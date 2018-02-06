@@ -3,9 +3,48 @@
   <head>
     <meta charset="utf-8">
     <title>Table template</title>
-    <link href="minimal-table.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <h1>Table template</h1>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+      <ul class="navbar-nav mr-auto">
+        <li>
+          <a class="navbar-brand" href="#">
+            <img src="images/icon.png" alt="Logo" style="width:40px;">
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Chat</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Match</a>
+        </li>
+        <li>
+          <form class="form-inline" action="/action_page.php">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search for Users">
+            <button class="btn btn-success" type="submit">Search</button>
+        </form>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html">Login</a>
+        </li>
+        <li class="navbar-item">
+          <a class="nav-link" href="#">Sign Up</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="test"><img src="images/bucketicon.png" alt="bucket" width="70px">Things To Do<p><strong>Before I Die</strong></p><p>(Animation First)</p></div>
+    <div class="w3-container">
+    <h1 class="entryText animate anim-fade-in-up delay-150"><img src="images/cuteiconpink.png" alt="cuteiconpink" width="100px">Things To Do<p><strong>Before I Die</strong></p><p>(Animation 2)</p></h1>
+
+  <div class="description animate anim-fade-in delay-1000">Things To Do Before I Die is a website where users can create user profiles listing things they want to do before they die. Users are able to customize their page. They can hashtag their goals and connect with friends. Upon hash tagging your goals, your goals will be sent to the database where you can match with other people with similar ambitions. You can achieve them together as you mark all of your things on your bucket list. If you run out of ideas, you can get suggestions as well (dont know if we'll implement this). There is also an extension which can help you match to local businesses to help get things done and how far they are from your location.</div>
+
+    <script src="javascript/slideDown.js"></script>
+
   </body>
 </html>
