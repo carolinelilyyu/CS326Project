@@ -1,44 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Table template</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link href="loginstyle.css" rel="stylesheet" type="text/css">
+    <title>Flat UI - Free Bootstrap Framework and Theme</title>
+    <meta name="description" content="Flat UI Kit Free is a Twitter Bootstrap Framework design and Theme, this responsive framework includes a PSD and HTML version."/>
+
+    <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="dist/css/flat-ui.css" rel="stylesheet">
+    <link href="docs/assets/css/demo.css" rel="stylesheet">
+    <link href="docs/assets/css/umoc.css" rel="stylesheet">
+    <link href="docs/assets/css/login.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
   </head>
   <body>
-    <nav>
-      <ul class="nav navbar-nav pull-right">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Go Back</a>
-          </li>
-      </ul>
-    </ul>
-      <ul class="nav navbar-nav left">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Not a member? [Sign up]</a>
-        </li>
-      </ul>
-    </ul>
-      </nav>
+    <div class="container">
+      <div class="login">
+        <div class="login-screen">
+            <div class="login-icon">
+                <h4>Welcome to <small>UMOC</small></h4>
+          </div>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class= "col-md-12" id="icon"><img src="images/cuteiconwhite.png" alt="cuteiconwhite" width="100px"></div>
-        <div class="loginBox">
-          <form class="col-md-12">
-            <p>Email</p>
-            <input type="text" name="" placeholder="Enter Email">
-            <p>Password</p>
-            <input type="password" name="" placeholder="••••••">
-            <input type="submit" name="" value="Sign In">
-            <a href="#">Forget Password</a>
-          </form>
+          <div class="login-form">
+            <div class="form-group">
+              <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name" />
+              <label class="login-field-icon fui-user" for="login-name"></label>
+            </div>
+
+            <div class="form-group">
+              <input type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
+              <label class="login-field-icon fui-lock" for="login-pass"></label>
+            </div>
+
+            <a class="btn btn-primary btn-lg btn-block" href="#">Log in</a>
+            <a class="login-link" href="#">Lost your password?</a>
+          </div>
+        </div>
       </div>
+      <div class="table">
+
+
       </div>
-    </div>
+     
+
+     
+    <script src="dist/js/vendor/jquery.min.js"></script>
+    <script src="dist/js/vendor/video.js"></script>
+    <script src="dist/js/flat-ui.min.js"></script>
+    <script src="docs/assets/js/application.js"></script>
+
+    <script>
+      videojs.options.flash.swf = "dist/js/vendors/video-js.swf"
+    </script>
   </body>
 </html>
