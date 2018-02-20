@@ -1,0 +1,39 @@
+
+#head {
+    border: 10px;
+    background: #202a35;
+    padding:50px;
+    margin-top:-50px;
+    background: linear-gradient(#202a35, #3b5666);
+    background-clip: border-box;
+}
+#currentleaders{
+  display: inline;
+  padding-bottom: 30px;
+}
+#allleaders{
+  display: inline;
+  padding-bottom: 50px;
+}
+h1{
+  text-align: center;
+  color: white;
+}
+#background{
+  background: #202a35;
+  height: 100%;
+  background-position: center;
+}
+#bodyoutline{
+  padding: 10px;
+}
+
+#white_form{
+  background-color: white;
+  padding: 50px;
+}
+#searchbar{
+  padding: 10px;
+  background: #3b5666;
+  margin-bottom: 20px;
+}
