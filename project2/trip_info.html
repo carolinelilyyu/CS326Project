@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Trip Info - UMOC</title>
+    <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.css" rel="stylesheet">
+    <link href="css/demo.css" rel="stylesheet">
+    <link href="css/umoc.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+    <link href="css/trip_info.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="dist/js/vendor/html5shiv.js"></script>
+      <script src="dist/js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+      <div class="container">
+          <div class="row demo-row">
+              <div class="col-xs-12">
+					<nav class="navbar navbar-inverse" role="navigation">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-5">
+								<span class="sr-only">Toggle navigation</span>
+							</button>
+							<a class="navbar-brand" href="index.html">UMOC</a>
+						</div>
+
+						<div class="collapse navbar-collapse" id="navbar-collapse-5">
+							<ul class="nav navbar-nav">
+								<li><a href="dashboard.html">Activites<span class="navbar-unread">1</span></a></li>
+								<li><a href="#">Gear Locker</a></li>
+								<li><a href="#">Leadership</a></li>
+								<li class="active"><a href="#">Contact Us</a></li>
+							</ul>
+							<form class="navbar-form navbar-left" action="#" role="search">
+								<div class="form-group">
+									<div class="input-group">
+										<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+										<span class="input-group-btn">
+											<button type="submit" class="btn"><span class="fui-search"></span></button>
+										</span>
+									</div>
+								</div>
+							</form>
+							<ul class="nav navbar-nav navbar-right">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Caroline Yu<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										<li><a href="#">My Trips</a></li>
+										<li><a href="#">Leader Menu</a></li>
+										<li><a href="Admin_Management.html">Admin Menu</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Log Out</a></li>
+									</ul>
+								</li>
+								<li>
+									<a href="profile.html">
+										<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
+										<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+              </div>
+          </div> <!-- /row -->
+
+          <div id="headingbox"><h1>Trip Details</h1></div>
+          <div id="form">
+            <div id="wrapper">
+              <div id="white_form">
+              <img id="clipboard" src="img/tripinfo/clipboard.png" alt="clipboard"><h3 id="trip_name">Mount Sunapee</h3>
+              <h5>Led By: Caroline Yu</h5>
+              <h6 id="location">Goes from: Amherst to New Hampshire</h6>
+              <p id="description"><strong>Description:</strong> Mount Sunapee is a four season recreation area located in Southern NH. Only 90 minutes from Boston, we offer skiing and snowboarding in the winter and ziplines, mountain biking, aerial challenge courses and more in the summer.</p>
+              <div class="btn-group">
+              <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">
+                9 Users Going On Trip <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+                <li><a href="#">Caroline</a></li>
+                <li><a href="#">Susan</a></li>
+                <li><a href="#">Kyle</a></li>
+                <li><a href="#">Stefan</a></li>
+                <li><a href="#">Jeff</a></li>
+                <li><a href="#">Nonu</a></li>
+                <li><a href="#">Alex</a></li>
+                <li><a href="#">Connie</a></li>
+                <li><a href="#">Sarah</a></li>
+
+            </div>
+            <button id="sign_up" class="btn btn-info">Sign Up</button>
+			<p><a class="btn btn-danger" id="emergency_contacts" href="admintripplanner.html">View Member Info</a></p>
+            
+            <h3 id="comments">Comments</h3>
+            <input type="text" placeholder="Comment" class="form-control" />
+
+            </div>
+          </div>
+          </div>
+		  
+      <script src="js/jquery.min.js"></script>
+      <script src="js/flat-ui.min.js"></script>
+      <script src="js/application.js"></script>
+  </body>
+</html>
