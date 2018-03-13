@@ -17,18 +17,18 @@ class User(models.Model):
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number') # TODO: VALIDATION
 	
 	# Allowed statuses for admin level 
-	ADMIN_STATUS = (
+	ADMIN_LEVELS = (
 		('u', 'User'),
 		('l', 'Leader'),
 		('a', 'Admin'),
 	)
-	admin_level = models.CharField(max_length=1, choices=ADMIN_STATUS, default='u')
+	admin_level = models.CharField(max_length=1, choices=ADMIN_LEVELS, default='u')
 
-	class Meta:
-		ordering = ['last_name', 'first_name', 'level']	
+	#class Meta:
+	#	ordering = ['last_name', 'first_name', 'admin_level']	
     
-    def __str__(self):
-        return '{}, {}'.format(self.last_name, self.first_name)
+	def __str__(self):
+		return '{}, {}'.format(self.last_name, self.first_name)
 		
 
 class Trip(models.Model):
@@ -52,9 +52,9 @@ class Trip(models.Model):
 		('sn', 'Snowboarding'),
 		('c', 'Cabin Trip'),
 	)
-	tag = models.CharField(choices=TAGS, blank=True)
-	leader = models.ForeignKey('User', on_delete=models.SET_NULL, null=True) # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
-	participants = models.ManyToManyField(User, help_text='Users goign on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS 
+	tag = models.CharField(max_length=2, choices=TAGS, blank=True)
+	leader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
+	participants = models.ManyToManyField(User, help_text='Users going on the trip', related_name='trip_participants') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
 	
 	class Meta:
 		ordering = ['start_time']
