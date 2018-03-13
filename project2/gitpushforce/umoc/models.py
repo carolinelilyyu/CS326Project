@@ -29,3 +29,35 @@ class User(models.Model):
     
     def __str__(self):
         return '{}, {}'.format(self.last_name, self.first_name)
+		
+
+class Trip(models.Model):
+	""" 
+	Represents a scheduled trip.
+	"""
+	name = models.CharField(max_length=20)
+	description = models.TextField()
+	num_seats = models.PositiveSmallIntegerField()
+	thumbnail = models.ImageField()
+	start_time = models.DateTimeField()
+	end_time = models.DateTimeField()
+	cancelled = models.BooleanField(default=False)
+	
+	# Allowed Tags a trip can have
+	TAGS = (
+		('r', 'Rock Climbing'),
+		('h', 'Hiking'),
+		('s', 'Ski and Board'),
+		('sk', 'Skiing'),
+		('sn', 'Snowboarding'),
+		('c', 'Cabin Trip'),
+	)
+	tag = models.CharField(choices=TAGS, blank=True)
+	leader = models.ForeignKey('User', on_delete=models.SET_NULL, null=True) # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
+	participants = models.ManyToManyField(User, help_text='Users goign on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS 
+	
+	class Meta:
+		ordering = ['start_time']
+		
+	def __str__(self):
+		return 'Trip "{}", running from {} to {}'.format(name, start_time, end_time)
