@@ -1,0 +1,18 @@
+<!--This is the base template for all pages, and this is what will be
+     extended by other templates such as the nav bar  -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/flat-ui.css" rel="stylesheet">
+        <link rel="shortcut icon" href="img/favicon.ico">
+        {% block title %}<title>Default Title</title>{% endblock %}
+    </head>
+
+    <body>
+        {% block navbar %}Your navbar is missing!!!{% endblock %}
+        {% block content %}Booooring, there is no content!!!{% endblock %}
+    </body>
+</html>
