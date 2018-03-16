@@ -25,11 +25,11 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-	path('umoc/', include('umoc.urls'))
+    path('', RedirectView.as_view(url='/umoc/')),
 ]
 
 urlpatterns += [
-    path('', RedirectView.as_view(url='/umoc/')),
+	path('umoc/', include('umoc.urls'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
