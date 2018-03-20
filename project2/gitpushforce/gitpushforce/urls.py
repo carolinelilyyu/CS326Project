@@ -22,14 +22,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+	path('', include('umoc.urls')),  # send root directory to umoc url handlers
 ]
 
-urlpatterns += [
-    path('', RedirectView.as_view(url='/umoc/')),
-]
-
-urlpatterns += [
-	path('umoc/', include('umoc.urls'))
-]
-
+# TODO: IS THIS NECESSARY?
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
