@@ -86,6 +86,8 @@ class TripListView(generic.ListView):
 
 class TripInfoView(generic.DetailView):
     model = Trip
+    template_name = 'trip_info.html'
+
     def trip_detail_view(request,pk):
         try:
             trip_id=Trip.objects.get(pk=pk)
@@ -96,7 +98,7 @@ class TripInfoView(generic.DetailView):
         
         return render(
             request,
-            'umoc/trip_info.html',
+            'trip_info.html',
             context={'trip':trip_id,}
         )
 
