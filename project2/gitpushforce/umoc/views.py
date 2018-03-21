@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from .models import User, Trip
 from datetime import datetime
+from django.views import generic
 
 # Sample models!!!
 user_sample = User(first_name='Stefan', last_name='Kussmaul', email='stefankussmaul@umass.edu', phone_num='1234567890', admin_level='l', dob=datetime.strptime('Jun 1 1998 1:33PM', '%b %d %Y %I:%M%p'))
@@ -71,8 +72,34 @@ def profile(request):
 		'profile_info.html',
 		context={'num_trips':num_trips, 'user': user_sample},
 	)
-	
-	
+
+class TripListView(generic.ListView):
+    model = Trip
+    template_name = 'dashboard.html'  # Specify your own template name/location
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(TripListView, self).get_context_data(**kwargs)
+        # Create any data and add it to the context
+        context['some_data'] = 'This is just some data'
+        return context
+
+class TripInfoView(generic.DetailView):
+    model = Trip
+    def trip_detail_view(request,pk):
+        try:
+            trip_id=Trip.objects.get(pk=pk)
+        except Trip.DoesNotExist:
+            raise Http404("Trip does not exist")
+
+        #book_id=get_object_or_404(Book, pk=pk)
+        
+        return render(
+            request,
+            'umoc/trip_info.html',
+            context={'trip':trip_id,}
+        )
+
 def trip_info(request, trip_id):
 	"""
 	Serves information page for trip with given trip_id.

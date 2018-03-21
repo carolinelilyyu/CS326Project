@@ -1,15 +1,21 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>Umoc Database: Trip Info</h1>
+  <h1>Trip Info: {{trip.name}}</h1>
+  <p>Led by: {{trip.leader.first_name}}</p>
+  <p>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</p>
 
-  <p>This is the <em>Trip Info</em></p>
+  <p><strong>Number of Seats:</strong> <a href="">{{ trip.num_seats }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Description:</strong> {{ trip.description }}</p>
 
-<h2>Dynamic content</h2>
 
-  <p>The database has the following record counts:</p>
-  <ul>
-    <li><strong>Trips:</strong> {{ num_trips }}</li>
-  </ul>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4></h4>
 
+    {% for participant in trip.participants.all %}
+    <hr>
+    <dt>
+    	{{participant}}
+	</dt>
+  </div>
 {% endblock %}

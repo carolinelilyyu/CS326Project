@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -32,6 +33,7 @@ class User(models.Model):
 		
 
 class Trip(models.Model):
+
 	""" 
 	Represents a scheduled trip.
 	"""
@@ -56,8 +58,15 @@ class Trip(models.Model):
 	leader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
 	participants = models.ManyToManyField(User, help_text='Users going on the trip', related_name='trip_participants') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
 	
+
 	class Meta:
 		ordering = ['start_time']
-		
+
+	def get_absolute_url(self):
+		"""
+		returns the url to access a detail record for the trip
+		"""
+		return reverse('trip_info', args=[str(self.id)])
+    
 	def __str__(self):
-		return 'Trip "{}", running from {} to {}'.format(name, start_time, end_time)
+		return 'Trip "{}", running from {} to {}'.format(self.name, self.start_time, self.end_time)
