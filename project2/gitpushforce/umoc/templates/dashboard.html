@@ -10,7 +10,7 @@
   <p>The database has the following record counts:</p>
   <ul>
 	{# use built-in length filter. This is equivalent to calling len(trips). See https://docs.djangoproject.com/en/2.0/ref/templates/builtins/ for more #}
-    <li><strong>Trips:</strong> {{ trips|length }}</li>
+    <li><strong>Trips:</strong> {{ count }}</li>
   </ul>
   
     {% if trip_list %}
