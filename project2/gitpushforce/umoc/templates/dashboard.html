@@ -3,13 +3,20 @@
 {% block content %}
 <h1>Umoc Database Dashboard</h1>
 
-  <p>This is the <em>Umoc Dashboard</em></p>
+  <p>Hi, {{ user.first_name }}! This is the <em>Umoc Dashboard</em></p>
 
 <h2>Dynamic content</h2>
 
   <p>The database has the following record counts:</p>
   <ul>
-    <li><strong>Trips:</strong> {{ num_trips }}</li>
+	{# use built-in length filter. This is equivalent to calling len(trips). See https://docs.djangoproject.com/en/2.0/ref/templates/builtins/ for more #}
+    <li><strong>Trips:</strong> {{ trips|length }}</li>
   </ul>
+  
+  {% for trip in trips %}
+	<h3>{{ trip.name }}</h3>
+	<p>{{ trip.description }}</p>
+	<p>Led by {{ trip.leader.first_name }}</p>
+  {% endfor %}
 
 {% endblock %}

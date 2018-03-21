@@ -2,6 +2,12 @@ from django.shortcuts import render
 
 # Create your views here.
 from .models import User, Trip
+from datetime import datetime
+
+# Sample models!!!
+user_sample = User(first_name='Stefan', last_name='Kussmaul', email='stefankussmaul@umass.edu', phone_num='1234567890', admin_level='l', dob=datetime.strptime('Jun 1 1998 1:33PM', '%b %d %Y %I:%M%p'))
+
+trip_sample = Trip(name='Trip 1', description='This is our first trip', num_seats=10, start_time=datetime.strptime('Mar 29 2018 1:30PM', '%b %d %Y %I:%M%p'), end_time=datetime.strptime('Mar 29 2018 5:00PM', '%b %d %Y %I:%M%p'), cancelled=False, tag='r', leader=user_sample)
 
 def index(request):
 	"""
@@ -42,7 +48,7 @@ def dashboard(request):
 	return render(
 		request,
 		'dashboard.html',
-		context={'num_trips':num_trips},
+		context={'num_trips':num_trips, 'user': user_sample, 'trips': [trip_sample]},
 	)
 
 
@@ -63,7 +69,7 @@ def profile(request):
 	return render(
 		request,
 		'profile_info.html',
-		context={'num_trips':num_trips},
+		context={'num_trips':num_trips, 'user': user_sample},
 	)
 	
 	
@@ -85,7 +91,7 @@ def trip_info(request, trip_id):
 	return render(
 		request,
 		'trip_info.html',
-		context={'num_trips':num_trips},
+		context={'num_trips':num_trips, 'user': user_sample, 'trip':trip_sample},
 	)
 
 
@@ -106,7 +112,7 @@ def admin_trip_planner(request):
 	return render(
 		request,
 		'admin_trip_planner.html',
-		context={'num_trips':num_trips},
+		context={'num_trips':num_trips, 'users': [user_sample]},
 	)
 
 def admin_management(request):
@@ -126,5 +132,5 @@ def admin_management(request):
 	return render(
 		request,
 		'admin_management.html',
-		context={'num_trips':num_trips},
+		context={'num_trips':num_trips, 'users': [user_sample]},
 	)
