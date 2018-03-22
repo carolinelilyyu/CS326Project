@@ -152,8 +152,9 @@ def admin_management(request):
 	View function for home page of site.
 	"""
 	# Generate counts of some of the main objects
-	num_trips=Trip.objects.all().count()
-
+	num_users=User.objects.all().count()
+	num_leaders=User.objects.filter(admin_level__exact='l').count()
+	num_admins=User.objects.filter(admin_level__exact='a').count()
 	
 	# Render the HTML template index.html with the data in the context variable
 	
@@ -164,5 +165,5 @@ def admin_management(request):
 	return render(
 		request,
 		'admin_management.html',
-		context={'num_trips':num_trips, 'users': [user_sample]},
+		context={'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins},
 	)

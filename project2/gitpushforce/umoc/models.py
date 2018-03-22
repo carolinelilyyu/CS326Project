@@ -30,7 +30,12 @@ class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
     
 	def __str__(self):
 		return '{}, {}'.format(self.last_name, self.first_name)
-		
+
+	def get_absolute_url(self):
+		"""
+		returns the url to user profile
+		"""
+		return reverse('profile_info', args=[str(self.id)])
 
 class Trip(models.Model):
 	""" 
