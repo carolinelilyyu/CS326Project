@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import RegexValidator
 
 
 # used for validating phone numbers entered (9 digits)
-phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be 10 digits and entered in the format '##########'.")
+phone_regex = RegexValidator(regex=r'\d{10}', message="Phone number must be 10 digits and entered in the format '##########'.")
 
 
 # returns path to user profile photo (MEDIA_ROOT/profiles/<user_id>
@@ -23,8 +24,8 @@ class User(models.Model):
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
 	profile_img = models.ImageField(verbose_name='Profile Image')
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
-	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact')
-	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex])
+	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact', blank=True)
+	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex], blank=True)
 	can_comment = models.BooleanField(help_text='Set whether user can leave comments on trips', default=True)
 	can_join_trip = models.BooleanField(help_text='Allow user to sign up for trips?', default=False)
 	
