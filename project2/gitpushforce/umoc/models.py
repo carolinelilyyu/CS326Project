@@ -17,7 +17,7 @@ class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
 	email = models.EmailField(max_length=30, unique=True, help_text='Enter your email address')
 	password = models.CharField(max_length=20) # TODO: store safely using dedicated authentication 
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
-	profile_img = models.ImageField(verbose_name='Profile Image', '''upload_to=profile_directory_path''')
+	profile_img = models.ImageField(verbose_name='Profile Image') #upload_to=profile_directory_path)
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number') # TODO: VALIDATION
 	# TODO: DATE_JOINED?
 	
@@ -35,12 +35,10 @@ class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
 	def __str__(self):
 		return '{}, {}'.format(self.last_name, self.first_name)
 
+	# returns url to user's profile. Todo: change. No user profile pages
 	def get_absolute_url(self):
-		"""
-		returns the url to user profile
-		"""
 		return reverse('profile_info', args=[str(self.id)])
-
+		
 		
 class Trip(models.Model):
 	""" 
@@ -71,6 +69,16 @@ class Trip(models.Model):
 	class Meta:
 		ordering = ['start_time']
 
+	# returns whether trip is full
+	def is_full(self):
+		return len(self.participants) < self.num_seats
+
+	# returns a string of details: members signed up, emergency contacts, etc. TODO: PDF?
+	def get_details(self):
+		for participant in self.participants_set:
+			print(participant.first_name)
+		return ''
+		
 	# route to trip page
 	def get_absolute_url(self):
 		return reverse('trip_info', args=[str(self.id)])
