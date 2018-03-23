@@ -2,12 +2,16 @@ from django.db import models
 from django.urls import reverse
 
 
+# used for validating phone numbers entered (9 digits)
+phone_regex = RegexValidator(regex=r'^\d{10}$', message="Phone number must be 10 digits and entered in the format '##########'.")
+
+
 # returns path to user profile photo (MEDIA_ROOT/profiles/<user_id>
 def profile_directory_path(instance, filename):
-    return 'profiles/{}'.format(instance.user.id)
+	return 'profiles/{}'.format(instance.id)
 
 
-class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
+class User(models.Model): 
 	"""
 	Model representing a user of the website (UMOC club member). A user has first name, last name and date of birth, as well as a profile image and phone number.
 	"""
@@ -17,9 +21,12 @@ class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
 	email = models.EmailField(max_length=30, unique=True, help_text='Enter your email address')
 	password = models.CharField(max_length=20) # TODO: store safely using dedicated authentication 
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
-	profile_img = models.ImageField(verbose_name='Profile Image') #upload_to=profile_directory_path)
-	phone_num = models.CharField(max_length=10, verbose_name='Phone Number') # TODO: VALIDATION
-	# TODO: DATE_JOINED?
+	profile_img = models.ImageField(verbose_name='Profile Image')
+	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
+	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact')
+	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex])
+	can_comment = models.BooleanField(help_text='Set whether user can leave comments on trips', default=True)
+	can_join_trip = models.BooleanField(help_text='Allow user to sign up for trips?', default=False)
 	
 	# Allowed statuses for admin level 
 	ADMIN_LEVELS = (
@@ -29,8 +36,8 @@ class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
 	)
 	admin_level = models.CharField(max_length=1, choices=ADMIN_LEVELS, default='u')
 
-	#class Meta:
-	#	ordering = ['last_name', 'first_name', 'admin_level']	
+	class Meta:
+		ordering = ['last_name', 'first_name', 'admin_level']	
     
 	def __str__(self):
 		return '{}, {}'.format(self.last_name, self.first_name)
@@ -93,7 +100,7 @@ class Comment(models.Model):
 	"""
 	author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 	parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
-	text = models.CharField(default='', max_length=280)
+	text = models.CharField(max_length=280)
 	time_stamp = models.DateTimeField(auto_now_add=True)
 	trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
 	
