@@ -1,21 +1,25 @@
 from django.db import models
 from django.urls import reverse
 
-# Create your models here.
+
+# returns path to user profile photo (MEDIA_ROOT/profiles/<user_id>
+def profile_directory_path(instance, filename):
+    return 'profiles/{}'.format(instance.user.id)
 
 
 class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
 	"""
-	Model representing a user of the website (UMOC club member). Stores all 
-	personal data.
+	Model representing a user of the website (UMOC club member). A user has first name, last name and date of birth, as well as a profile image and phone number.
 	"""
 	first_name = models.CharField(max_length=20, help_text='Enter your first name', verbose_name='First Name')
 	last_name = models.CharField(max_length=20, help_text='Enter your last name', verbose_name='Last Name')
-	dob = models.DateField(verbose_name='Date of Birth')
-	email = models.EmailField(max_length=30, unique=True)
+	dob = models.DateField(verbose_name='Date of Birth', help_text='Enter your birth date in the format "YYYY-MM-DD"')
+	email = models.EmailField(max_length=30, unique=True, help_text='Enter your email address')
 	password = models.CharField(max_length=20) # TODO: store safely using dedicated authentication 
-	profile_img = models.ImageField(verbose_name='Profile Image')
+	# upload profile to MEDIA_ROOT/profiles/<user_id>
+	profile_img = models.ImageField(verbose_name='Profile Image', '''upload_to=profile_directory_path''')
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number') # TODO: VALIDATION
+	# TODO: DATE_JOINED?
 	
 	# Allowed statuses for admin level 
 	ADMIN_LEVELS = (
@@ -37,17 +41,18 @@ class User(models.Model): # TODO: CAN_COMMENT, CAN_JOIN_TRIP
 		"""
 		return reverse('profile_info', args=[str(self.id)])
 
+		
 class Trip(models.Model):
 	""" 
 	Represents a scheduled trip.
 	"""
-	name = models.CharField(max_length=20)
-	description = models.TextField()
-	num_seats = models.PositiveSmallIntegerField()
-	thumbnail = models.ImageField()
-	start_time = models.DateTimeField()
-	end_time = models.DateTimeField()
-	cancelled = models.BooleanField(default=False)
+	name = models.CharField(max_length=20, help_text='Enter Trip Name')
+	description = models.TextField(help_text='Enter description and informatin for trip')
+	num_seats = models.PositiveSmallIntegerField(verbose_name='Number of Seats', help_text='Enter number of seats available for the trip')
+	thumbnail = models.ImageField(help_text='Upload an image to show alongside this trip')
+	start_time = models.DateTimeField(help_text='Select Start Time of the Trip')
+	end_time = models.DateTimeField(help_text='Select End Time of the Trip')
+	cancelled = models.BooleanField(default=False, help_text='Click to Cancel')
 	
 	# Allowed Tags a trip can have
 	TAGS = (
@@ -58,18 +63,16 @@ class Trip(models.Model):
 		('sn', 'Snowboarding'),
 		('c', 'Cabin Trip'),
 	)
-	tag = models.CharField(max_length=2, choices=TAGS, blank=True)
-	leader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
-	participants = models.ManyToManyField(User, help_text='Users going on the trip', related_name='trip_participants') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
 	
-
+	tag = models.CharField(max_length=2, choices=TAGS, blank=True, help_text='Select a tag to help classify this trip')
+	leader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
+	participants = models.ManyToManyField(User, help_text='Select users who are signed up to go on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
+	
 	class Meta:
 		ordering = ['start_time']
 
+	# route to trip page
 	def get_absolute_url(self):
-		"""
-		returns the url to access a detail record for the trip
-		"""
 		return reverse('trip_info', args=[str(self.id)])
     
 	def __str__(self):
@@ -83,13 +86,13 @@ class Comment(models.Model):
 	author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 	parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
 	text = models.CharField(default='', max_length=280)
-	time_stamp = models.DateTimeField() # TODO: DEFAULT TO NOW
+	time_stamp = models.DateTimeField(auto_now_add=True)
 	trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
 	
 	#class Meta:
 	#	ordering = ['trip.id']
 
-	# returns url to trip
+	# route to trip page comment is on
 	def get_absolute_url(self):
 		return reverse('trip_info', args=[str(self.trip.id)])
     
@@ -104,5 +107,10 @@ class Notification(models.Model):
 	recipient = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 	message = models.TextField()
 	seen = models.BooleanField(default=False)
+	dismissed = models.BooleanField(default=False)
 	link = models.URLField(max_length=100, blank=True)
-	time_stamp = models.DateTimeField()
+	# auto_now_add defaults to a timestamp when object is first created
+	time_stamp = models.DateTimeField(auto_now_add=True)
+	
+	class Meta:
+		ordering = ['time_stamp']
