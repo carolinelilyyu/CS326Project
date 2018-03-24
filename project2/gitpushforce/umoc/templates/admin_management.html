@@ -1,30 +1,33 @@
-{% extends "base_generic.html" %}
+{% extends "template.html" %}
+
+{% block title %}<title>Management (Leader) - UMOC</title>{% endblock %}
 
 {% block content %}
-<h1>Umoc Database: Admin Management</h1>
 
-	<p>This is the page for <em>Admin Management</em></p>
-	<h2>Dynamic content</h2>
-
-	<p>The database has the following record counts:</p>
-	<ul>
-  		<li><strong>Admins:</strong> {{ num_admins }}</li>
-    	<li><strong>Leaders:</strong> {{ num_leaders }}</li>
-    	<li><strong>Users:</strong> {{ num_users }}</li>
-
-    	{% if user_list %}
-    	<ul>
-
-      		{% for user in user_list %}
-      		<li>
-        	<a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a> 
-      		</li>
-      		{% endfor %}
-
-	    </ul>
-    	{% else %}
-      		<p>work in progress</p>
-    	{% endif %}
-	</ul>
+<div class="row">
+	<div class="col-md-12">
+		<h1>UMOC Managment (Leader)</h1>
+		<p>This is the page for <em>Admin Management</em></p>
+		<h2>Dynamic content</h2>
+		<p>The database has the following record counts:</p>
+		
+		<ul>
+			<li><strong>Admins:</strong> {{ num_admins }}</li>
+			<li><strong>Leaders:</strong> {{ num_leaders }}</li>
+			<li><strong>Users:</strong> {{ num_users }}</li>
+			{% if user_list %}
+				<ul>
+				{% for user in user_list %}
+					<li>
+						<a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a> 
+					</li>
+				{% endfor %}
+				</ul>
+			{% else %}
+				<p>work in progress</p>
+			{% endif %}
+		</ul>
+	</div>
+</div>
 
 {% endblock %}

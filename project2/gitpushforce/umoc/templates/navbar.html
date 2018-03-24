@@ -1,0 +1,50 @@
+<div class="row">
+	<div class="col-md-12">
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-5">
+					<span class="sr-only">Toggle navigation</span>
+				</button>
+				<a class="navbar-brand" href="{% url 'index' %}">UMOC</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbar-collapse-5">
+				<ul class="nav navbar-nav">
+					<li><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">1</span></a></li>
+					<li><a href="#">Gear Locker</a></li>
+					<li><a href="#">Leadership</a></li>
+					<li class="active"><a href="#">Contact Us</a></li>
+				</ul>
+				<form class="navbar-form navbar-left" action="#" role="search">
+					<div class="form-group">
+						<div class="input-group">
+							<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+							<span class="input-group-btn">
+								<button type="submit" class="btn"><span class="fui-search"></span></button>
+							</span>
+						</div>
+					</div>
+				</form>
+				
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">FName LName<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="{% url 'admin_trip_planner' %}">My Trips</a></li>
+							<li><a href="#">Leader Menu</a></li>
+							<li><a href="{% url 'admin_management' %}">Admin Menu</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Log Out</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="{% url 'profile' %}">
+							<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
+							<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</div>

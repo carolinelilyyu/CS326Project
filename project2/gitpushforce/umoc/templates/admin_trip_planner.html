@@ -1,15 +1,20 @@
-{% extends "base_generic.html" %}
+{% extends "template.html" %}
+
+{% block title %}<title>Trip Planner (Leader) - UMOC</title>{% endblock %}
 
 {% block content %}
-<h1>Umoc Database: Admin Trip Planner</h1>
 
-  <p>This is the <em>Trip Planner</em></p>
-
-<h2>Dynamic content</h2>
-
-  <p>The database has the following record counts:</p>
-  <ul>
-    <li><strong>Trips:</strong> {{ num_trips }}</li>
-  </ul>
-
+<div class="row">
+	<div class="col-md-12">
+		<h1>UMOC Trip Planner (Leader)</h1>
+		<p>This is the <em>Trip Planner</em></p>
+		<h2>Dynamic content</h2>
+		<p>The database has the following record counts:</p>
+		
+		<ul>
+			<li><strong>Trips:</strong> {{ num_trips }}</li>
+		</ul>
+	</div>
+</div>
+  
 {% endblock %}
