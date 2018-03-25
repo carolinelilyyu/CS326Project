@@ -6,3 +6,4 @@ admin.site.register(User)
 admin.site.register(Trip) 
 admin.site.register(Comment)
 admin.site.register(Notification)
+

@@ -1,14 +1,22 @@
 {% extends "template.html" %}
 
 {% block title %}<title>Activities - UMOC</title>{% endblock %}
-
 {% block content %}
 
 <div class="row">
 	<div class="col-md-12">
 		<h1>UMOC Activities</h1>
-		<p>Hi, {{ user.first_name }}! This is the <em>Umoc Dashboard</em></p>
-		<h2>Dynamic content</h2>
+		<p>Hi, {{ user.first_name }}! This is the <em>UMOC Dashboard</em></p>
+		<!-- Not sure what this is-->
+		<!--<h2>Dynamic content </h2>-->
+		<h2>Trip Finder</h2>
+		<a href = "{% url 'admin_trip_planner'%}">	
+			<button type="button" class="btn btn-primary">
+				Leader Only: Add a Trip	
+			</button>
+		</a>
+		
+		<p></p>
 		<p>The database has the following record counts:</p>
 		
 		<ul>
@@ -19,13 +27,22 @@
 		{% if trip_list %}
 			<ul>
 				{% for trip in trip_list %}
-					<li>
-						<a href="{{ trip.get_absolute_url }}">{{ trip.name }}</a> 
-					</li>
-					
-					<h3>{{ trip.name }}</h3>
-					<p>{{ trip.description }}</p>
-					<p>Led by {{ trip.leader.first_name }}</p>
+					<!-- In proj1 we had the dashboard have its own css; don't know if we want that here  -->
+					<div class = "col-xs-10" style ="background-color:#D3D3D3;	margin: 4rem; padding: 1.5rem; border: 2px solid #73AD21; border-radius: 10px;">
+						
+						<!--
+						<li>
+							<a href="{{ trip.get_absolute_url }}">{{ trip.name }}</a> 
+						</li>
+						-->
+						
+						<h3>
+							<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
+						</h3>
+						
+						<p>Led by {{ trip.leader.first_name }}</p>
+						<p>{{ trip.description }}</p>
+					</div>
 				{% endfor %}
 			</ul>
 		{% else %}

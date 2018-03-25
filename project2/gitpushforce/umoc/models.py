@@ -37,6 +37,7 @@ class User(models.Model):
 	)
 	admin_level = models.CharField(max_length=1, choices=ADMIN_LEVELS, default='u')
 
+
 	class Meta:
 		ordering = ['last_name', 'first_name', 'admin_level']	
     
@@ -73,7 +74,7 @@ class Trip(models.Model):
 	tag = models.CharField(max_length=2, choices=TAGS, blank=True, help_text='Select a tag to help classify this trip')
 	leader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
 	participants = models.ManyToManyField(User, help_text='Select users who are signed up to go on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
-	
+
 	class Meta:
 		ordering = ['start_time']
 
@@ -94,7 +95,7 @@ class Trip(models.Model):
 	def __str__(self):
 		return 'Trip "{}", running from {} to {}'.format(self.name, self.start_time, self.end_time)
 
-		
+
 class Comment(models.Model):
 	""" 
 	Represents a comment left by a user on a trip. Has an author (User), a timestamp, a parent comment if it is a reply (can be None), and the Trip it is commenting on.
@@ -114,7 +115,7 @@ class Comment(models.Model):
     
 	def __str__(self):
 		return 'Comment by {} on trip {}. Replying to {} on {}'.format(self.author.first_name, self.trip.name, self.parent.author.first_name if self.parent else '', self.time_stamp)
-		
+
 
 class Notification(models.Model):
 	""" 
@@ -127,6 +128,6 @@ class Notification(models.Model):
 	link = models.URLField(max_length=100, blank=True)
 	# auto_now_add defaults to a timestamp when object is first created
 	time_stamp = models.DateTimeField(auto_now_add=True)
-	
+
 	class Meta:
 		ordering = ['time_stamp']
