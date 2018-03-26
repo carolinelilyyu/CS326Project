@@ -27,7 +27,7 @@
         <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
 
           <div class="btn-group">
-            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.num_seats }} Users Going On Trip <span class="caret"></span>
+            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.participants.all.count }} Users Going On Trip <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
               {% for participant in trip.participants.all %}
