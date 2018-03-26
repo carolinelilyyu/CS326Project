@@ -90,10 +90,12 @@ class TripListView(generic.ListView):
 class TripInfoView(generic.DetailView):
     model = Trip
     template_name = 'trip_info.html'
+    num_trips=Trip.objects.all().count()
 
     def trip_detail_view(request,pk):
         try:
             trip_id=Trip.objects.get(pk=pk)
+            num_participants = trip_id.participants.count()
         except Trip.DoesNotExist:
             raise Http404("Trip does not exist")
 
@@ -102,7 +104,7 @@ class TripInfoView(generic.DetailView):
         return render(
             request,
             'trip_info.html',
-            context={'trip':trip_id,}
+            context={'trip':trip_id, 'num_participants': num_participants, 'num_trips':num_trips,}
         )
 
 def trip_info(request, trip_id):

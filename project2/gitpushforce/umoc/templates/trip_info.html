@@ -1,22 +1,55 @@
-{% extends "base_generic.html" %}
+{% extends "template.html" %}
+
 
 {% block content %}
-  <h1>Trip Info: {{trip.name}}</h1>
-  <p>Led by: {{trip.leader.first_name}}</p>
-  <p>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</p>
+  <head>
+  
+    <meta charset="utf-8">
+    <title>Trip Info - UMOC</title>
+    <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
 
-  <p><strong>Number of Seats:</strong> <a href="">{{ trip.num_seats }}</a></p> <!-- author detail link not yet defined -->
-  <p><strong>Description:</strong> {{ trip.description }}</p>
+  </head>
+  
+
+  <body>
+    <div id="headingbox"><h1>Trip Details</h1></div>
+    <div id="form">
+      <div id="wrapper">
+        <div id="white_form">
+        {% load static %}
+        <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
+        <h5>Led by: {{trip.leader.first_name}}</h5>
+        <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
+
+        <p><strong>Number of Seats:</strong> <a href="">{{ trip.num_seats }}</a></p>
+        <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
+              <div class="btn-group">
+      </div>
+
+    <div class="btn-group">
+              <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ num_trips }} Users Going On Trip <span class="caret"></span></button>
+    </div>
 
 
-  <div style="margin-left:20px;margin-top:20px">
-    <h4></h4>
+    </div>
 
-    {% for participant in trip.participants.all %}
-    <hr>
-    <dt>
-    	{{participant}}
-	 </dt>
-    {% endfor %}
-  </div>
-{% endblock %}
+
+     <h4>Participants:</h4>
+
+      {% for participant in trip.participants.all %}
+      <hr>
+      <dt>
+        {{participant}}
+     </dt>
+      {% endfor %}
+    </div>
+    </div>
+
+
+
+    <div style="margin-left:20px;margin-top:20px">
+
+    </body>
+  {% endblock %}
