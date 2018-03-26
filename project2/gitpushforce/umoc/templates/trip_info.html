@@ -20,36 +20,28 @@
         <div id="white_form">
         {% load static %}
         <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
-        <h5>Led by: {{trip.leader.first_name}}</h5>
+        <h5>Led by: <a href="{% url 'profile'%}">{{trip.leader.first_name}}</a></h5>
         <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
 
-        <p><strong>Number of Seats:</strong> <a href="">{{ trip.num_seats }}</a></p>
+        <p><strong>Number of Seats Available:</strong> <a href="">{{ trip.num_seats }}</a></p>
         <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
-              <div class="btn-group">
-      </div>
 
-    <div class="btn-group">
-              <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.num_seats }} Users Going On Trip <span class="caret"></span></button>
-    </div>
+          <div class="btn-group">
+            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.num_seats }} Users Going On Trip <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+              {% for participant in trip.participants.all %}
+              <li><a href="#">{{participant}}</a></li>
+              {% endfor %}
 
+            </ul>
 
-    </div>
+        </div>
+        <button id="sign_up" class="btn btn-info">Join Trip!</button>
+        <h3 id="comments">Comments</h3>
+        <input type="text" placeholder="Comment" class="form-control" />
 
-
-     <h4>Participants:</h4>
-
-      {% for participant in trip.participants.all %}
-      <hr>
-      <dt>
-        {{participant}}
-     </dt>
-      {% endfor %}
-    </div>
-    </div>
-
-
-
-    <div style="margin-left:20px;margin-top:20px">
+        </div>
 
     </body>
   {% endblock %}
