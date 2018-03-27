@@ -1,6 +1,5 @@
 {% extends "template.html" %}
 
-
 {% block content %}
   <head>
   
@@ -8,6 +7,7 @@
     <title>Trip Info - UMOC</title>
     <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
     {% load static %}
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
 
   </head>
@@ -44,10 +44,11 @@
 			{% include 'snippets/comment.html' with comment=comment %}
 		{% endfor %}
 		
-        <input type="text" placeholder="Comment" class="form-control" />
-
+		<!-- import Javascript for Comment functionality -->
+		{% load static %}
+		<script src="{% static 'javascript/comments.js' %}"></script>
         </div>
       </div>
     </div>
-    </body>
-  {% endblock %}
+  </body>
+{% endblock %}

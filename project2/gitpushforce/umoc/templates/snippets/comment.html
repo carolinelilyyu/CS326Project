@@ -1,13 +1,10 @@
 <!-- Renders a Comment 
 Expected input: a Comment model named 'comment'
-Requires Javascript file comment.js and CSS file comment.cs -->
-{% load static %}
-<script src="{% static 'javascript/comments.js' %}"></script>
-<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-<link rel="stylesheet" href="{% static 'css/comment.css' %}">
+Requires Javascript file comment.js for reply functionality -->
 
-<!-- todo: bootstrap this... -->
- <div class="panel panel-default">
+
+<!-- Create panel for comment. Comment will include a data-* attribute called "data-comment-id" to let the Javascript exact the id of the comment being replied to NOTE: CAN'T FIGURE OUT WHY DATA ATTRIBUTE IS NOT REGISTERING -->
+ <div class="panel panel-default comment" data-comment-id="{{ comment.id }}">
 	<div class="panel-heading">
 		<p>
 			<strong>{{ comment.author }}</strong>
@@ -24,6 +21,6 @@ Requires Javascript file comment.js and CSS file comment.cs -->
 
 		<div id="text"><p>{{ comment.text }}</p></div>
 
-	<button type="button" class="btn btn-primary pull-right">Reply</button>
-</div>
+	<button type="button" class="btn btn-primary pull-right comment-reply-btn">Reply</button>
+	</div>
 </div>
