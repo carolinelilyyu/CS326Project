@@ -28,45 +28,41 @@ Parameters:
 						</div>
 					</div>
 				</form>
-				
-				<!-- Notifications Drop-Down -->
-				<ul class="nav navbar-nav navbar-left">
-					<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-					  My Notifications
-					  <span class="caret"></span>
-					</a>
-					<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
-						<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
-						<ul class="dropdown-menu">
-						  {% if user.notification_set.all %}
-						    {% for notification in user.notification_set.all %}
-							  <li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
-						    {% endfor %}
-						  {% else %}
-						      <li><a href="#">No Notifications</a></li>
-						  {% endif %}
-						</ul> <!-- /Sub menu -->
-					</li>
-				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					  <li class="dropdown">
-						
-						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% block fullname %}{{ user.first_name }} {{ user.last_name }}{% endblock %}<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="{% url 'admin_trip_planner' %}">My Trips</a></li>
-							<li><a href="#">Leader Menu</a></li>
-							<li><a href="{% url 'admin_management' %}">Admin Menu</a></li>
-							<li class="divider"></li>
-							<li><a href="#">Log Out</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="{% url 'profile' %}">
-							<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
-							<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
-						</a>
-					</li>
+					{% if user %}
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<b class="caret"></b></a>
+							<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
+							<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
+							<ul class="dropdown-menu">
+								{% if user.notification_set.all %}
+									{% for notification in user.notification_set.all %}
+										<li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
+									{% endfor %}
+								{% else %}
+									<li><a href="#">No Notifications</a></li>
+								{% endif %}
+							</ul> <!-- /Sub menu -->
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% block fullname %}{{ user.first_name }} {{ user.last_name }}{% endblock %}<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="{% url 'admin_trip_planner' %}">My Trips</a></li>
+								<li><a href="#">Leader Menu</a></li>
+								<li><a href="{% url 'admin_management' %}">Admin Menu</a></li>
+								<li class="divider"></li>
+								<li><a href="#">Log Out</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="{% url 'profile' %}">
+								<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
+								<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
+							</a>
+						</li>
+					{% else %}
+						<li><a href="login.html">Log In</a></li>
+					{% endif %}
 				</ul>
 			</div>
 		</nav>
