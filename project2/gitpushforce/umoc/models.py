@@ -131,3 +131,6 @@ class Notification(models.Model):
 
 	class Meta:
 		ordering = ['time_stamp']
+		
+	def __str__(self):
+		return 'Notification for {} on {}: "{}"'.format(self.recipient.first_name, self.time_stamp, self.message)

@@ -1,0 +1,20 @@
+<!-- Renders a Comment 
+Expected input: a Comment model named 'comment'
+Requires Javascript file comment.js and CSS file comment.cs -->
+{% load static %}
+<script src="{% static 'javascript/comments.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<!-- todo: bootstrap this... -->
+<div class="trip-comment" style="background-color:#D3D3D3">
+	<h3>{{ comment.author }} on {{ comment.time_stamp }}</h3>
+
+	<!-- only true if this comment is a reply -->
+	{% if comment.parent %}
+		<p>In reply to {{ comment.parent.author }}</p>
+	{% endif %}
+
+	<p>{{ comment.text }}</p>
+
+	<button type="button">Reply</button>
+</div>

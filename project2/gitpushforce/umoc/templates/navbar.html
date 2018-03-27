@@ -1,3 +1,8 @@
+<!-- Website navbar.
+Parameters:
+'user', currently logged-in user
+'notifications', a list of Notification models
+-->
 <div class="row">
 	<div class="col-md-12">
 		<nav class="navbar navbar-inverse" role="navigation">
@@ -11,8 +16,6 @@
 			<div class="collapse navbar-collapse" id="navbar-collapse-5">
 				<ul class="nav navbar-nav">
 					<li><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">1</span></a></li>
-					<li><a href="#">Gear Locker</a></li>
-					<li><a href="#">Leadership</a></li>
 					<li class="active"><a href="#">Contact Us</a></li>
 				</ul>
 				<form class="navbar-form navbar-left" action="#" role="search">
@@ -26,10 +29,27 @@
 					</div>
 				</form>
 				
+				<!-- Notifications Drop-Down -->
+				<ul class="nav navbar-nav navbar-left">
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					  My Notifications
+					  <span class="caret"></span>
+					</a>
+					<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
+						<ul class="dropdown-menu">
+							<li><a href="#">Hi</a></li>
+							<li><a href="#">{{ notifications|length }}</a></li>
+						  {% for notification in notifications %}
+							<li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
+						  {% endfor %}
+						</ul> <!-- /Sub menu -->
+					</li>
+				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					  <li class="dropdown">
 						
-						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% block fullname %}Stefan Kussmaul{% endblock %}<b class="caret"></b></a>
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% block fullname %}{{ user.first_name }} {{ user.last_name }}{% endblock %}<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="{% url 'admin_trip_planner' %}">My Trips</a></li>
 							<li><a href="#">Leader Menu</a></li>

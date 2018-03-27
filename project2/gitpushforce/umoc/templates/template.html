@@ -18,7 +18,8 @@
 
 	<body>
 		<div class="container">
-			{% include "navbar.html" %}
+			<!-- include navbar, passing in user and notifications -->
+			{% include "navbar.html" with user=user notifications=notifications %}
 			{% block content %}Content{% endblock %}
 		</div>
 	</body>

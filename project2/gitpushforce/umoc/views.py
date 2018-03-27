@@ -19,37 +19,31 @@ def index(request):
 	num_trips=Trip.objects.all().count()
 	num_admins=User.objects.filter(admin_level__exact='a').count()
 
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
 	
-	# Render the HTML template index.html with the data in the context variable
-	
-	# "Caroline's note to clarify what render does":
-
-	# Render creates an html page as a response
-	# GIVEN: request object (HttpRequest), HTML template with placeholder for data, and context variable (data to be inserted into placeholders)
+	print ('Found user {}'.format(user))
+	print ('User has {} notifications:'.format(len(notifications)))
+	for n in notifications:
+		print (n)
+		
 	return render(
 		request,
 		'index.html',
-		context={'num_users':num_users,'num_trips':num_trips, 'num_admins':num_admins},
+		context={'num_users':num_users,'num_trips':num_trips, 'num_admins':num_admins, 'user': user, notifications: notifications },
 	)
 
 def dashboard(request):
 	"""
 	View function for home page of site.
 	"""
-	# Generate counts of some of the main objects
-	num_trips=Trip.objects.all().count()
-
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
 	
-	# Render the HTML template index.html with the data in the context variable
-	
-	# "Caroline's note to clarify what render does":
-
-	# Render creates an html page as a response
-	# GIVEN: request object (HttpRequest), HTML template with placeholder for data, and context variable (data to be inserted into placeholders)
 	return render(
 		request,
 		'dashboard.html',
-		context={'num_trips':num_trips, 'user': user_sample, 'trips': [trip_sample]},
+		context={'user': user, 'trips': [trip_sample], notifications: notifications},
 	)
 
 
@@ -57,20 +51,14 @@ def profile(request):
 	"""
 	View function for home page of site.
 	"""
-	# Generate counts of some of the main objects
-	num_trips=Trip.objects.all().count()
 
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
 	
-	# Render the HTML template index.html with the data in the context variable
-	
-	# "Caroline's note to clarify what render does":
-
-	# Render creates an html page as a response
-	# GIVEN: request object (HttpRequest), HTML template with placeholder for data, and context variable (data to be inserted into placeholders)
 	return render(
 		request,
 		'profile_info.html',
-		context={'num_trips':num_trips, 'user': user_sample},
+		context={'user': user, notifications: notifications},
 	)
 
 class TripListView(generic.ListView):
@@ -78,12 +66,17 @@ class TripListView(generic.ListView):
 	template_name = 'dashboard.html'  # Specify your own template name/location
 	num_trips=Trip.objects.all().count()
 	
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
+	
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get the context
 		context = super(TripListView, self).get_context_data(**kwargs)
 		# Create any data and add it to the context
 		context['some_data'] = 'This is just some data'
 		context['count'] = self.get_queryset().count()
+		context['user'] = user
+		context['notifications'] = notifications
 		return context
 
 
@@ -97,33 +90,26 @@ class TripInfoView(generic.DetailView):
 		except Trip.DoesNotExist:
 			raise Http404("Trip does not exist")
 
-		#book_id=get_object_or_404(Book, pk=pk)
-		
+		user = User.objects.filter(first_name__exact='Stefan')[0]
+		notifications = user.notification_set.all()
+	
 		return render(
 			request,
 			'trip_info.html',
-			context={'trip':trip_id, }
+			context={'trip': trip_id, 'user': user, notifications: notifications}
 		)
 
 def trip_info(request, trip_id):
 	"""
 	Serves information page for trip with given trip_id.
 	"""
-	print('Received trip_id {}'.format(trip_id))
-	# Generate counts of some of the main objects
-	num_trips=Trip.objects.all().count()
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
 
-	
-	# Render the HTML template index.html with the data in the context variable
-	
-	# "Caroline's note to clarify what render does":
-
-	# Render creates an html page as a response
-	# GIVEN: request object (HttpRequest), HTML template with placeholder for data, and context variable (data to be inserted into placeholders)
 	return render(
 		request,
 		'trip_info.html',
-		context={'num_trips':num_trips, 'user': user_sample, 'trip':trip_sample},
+		context={'user': user, notifications: notifications, 'trip':trip_sample},
 	)
 
 
@@ -131,20 +117,13 @@ def admin_trip_planner(request):
 	"""
 	View function for home page of site.
 	"""
-	# Generate counts of some of the main objects
-	num_trips=Trip.objects.all().count()
-
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
 	
-	# Render the HTML template index.html with the data in the context variable
-	
-	# "Caroline's note to clarify what render does":
-
-	# Render creates an html page as a response
-	# GIVEN: request object (HttpRequest), HTML template with placeholder for data, and context variable (data to be inserted into placeholders)
 	return render(
 		request,
 		'admin_trip_planner.html',
-		context={'num_trips':num_trips, 'users': [user_sample]},
+		context={'user': user, 'notifications': notifications, 'users': [user_sample]},
 	)
 
 def admin_management(request):
@@ -155,15 +134,11 @@ def admin_management(request):
 	num_users=User.objects.all().count()
 	num_leaders=User.objects.filter(admin_level__exact='l').count()
 	num_admins=User.objects.filter(admin_level__exact='a').count()
-	
-	# Render the HTML template index.html with the data in the context variable
-	
-	# "Caroline's note to clarify what render does":
+	user = User.objects.filter(first_name__exact='Stefan')[0]
+	notifications = user.notification_set.all()
 
-	# Render creates an html page as a response
-	# GIVEN: request object (HttpRequest), HTML template with placeholder for data, and context variable (data to be inserted into placeholders)
 	return render(
 		request,
 		'admin_management.html',
-		context={'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins},
+		context={'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins, 'user': user, 'notifications': notifications}
 	)
