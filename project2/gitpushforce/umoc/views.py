@@ -141,3 +141,14 @@ def admin_management(request):
 		'admin_management.html',
 		context={'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins, 'user': user, 'notifications': notifications}
 	)
+
+
+def waiver(request):
+   user = User.objects.filter(first_name__exact='Stefan')[0]
+   notifications = user.notification_set.all()
+
+   return render(
+      request,
+      'waiver.html',
+      context={'user': user, 'trips': [trip_sample], notifications: notifications},
+   )
