@@ -9,6 +9,7 @@ phone_regex = RegexValidator(regex=r'\d{10}', message="Phone number must be 10 d
 
 # returns path to user profile photo (MEDIA_ROOT/profiles/<user_id>
 def profile_directory_path(instance, filename):
+	print ('Received instance {} and filename {}'.format(instance, filename))
 	return 'profiles/{}'.format(instance.id)
 
 
@@ -22,7 +23,7 @@ class User(models.Model):
 	email = models.EmailField(max_length=30, unique=True, help_text='Enter your email address')
 	password = models.CharField(max_length=20) # TODO: store safely using dedicated authentication 
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
-	profile_img = models.ImageField(verbose_name='Profile Image')
+	profile_img = models.ImageField(verbose_name='Profile Image', upload_to=profile_directory_path)
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
 	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact', blank=True)
 	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex], blank=True)
