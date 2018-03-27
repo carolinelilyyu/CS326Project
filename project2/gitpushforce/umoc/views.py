@@ -98,6 +98,26 @@ class TripInfoView(generic.DetailView):
 			context={'trip': trip_id, 'user': user, notifications: notifications}
 		)
 
+
+class UserInfoView(generic.DetailView):
+	model = User
+	template_name = 'profile_info.html'
+	
+	def user_detail_view(request,pk):
+		try:
+			user_id=User.objects.get(pk=pk)
+		except User.DoesNotExist:
+			raise Http404("User does not exist")
+
+		user = User.objects.filter(first_name__exact='Stefan')[0]
+		notifications = user.notification_set.all()
+	
+		return render(
+			request,
+			'profile_info.html',
+			context={'user': user_id, notifications: notifications}
+		)
+
 def trip_info(request, trip_id):
 	"""
 	Serves information page for trip with given trip_id.

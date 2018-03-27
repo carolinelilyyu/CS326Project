@@ -20,7 +20,7 @@
         <div id="white_form">
         {% load static %}
         <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
-        <h5>Led by: <a href="{% url 'profile'%}">{{trip.leader.first_name}}</a></h5>
+        <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
         <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
 
         <p><strong>Number of Seats Available:</strong> <a href="">{{ trip.num_seats }}</a></p>
