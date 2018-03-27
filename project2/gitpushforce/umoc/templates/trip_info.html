@@ -38,7 +38,12 @@
 
         </div>
         <button id="sign_up" class="btn btn-info">Join Trip!</button>
-        <h3 id="comments">Comments</h3>
+        
+		<h3 id="comments">Comments</h3>
+		{% for comment in trip.comment_set.all %}
+			{% include 'snippets/comment.html' with comment=comment %}
+		{% endfor %}
+		
         <input type="text" placeholder="Comment" class="form-control" />
 
         </div>

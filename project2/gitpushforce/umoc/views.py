@@ -74,36 +74,36 @@ def profile(request):
 	)
 
 class TripListView(generic.ListView):
-    model = Trip
-    template_name = 'dashboard.html'  # Specify your own template name/location
-    num_trips=Trip.objects.all().count()
-    
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
-        context = super(TripListView, self).get_context_data(**kwargs)
-        # Create any data and add it to the context
-        context['some_data'] = 'This is just some data'
-        context['count'] = self.get_queryset().count()
-        return context
+	model = Trip
+	template_name = 'dashboard.html'  # Specify your own template name/location
+	num_trips=Trip.objects.all().count()
+	
+	def get_context_data(self, **kwargs):
+		# Call the base implementation first to get the context
+		context = super(TripListView, self).get_context_data(**kwargs)
+		# Create any data and add it to the context
+		context['some_data'] = 'This is just some data'
+		context['count'] = self.get_queryset().count()
+		return context
 
 
 class TripInfoView(generic.DetailView):
-    model = Trip
-    template_name = 'trip_info.html'
+	model = Trip
+	template_name = 'trip_info.html'
+	
+	def trip_detail_view(request,pk):
+		try:
+			trip_id=Trip.objects.get(pk=pk)
+		except Trip.DoesNotExist:
+			raise Http404("Trip does not exist")
 
-    def trip_detail_view(request,pk):
-        try:
-            trip_id=Trip.objects.get(pk=pk)
-        except Trip.DoesNotExist:
-            raise Http404("Trip does not exist")
-
-        #book_id=get_object_or_404(Book, pk=pk)
-        
-        return render(
-            request,
-            'trip_info.html',
-            context={'trip':trip_id, }
-        )
+		#book_id=get_object_or_404(Book, pk=pk)
+		
+		return render(
+			request,
+			'trip_info.html',
+			context={'trip':trip_id, }
+		)
 
 def trip_info(request, trip_id):
 	"""
