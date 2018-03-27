@@ -37,12 +37,15 @@ Parameters:
 					  <span class="caret"></span>
 					</a>
 					<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
+						<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
 						<ul class="dropdown-menu">
-							<li><a href="#">Hi</a></li>
-							<li><a href="#">{{ notifications|length }}</a></li>
-						  {% for notification in notifications %}
-							<li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
-						  {% endfor %}
+						  {% if user.notification_set.all %}
+						    {% for notification in user.notification_set.all %}
+							  <li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
+						    {% endfor %}
+						  {% else %}
+						      <li><a href="#">No Notifications</a></li>
+						  {% endif %}
 						</ul> <!-- /Sub menu -->
 					</li>
 				</ul>

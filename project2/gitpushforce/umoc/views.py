@@ -66,15 +66,14 @@ class TripListView(generic.ListView):
 	template_name = 'dashboard.html'  # Specify your own template name/location
 	num_trips=Trip.objects.all().count()
 	
-	user = User.objects.filter(first_name__exact='Stefan')[0]
-	notifications = user.notification_set.all()
-	
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get the context
 		context = super(TripListView, self).get_context_data(**kwargs)
 		# Create any data and add it to the context
 		context['some_data'] = 'This is just some data'
 		context['count'] = self.get_queryset().count()
+		user = User.objects.filter(first_name__exact='Stefan')[0]
+		notifications = user.notification_set.all()
 		context['user'] = user
 		context['notifications'] = notifications
 		return context
