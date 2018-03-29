@@ -88,8 +88,10 @@ class TripInfoView(generic.DetailView):
 	template_name = 'trip_info.html'
 	
 	def trip_detail_view(request,pk):
+		print ('received id {}'.format(pk))  # TODO: WHY IS IT NOT PRINTING???
 		try:
-			trip_id=Trip.objects.get(pk=pk)
+			queried_trip = Trip.objects.get(pk=pk)
+			print ('{} seats available'.format(queried_trip.num_seats - len(queried_trip.participants)) )
 		except Trip.DoesNotExist:
 			raise Http404("Trip does not exist")
 
@@ -99,7 +101,7 @@ class TripInfoView(generic.DetailView):
 		return render(
 			request,
 			'trip_info.html',
-			context={'trip': trip_id, 'user': user, notifications: notifications}
+			context={'trip': queried_trip, 'user': user, notifications: notifications, 'num_seats_remaining': queried_trip.num_seats - len(queried_trip.participants)}
 		)
 
 

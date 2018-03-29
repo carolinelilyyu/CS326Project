@@ -23,15 +23,15 @@
         <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
         <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
 
-        <p><strong>Number of Seats Available:</strong> <a href="">{{ trip.num_seats }}</a></p>
+        <p><strong>Number of Seats Available:</strong> {{ num_seats_remaining }} of {{ trip.num_seats }}</p> <!-- todo: what's the issue here? -->
         <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
 
-          <div class="btn-group">
-            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.num_seats }} Users Going On Trip <span class="caret"></span>
+          <div class="btn-group"> <!-- todo: why isn't trip.participants|length working correctly? -->
+            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.participants|length }} Users Going On Trip <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
               {% for participant in trip.participants.all %}
-              <li><a href="#">{{participant}}</a></li>
+              <li><a href="{{ participant.get_absolute_url }}">{{participant}}</a></li>
               {% endfor %}
 
             </ul>
