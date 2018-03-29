@@ -25,5 +25,5 @@ urlpatterns = [
 	path('', include('umoc.urls')),  # send root directory to umoc url handlers
 ]
 
-# TODO: IS THIS NECESSARY?
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

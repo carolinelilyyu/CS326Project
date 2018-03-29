@@ -20,6 +20,10 @@ def index(request):
 	num_admins=User.objects.filter(admin_level__exact='a').count()
 
 	user = User.objects.filter(first_name__exact='Stefan')[0]
+	print(user.profile_img.__dir__())
+	print(user.profile_img.name)
+	print(user.profile_img.url)
+	
 	notifications = user.notification_set.all()
 	
 	print ('Found user {}'.format(user))
