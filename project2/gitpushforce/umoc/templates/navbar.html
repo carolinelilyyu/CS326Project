@@ -15,23 +15,24 @@ Parameters:
 
 			<div class="collapse navbar-collapse" id="navbar-collapse-5">
 				<ul class="nav navbar-nav">
-					<li><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">1</span></a></li>
-					<li class="active"><a href="#">Contact Us</a></li>
+					<li {% if request.path == "/dashboard/" %}class="active"{% endif %}><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">1</span></a></li>
+					<li><a href="#">{{request.path}}, {{user.admin_level}}</a></li>
 				</ul>
-				<form class="navbar-form navbar-left" action="#" role="search">
-					<div class="form-group">
-						<div class="input-group">
-							<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
-							<span class="input-group-btn">
-								<button type="submit" class="btn"><span class="fui-search"></span></button>
-							</span>
+				{% if user %}
+					<form class="navbar-form navbar-left" action="#" role="search">
+						<div class="form-group">
+							<div class="input-group">
+								<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+								<span class="input-group-btn">
+									<button type="submit" class="btn"><span class="fui-search"></span></button>
+								</span>
+							</div>
 						</div>
-					</div>
-				</form>
-				<ul class="nav navbar-nav navbar-right">
-					{% if user %}
+					</form>
+
+					<ul class="nav navbar-nav navbar-right">				
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="navbar-new">1</span></a>
 							<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
 							<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
 							<ul class="dropdown-menu">
@@ -40,30 +41,43 @@ Parameters:
 										<li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
 									{% endfor %}
 								{% else %}
-									<li><a href="#">No Notifications</a></li>
+									<li><a>No Notifications</a></li>
 								{% endif %}
 							</ul> <!-- /Sub menu -->
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% block fullname %}{{ user.first_name }} {{ user.last_name }}{% endblock %}<b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="{% url 'admin_trip_planner' %}">My Trips</a></li>
-								<li><a href="#">Leader Menu</a></li>
-								<li><a href="{% url 'admin_management' %}">Admin Menu</a></li>
+								<li><a href="#">My Trips</a></li>
+								{% if user.admin_level == "l" %}
+									<li {% if request.path == "/admin_trip_planner/" %}class="active"{% endif %}><a href="{% url 'admin_trip_planner' %}">Leader Menu</a></li>
+								{% endif %}
+								{% if user.admin_level == "a" %}
+									<li {% if request.path == "/admin_management/" %}class="active"{% endif %}><a href="{% url 'admin_management' %}">Admin Menu</a></li>
+								{% endif %}
 								<li class="divider"></li>
 								<li><a href="#">Log Out</a></li>
 							</ul>
 						</li>
-						<li>
+						<li {% if request.path == "/profile/" %}class="active"{% endif %}>
 							<a href="{% url 'profile' %}">
 								<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
 								<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
 							</a>
 						</li>
-					{% else %}
-						<li><a href="login.html">Log In</a></li>
-					{% endif %}
-				</ul>
+					</ul>
+				{% else %}
+					<form class="navbar-form navbar-right" role="form">
+						<div class="form-group">
+							<input type="text" placeholder="Email" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="password" placeholder="Password" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-success">Sign in</button>
+						<button type="submit" class="btn btn-danger">Register</button>
+					</form>
+				{% endif %}
 			</div>
 		</nav>
 	</div>
