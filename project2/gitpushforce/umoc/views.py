@@ -101,7 +101,7 @@ class TripInfoView(generic.DetailView):
 		return render(
 			request,
 			'trip_info.html',
-			context={'trip': queried_trip, 'user': user, notifications: notifications, 'num_seats_remaining': queried_trip.num_seats - len(queried_trip.participants)}
+			context={'trip': queried_trip, 'user': user, notifications: notifications, 'num_seats_remaining': 2} # queried_trip.num_seats - queried_trip.participants.count()}
 		)
 
 

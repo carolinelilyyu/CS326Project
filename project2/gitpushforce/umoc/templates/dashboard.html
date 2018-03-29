@@ -37,9 +37,10 @@
 					
 								<h3>
 									<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
-								</h3>
+								</h3> 
 								
 								<p>Led by {{ trip.leader.first_name }}</p>
+								<p>From {{ trip.start_time }} to {{ trip.end_time }}</p>
 								<p>{{ trip.description }}</p>
 							</div>
 							</div>
