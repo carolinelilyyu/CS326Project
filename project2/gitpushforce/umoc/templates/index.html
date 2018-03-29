@@ -6,16 +6,58 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<h1>UMOC Home</h1>
-		<p>Welcome to <em>UMOC</em>, a very basic UMOC website developed by the students of CS326, Spring 2018.</p>
-		<h2>Dynamic content</h2>
-		<p>The database has the following record counts:</p>
-		
-		<ul>
-			<li><strong>Users:</strong> {{ num_users }}</li>
-			<li><strong>Trips:</strong> {{ num_trips }}</li>
-			<li><strong>Admins:</strong> {{ num_admins }}</li>
-		</ul>
+		<div class="headingbox">
+			<h1 class="heading">Index</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				
+				
+				<div class="row">
+					<div class="col-md-12">
+						<h1>UMOC Home</h1>
+						<p>Welcome to <em>UMOC</em>, a very basic UMOC website developed by the students of CS326, Spring 2018.</p>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-md-12">
+						<h2>Dynamic content</h2>
+						<p>The database has the following record counts:</p>
+						<ul>
+							<li><strong>Users:</strong> {{ num_users }}</li>
+							<li><strong>Trips:</strong> {{ num_trips }}</li>
+							<li><strong>Admins:</strong> {{ num_admins }}</li>
+						</ul>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-md-12">
+						<p class="centered">UMass Outing Club is one of UMass Amherst's largest clubs, with members from all backgrounds and interests, from hiking to rock climbing to looking at photos of nature on Instagram. You should sign up and go an an adventure!</p>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-md-12">
+						{% load static %}
+						<img src="{% static 'img/index/sunrise.jpg' %}" alt="example-image" class="img-rounded img-responsive center-image">
+						{% load static %}
+						<script src="{% static 'javascript/index.js' %}"></script>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
 	</div>
 </div>
 
