@@ -1,84 +1,100 @@
-<!DOCTYPE html>
 {% extends "template.html" %}
 
-{% block title %}<title>Activities - UMOC</title>{% endblock %}
+{% block title %}<title>Waiver - UMOC</title>{% endblock %}
+
 {% block content %}
 
 <div class="row">
-				<div class="col-md-12">
-					<pre>
-								<strong>RELEASE OF LIABILITY</strong>
-						<strong>READ CAREFULLY - THIS AFFECTS YOUR LEGAL RIGHTS</strong>
-In exchange for participation in the activity of *activity* organized by UMOC, of 181 Presidents Dr, Amherst, Massachusetts, 01003 and/or use of the 
-property, facilities, and services of UMOC, I, *name*, of *address*, *city*, *state* *zip*, agree for myself and (if applicable) for the members of my 
-family, to the following:
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">{{user.first_name}}'s Waiver</h1>
+		</div>
+	</div>
+</div>
 
-<strong>1. AGREEMENT TO FOLLOW DIRECTIONS.</strong> I agree to observe and obey all posted rules and warnings, and further agree to follow any oral instructions or
-directions given by UMOC or the employees, representatives, or agents of UMOC.
-
-<strong>2. ASSUMPTION OF THE RISKS AND RELEASE.</strong> I recognize that there are certain inherent risks associated with the above described activity and I assume full
-responsibility for personal injury to myself and (if applicable) my family members, and further release and discharge UMOC for injury, loss, or damage
-arising out of my or my family's use of or presence upon the facilities of UMOC, whether caused by the fault of myself, my family, UMOC, or other third
-parties.
-
-<strong>3. INDEMNIFICATION.</strong> I agree to indemnify and defend UMOC against all claims, causes of action, damages, judgments, costs or expenses, including attorney
-fees and other litigation costs, which may in any way arise from my or my family's use of or presence upon the facilities of UMOC.
-					
-<strong>4. FEES.</strong> I agree to pay for all damages to the facilities of UMOC caused by any negligent, reckless, or willful actions by me or my family.
-
-<strong>5. APPLICABLE LAW.</strong> Any legal or equitable claim that may arise from participation in the above shall be resolved under Massachusetts law.
-
-<strong>6. NO DURESS.</strong> I agree and acknowledge that I am under no pressure or duress to sign this agreement and that I have been given a reasonable opportunity
-to review it before signing. I further agree and acknowledge that I am free to have my own legal counsel review this agreement if I so desire. I further
-agree and acknowledge that UMOC has offered to refund any fees I paid to use its facilities if I choose not to sign this agreement.
-
-<strong>7. ARM'S LENGTH AGREEMENT.</strong> This agreement and each of its terms are the product of an arm's length negotiation between the parties. In the event any
-ambiguity is found to exist in the interpretation of this agreement, or any of its provisions, the parties, and each of them, explicitly reject the
-application of any legal or equitable rule of interpretation which would elad to a construction either "for" or "against" a particular party based
-upon their status as the drafter of a specific term, language, or provision giving rise to such ambiguity.
-
-<strong>8. ENFORCEABILITY.</strong> The invalidity or unenforceability of any provision of this agreement, whether standing alone or as applied to a particular
-occurrence or circumstance, shall not affect the validity or enforceability of any other provision of this agreement or of any other applications
-of such provision, as the case amy be, and such invalid or unenforceable provision shall be deemed not to be part of this agreement.
-
-<strong>9. DISPUTE RESOLUTIONS.</strong> The parties will attempt to resolve any dispute arising out of or relating to this agreement through friendly negotiations
-amongst the parties. If the matter is not resolved by negotiation, the parties will resolve the dispute using the below Alternate Dispute Resolution
-procedure.
-
-Any controversies or disputes arising out of or relating to this agreement will be submitted to mediation in accordance with any statutory rules of
-mediation. If mediation is not successful in resolving the entire dispute or is unavailable, any outstanding issues will be submitted to final and
-binding arbitration under the rules of the American Arbitration Association. The arbitrator's award will be final, and judgment may be entered upon
-it by any court having proper jurisdiction.
-
-<strong>Emergency Contact.</strong> In case of an emergency, please call *name* (relationship: *relationship*) at *number* (day), or *number* (evening).
-
-<strong>I HAVE READ THIS DOCUMENT AND UNDERSTAND IT. I FURTHER UNDERSTAND THAT BY SIGNING THIS RELEASE, I VOLUNTARILY SURRENDER CERTAIN LEGAL RIGHTS</strong>
-					</pre>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label for="name">Legal Name</label>
-						<input type="text" class="form-control" id="name" placeholder="Nihit Bajaj">
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				
+				
+				<div class="row">
+					<div class="col-md-12">
+						<p class="centered"><strong>THE UNIVERSITY OF MASSACHUSETTS AMHERST</strong></p>
+						<p class="centered">Student Activities & Involvement</p>
+						<p class="centered"><strong>OUTING CLUB LIABILITY WAIVER</strong></p>
+						<p class="centered"><strong>AND EMERGENCY CONTACT INFORMATION</strong></p>
+						<p class="centered">To be completed by all participating individuals</p>
+						<p>Participants involved with the University of Massachusetts, Outing Club should be aware of the possible risks that are inherent in nature for some activities. These risks include, but are not limited to, the potential for accidents or illness while traveling to and from events, as well as participating in various club activities. Every attempt should be made to minimize the existing risks through the use of proper equipment, safe facilities under the University’s control, and sound safety practices. However, participants should realize these risks cannot be eliminated completely. If participants meet minimal physical and mental conditioning and follow safety procedures, the potential accidents may be reduced. Student Activates & Involvement strongly recommends that each participant have an annual physical examination and personal medical and accident insurance.</p>
 					</div>
 				</div>
-				<div class="col-md-4">
-					<div class="form-group">
-						<label for="date">Current Date</label>
-						<input type="date" class="form-control" id="date" placeholder="">
+				
+				
+				<div class="row">
+					<div class="col-md-6">
+						<p class="centered"><strong>TEAM MEMBER INFORMATION</strong></p>
+						<pre>Name: {{user.last_name}}, {{user.first_name}}</pre>
+						<pre>Phone: {{user.phone_num}}</pre>
+						<pre>Email: {{user.email}}</pre>
+						<pre>Permanent Address: Address here</pre>
+					</div>
+					<div class="col-md-6">
+						<p class="centered"><strong>EMERGENCY CONTACT INFORMATION</strong></p>
+						<pre>Name: {{user.contact_name}}</pre>
+						<pre>Phone: {{user.contact_phone}}</pre>
+						<pre>Email: Email here</pre>
+						<pre>Emergency Contact's Address: Address here</pre>
 					</div>
 				</div>
-				<div class="col-md-2">
-					<div class="form-group">
-						<label>I agree.</label>
-						<button class="btn btn-primary form-control" type="submit">Submit</button>
+				
+				<div class="row">
+					<p>My signature below verifies that I am eighteen years of age or order and have voluntarily applied to participate in activities for the organization listed above. I acknowledge that the nature of my participation in Outing Club activities may expose me to hazards or risks that may result in illness, personal injury, or death, and I understand and appreciate the nature of such hazards and risks.</p>
+				</div>
+				
+				<div class="row">
+					<p>In consideration of my participation, I hereby accept all risk to my health and of my injury or death that may result from such participation, and I hereby release the University of Massachusetts, Amherst, its governing board, officers , employees, and representatives from any and all liability to me, my personal representatives, estate, heirs, next of kin, and assigns for any claims and causes of action for loss of or damage to my property and for any and all illness or injury to my person, including my death, that may result from or occur during my participation, whether caused by negligence of the University of Massachusetts, Amherst its governing board, officers, employees, or representatives, or otherwise. I further agree to indemnify and hold harmless the University of Massachusetts, Amherst, its governing board, officers, employees, and representatives from liability for the injury or death of any person(s) and damage that may result from my negligent or intentional act or omission while participating.</p>
+				</div>
+				
+				<div class="row">
+					<p>I also accept the responsibility of reporting all injuries and illness, including the signs and symptoms for concussions, to SA&I staff. I have been educated (<strong>see reverse side</strong>) on what a concussion is and how I can prevent sustaining a concussion. I have been informed of the signs and symptoms for a concussion and instructed on what I should do if I think I have a concussion.</p>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="name">Legal Name (First, Last)</label>
+							<input type="text" class="form-control" id="name" value="{{user.first_name}} {{user.last_name}}">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="date">Current Date (mm/dd/yyyy)</label>
+							<input type="date" class="form-control" id="date" value="{% now 'Y-m-d' %}">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							<label>Spire ID</label>
+							<input type="number" class="form-control" placeholder="12345678" min="10000000" max="99999999">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							<label>I agree.</label>
+							<button class="btn btn-primary form-control" type="submit">Submit</button>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-12">
-				<p>Please note that information related to your submission (such as an <strong>IP address</strong> and <strong>browser information</strong>) will be recorded and stored.
+				<div class="row">
+					<div class="col-md-12">
+						<p>Please note that information related to your submission (such as an <strong>IP address</strong> and <strong>browser information</strong>) will be recorded and stored along with your waiver.</p>
+					</div>
+				</div>
+				
+				
 			</div>
 		</div>
+	</div>
+</div>
 
 {% endblock %}
