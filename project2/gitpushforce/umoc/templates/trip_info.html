@@ -1,19 +1,12 @@
 {% extends "template.html" %}
 
+{% block title %}<title>Trip Info - UMOC</title>{% endblock %}
+
 {% block content %}
-  <head>
-  
-    <meta charset="utf-8">
-    <title>Trip Info - UMOC</title>
-    <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
-    {% load static %}
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
 
-  </head>
-  
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
 
-  <body>
     <div id="headingbox"><h1>Trip Details</h1></div>
     <div id="form">
       <div id="wrapper">
@@ -50,5 +43,5 @@
         </div>
       </div>
     </div>
-  </body>
+
 {% endblock %}
