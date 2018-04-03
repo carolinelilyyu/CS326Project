@@ -1,0 +1,47 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Trip Info - UMOC</title>{% endblock %}
+
+{% block content %}
+
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+
+    <div id="headingbox"><h1>Trip Details</h1></div>
+    <div id="form">
+      <div id="wrapper">
+        <div id="white_form">
+        {% load static %}
+        <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
+        <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
+        <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
+
+        <!-- TODO <p><strong>Number of Seats Available:</strong> {{ num_seats_remaining }} of {{ trip.num_seats }}</p> <!-- todo: what's the issue here? -->
+        <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
+
+          <div class="btn-group"> <!-- todo: why isn't trip.participants|length working correctly? -->
+            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.participants.all|length }} Users Going On Trip <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+              {% for participant in trip.participants.all %}
+              <li><a href="{{ participant.get_absolute_url }}">{{participant}}</a></li>
+              {% endfor %}
+
+            </ul>
+
+        </div>
+        <button id="sign_up" class="btn btn-info">Join Trip!</button>
+        
+		<h3 id="comments">Comments</h3>
+		{% for comment in trip.comment_set.all %}
+			{% include 'snippets/comment.html' with comment=comment %}
+		{% endfor %}
+		
+		<!-- import Javascript for Comment functionality -->
+		{% load static %}
+		<script src="{% static 'javascript/comments.js' %}"></script>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

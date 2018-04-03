@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		{% block title %}<title>Template - UMOC</title>{% endblock %}
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.3.0/css/flat-ui.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.3.0/js/flat-ui.min.js"></script>
+		
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+		{% load static %}
+		<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+	</head>
+
+	<body>
+		<div class="container">
+			<!-- include navbar, passing in user and notifications -->
+			{% include "navbar.html" with user=user notifications=notifications %}
+			{% block content %}Content{% endblock %}
+		</div>
+	</body>
+</html>

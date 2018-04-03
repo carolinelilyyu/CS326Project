@@ -1,0 +1,83 @@
+<!-- Website navbar.
+Parameters:
+'user', currently logged-in user
+'notifications', a list of Notification models
+-->
+<div class="row">
+	<div class="col-md-12">
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-5">
+					<span class="sr-only">Toggle navigation</span>
+				</button>
+				<a class="navbar-brand" href="{% url 'index' %}">UMOC</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="navbar-collapse-5">
+				<ul class="nav navbar-nav">
+					<li {% if request.path == "/dashboard/" %}class="active"{% endif %}><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">4</span></a></li>
+				</ul>
+				{% if user %}
+					<form class="navbar-form navbar-left" action="#" role="search">
+						<div class="form-group">
+							<div class="input-group">
+								<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+								<span class="input-group-btn">
+									<button type="submit" class="btn"><span class="fui-search"></span></button>
+								</span>
+							</div>
+						</div>
+					</form>
+
+					<ul class="nav navbar-nav navbar-right">				
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="navbar-new">{{ user.notification_set.all|length }}</span></a>
+							<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
+							<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
+							<ul class="dropdown-menu">
+								{% if user.notification_set.all %}
+									{% for notification in user.notification_set.all %}
+										<li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
+									{% endfor %}
+								{% else %}
+									<li><a>No Notifications</a></li>
+								{% endif %}
+							</ul> <!-- /Sub menu -->
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% block fullname %}{{ user.first_name }} {{ user.last_name }}{% endblock %}<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">My Trips</a></li>
+								{% if user.admin_level == "l" %}
+									<li {% if request.path == "/admin_trip_planner/" %}class="active"{% endif %}><a href="{% url 'admin_trip_planner' %}">Leader Menu</a></li>
+								{% endif %}
+								{% if user.admin_level == "a" %}
+									<li {% if request.path == "/admin_management/" %}class="active"{% endif %}><a href="{% url 'admin_management' %}">Admin Menu</a></li>
+								{% endif %}
+								<li class="divider"></li>
+								<li><a href="#">Log Out</a></li>
+							</ul>
+						</li>
+						<li {% if request.path == "/profile/" %}class="active"{% endif %}>
+							<a href="{% url 'profile' %}">
+								<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
+								<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
+							</a>
+						</li>
+					</ul>
+				{% else %}
+					<form class="navbar-form navbar-right" role="form">
+						<div class="form-group">
+							<input type="text" placeholder="Email" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="password" placeholder="Password" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-success">Sign in</button>
+						<button type="submit" class="btn btn-danger">Register</button>
+					</form>
+				{% endif %}
+			</div>
+		</nav>
+	</div>
+</div>
