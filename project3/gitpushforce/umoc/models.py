@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 
@@ -13,15 +14,14 @@ def profile_directory_path(instance, filename):
 	return 'profiles/{}'.format(instance.id)
 
 
-class User(models.Model): 
+class UserProfile(models.Model): 
 	"""
 	Model representing a user of the website (UMOC club member). A user has first name, last name and date of birth, as well as a profile image and phone number.
 	"""
+	user = models.OneToOneField(User, related_name='profile', on_delete='models.SET_NULL')
 	first_name = models.CharField(max_length=20, help_text='Enter your first name', verbose_name='First Name')
 	last_name = models.CharField(max_length=20, help_text='Enter your last name', verbose_name='Last Name')
 	dob = models.DateField(verbose_name='Date of Birth', help_text='Enter your birth date in the format "YYYY-MM-DD"')
-	email = models.EmailField(max_length=30, unique=True, help_text='Enter your email address')
-	password = models.CharField(max_length=20) # TODO: store safely using dedicated authentication 
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
 	profile_img = models.ImageField(verbose_name='Profile Image', upload_to=profile_directory_path)
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
@@ -77,8 +77,8 @@ class Trip(models.Model):
 	)
 	
 	tag = models.CharField(max_length=2, choices=TAGS, blank=True, help_text='Select a tag to help classify this trip')
-	leader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
-	participants = models.ManyToManyField(User, help_text='Select users who are signed up to go on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
+	leader = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
+	participants = models.ManyToManyField(UserProfile, help_text='Select users who are signed up to go on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
 
 	class Meta:
 		ordering = ['start_time']
@@ -105,7 +105,7 @@ class Comment(models.Model):
 	""" 
 	Represents a comment left by a user on a trip. Has an author (User), a timestamp, a parent comment if it is a reply (can be None), and the Trip it is commenting on.
 	"""
-	author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	author = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
 	text = models.CharField(max_length=280)
 	time_stamp = models.DateTimeField(auto_now_add=True)
@@ -126,7 +126,7 @@ class Notification(models.Model):
 	""" 
 	A Notification is sent to a user when something relevant to them occurs. Examples are: one of their comments gets a reply, one of their planned trips is canceled, their trip is coming up soon. A Notification simply stores a reference to the User, a message, a timestamp of when it was sent, and a bool (whether it has been seen yet). It can also include an optional url, which when clicked will direct the user to a relevant page.
 	"""
-	recipient = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	recipient = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	message = models.TextField()
 	seen = models.BooleanField(default=False)
 	dismissed = models.BooleanField(default=False)
