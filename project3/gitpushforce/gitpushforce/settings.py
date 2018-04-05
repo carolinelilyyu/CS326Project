@@ -55,7 +55,7 @@ ROOT_URLCONF = 'gitpushforce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +123,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = 'media/'
 
 MEDIA_URL = 'media/'
+
+# Redirect to dashboard URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/dashboard'

@@ -17,7 +17,7 @@ Parameters:
 				<ul class="nav navbar-nav">
 					<li {% if request.path == "/dashboard/" %}class="active"{% endif %}><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">4</span></a></li>
 				</ul>
-				{% if user %}
+				{% if user.is_authenticated %}
 					<form class="navbar-form navbar-left" action="#" role="search">
 						<div class="form-group">
 							<div class="input-group">
@@ -77,6 +77,15 @@ Parameters:
 						<button type="submit" class="btn btn-danger">Register</button>
 					</form>
 				{% endif %}
+				<!-- TODO: SNIPPET FROM DJANGO DOCS FOR LOGIN/LOGOUT:
+				{% if user.is_authenticated %}
+				 <li>User: {{ user.get_username }}</li>
+				 <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+				   {% else %}
+					 <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+				   {% endif %} 
+				  </ul>
+				  -->
 			</div>
 		</nav>
 	</div>

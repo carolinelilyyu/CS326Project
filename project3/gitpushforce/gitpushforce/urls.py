@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
 	path('', include('umoc.urls')),  # send root directory to umoc url handlers
+	path('accounts/', include('django.contrib.auth.urls')),  # authentication
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

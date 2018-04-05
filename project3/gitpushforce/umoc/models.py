@@ -30,7 +30,7 @@ class UserProfile(models.Model):
 	can_comment = models.BooleanField(help_text='Set whether user can leave comments on trips', default=True)
 	can_join_trip = models.BooleanField(help_text='Allow user to sign up for trips?', default=False)
 	
-	# Allowed statuses for admin level 
+	# Allowed statuses for admin level  TODO: MAKE GROUPS
 	ADMIN_LEVELS = (
 		('u', 'User'),
 		('l', 'Leader'),
@@ -38,6 +38,12 @@ class UserProfile(models.Model):
 	)
 	admin_level = models.CharField(max_length=1, choices=ADMIN_LEVELS, default='u')
 
+	''' TODO: ADD PROPERTIES, LIKE SO
+	@property
+	def is_overdue(self):
+		if self.due_back and date.today() > self.due_back:
+			return True
+		return False'''
 
 	class Meta:
 		ordering = ['last_name', 'first_name', 'admin_level']	
