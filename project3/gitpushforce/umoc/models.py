@@ -47,6 +47,7 @@ class UserProfile(models.Model):
 
 	class Meta:
 		ordering = ['last_name', 'first_name', 'admin_level']	
+		permissions = (('can_comment', 'Wether the user can leave comments on trips'), ('can_join_trip', 'Whether the user can sign up for a trip'))
     
 	def __str__(self):
 		return '{}, {}'.format(self.last_name, self.first_name)

@@ -31,12 +31,13 @@ Parameters:
 
 					<ul class="nav navbar-nav navbar-right">				
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="navbar-new">{{ user.notification_set.all|length }}</span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="navbar-new">{{ user.profile.notification_set.all|length }}</span></a>
 							<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
 							<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
 							<ul class="dropdown-menu">
-								{% if user.notification_set.all %}
-									{% for notification in user.notification_set.all %}
+								<!-- todo: make for-else -->
+								{% if user.profile.notification_set.all %}
+									{% for notification in user.profile.notification_set.all %}
 										<li><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a></li>
 									{% endfor %}
 								{% else %}
