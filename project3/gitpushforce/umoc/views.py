@@ -1,10 +1,8 @@
 from django.shortcuts import render
-
-# Create your views here.
 from .models import UserProfile, Trip
 from datetime import datetime
 from django.views import generic
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
 	"""
@@ -62,7 +60,7 @@ def profile(request):
 	"""
 	return render(
 		request,
-		'profile_info.html',
+		'profile.html',
 		context={},
 	)
 
@@ -96,11 +94,12 @@ class TripInfoView(generic.DetailView):
 			'trip_info.html',
 			context={'trip': queried_trip, 'num_seats_remaining': 2} # queried_trip.num_seats - queried_trip.participants.count()}
 		)
-
-
+		
+		
+#@login_required
 class UserInfoView(generic.DetailView):
 	model = UserProfile
-	template_name = 'profile_info.html'
+	template_name = 'public_profile.html'
 	
 	def user_detail_view(request,pk):
 		try:
@@ -112,7 +111,7 @@ class UserInfoView(generic.DetailView):
 	
 		return render(
 			request,
-			'profile_info.html',
+			'public_profile.html',
 			context={'profile': profile}
 		)
 
@@ -127,13 +126,13 @@ def trip_info(request, trip_id):  # TODO: IS THIS EVEN USED???
 	)
 
 
-def admin_trip_planner(request):
+def trip_planner(request):
 	"""
 	View function for home page of site.
 	"""
 	return render(
 		request,
-		'admin_trip_planner.html',
+		'trip_planner.html',
 		context={'profiles': [UserProfile.objects.all()]},
 	)
 

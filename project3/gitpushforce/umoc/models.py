@@ -57,7 +57,7 @@ class UserProfile(models.Model):
 		
 	# returns url to user's profile. Todo: change. No user profile pages
 	def get_absolute_url(self):
-		return reverse('profile_info', args=[str(self.id)])
+		return reverse('public_profile', args=[str(self.id)])
 		
 	# returns path to user's profile image. In development.
 	def get_profile_img_url(self):
