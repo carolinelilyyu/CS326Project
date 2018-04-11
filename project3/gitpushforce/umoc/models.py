@@ -52,6 +52,9 @@ class UserProfile(models.Model):
 	def __str__(self):
 		return '{}, {}'.format(self.last_name, self.first_name)
 
+	def __equals__(self, other): # TODO: LOOK UP BEST PRACTICE
+		return other is not None and isinstance(other, self.__class__) and self.id == other.id
+		
 	# returns url to user's profile. Todo: change. No user profile pages
 	def get_absolute_url(self):
 		return reverse('profile_info', args=[str(self.id)])
@@ -85,7 +88,7 @@ class Trip(models.Model):
 	
 	tag = models.CharField(max_length=2, choices=TAGS, blank=True, help_text='Select a tag to help classify this trip')
 	leader = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
-	participants = models.ManyToManyField(UserProfile, help_text='Select users who are signed up to go on the trip') # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
+	participants = models.ManyToManyField(UserProfile, help_text='Select users who are signed up to go on the trip', blank=True) # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
 
 	class Meta:
 		ordering = ['start_time']

@@ -20,6 +20,7 @@ def index(request):
 	print(profile.profile_img.__dir__())
 	print(profile.profile_img.name)
 	print(profile.profile_img.url)
+	print('Equals itself? {}'.format(profile == profile))
 	
 	notifications = profile.notification_set.all()
 	
