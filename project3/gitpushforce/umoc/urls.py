@@ -5,6 +5,7 @@ from django.conf.urls import url
 urlpatterns = [
     path('', views.index, name='index'),
 	path('dashboard/', views.TripListView.as_view(), name='dashboard'),
+	path('register/', views.register, name='register'),
 	path('profile/', views.profile, name='profile'),
 	# trip path must include an integer trip_id field
 	# path('trip/<int:trip_id>', views.TripInfoView.as_view(), name='trip_info'),

@@ -30,9 +30,10 @@
             </ul>
 
         </div>
+		
 		{% if user.profile == trip.leader %} <!-- TODO: THIS DOESN'T WORK -->
 			<button id="cancel" class="btn btn-danger">Cancel Trip</button>
-		{% elif user.profile in trip.participants %}
+		{% elif user.profile in trip.participants.all %}
 			<button id="sign_up" class="btn btn-info">Withdraw</button>
 		{% else %}
 			<button id="sign_up" class="btn btn-info">Join Trip!</button>

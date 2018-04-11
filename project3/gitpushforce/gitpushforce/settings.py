@@ -126,3 +126,4 @@ MEDIA_URL = 'media/'
 
 # Redirect to dashboard URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/dashboard'
+LOGOUT_REDIRECT_URL = '/'

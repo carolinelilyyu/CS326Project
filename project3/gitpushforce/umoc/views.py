@@ -46,6 +46,16 @@ def dashboard(request):
 	)
 
 
+def register(request):
+	"""
+	View function where new users register.
+	"""
+	return render(
+		request,
+		'index.html' # TODO: registration page
+	)
+		
+		
 def profile(request):
 	"""
 	View function for home page of site.
