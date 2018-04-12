@@ -13,7 +13,13 @@ def profile_directory_path(instance, filename):
 	print ('Received instance {} and filename {}'.format(instance, filename))
 	return 'profiles/{}'.format(instance.id)
 
-
+# Allowed statuses for admin level
+ADMIN_LEVELS = (
+	('u', 'User'),
+	('l', 'Leader'),
+	('a', 'Admin'),
+)
+	
 class UserProfile(models.Model): 
 	"""
 	Model representing a user of the website (UMOC club member). A user has first name, last name and date of birth, as well as a profile image and phone number.
@@ -27,28 +33,14 @@ class UserProfile(models.Model):
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
 	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact', blank=True)
 	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex], blank=True)
-	#last_payment = models.DateField(blank=True)
+	# date of last club payment
+	last_paid = models.DateField(blank=True, null=True, help_text='Date the last time the user paid (blank if never)')
 	can_comment = models.BooleanField(help_text='Set whether user can leave comments on trips', default=True)
 	can_join_trip = models.BooleanField(help_text='Allow user to sign up for trips?', default=False)
-	
-	# Allowed statuses for admin level  TODO: MAKE GROUPS
-	ADMIN_LEVELS = (
-		('u', 'User'),
-		('l', 'Leader'),
-		('a', 'Admin'),
-	)
 	admin_level = models.CharField(max_length=1, choices=ADMIN_LEVELS, default='u')
-
-	''' TODO: ADD PROPERTIES, LIKE SO
-	@property
-	def is_overdue(self):
-		if self.due_back and date.today() > self.due_back:
-			return True
-		return False'''
 
 	class Meta:
 		ordering = ['last_name', 'first_name', 'admin_level']	
-		permissions = (('can_comment', 'Wether the user can leave comments on trips'), ('can_join_trip', 'Whether the user can sign up for a trip'))
     
 	def __str__(self):
 		return '{}, {}'.format(self.last_name, self.first_name)
@@ -71,7 +63,8 @@ class Trip(models.Model):
 	"""
 	name = models.CharField(max_length=20, help_text='Enter Trip Name')
 	description = models.TextField(help_text='Enter description and informatin for trip')
-	num_seats = models.PositiveSmallIntegerField(verbose_name='Number of Seats', help_text='Enter number of seats available for the trip')
+	num_seats = models.PositiveSmallIntegerField(verbose_name='Total Trip Capacity', help_text='Enter number of seats available for the trip')
+	capacity = models.PositiveSmallIntegerField(verbose_name='Total Trip Capacity', help_text='Enter number of seats available for the trip')
 	thumbnail = models.ImageField(help_text='Upload an image to show alongside this trip')
 	start_time = models.DateTimeField(help_text='Select Start Time of the Trip')
 	end_time = models.DateTimeField(help_text='Select End Time of the Trip')
@@ -100,14 +93,15 @@ class Trip(models.Model):
 	
 	tag = models.CharField(max_length=2, choices=TAG_CHOICES, blank=True, help_text='Select a tag to help classify this trip')
 	leader = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
-	participants = models.ManyToManyField(UserProfile, help_text='Select users who are signed up to go on the trip', blank=True) # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
+	participants = models.ManyToManyField(UserProfile, help_text='Select users who are signed up to go on the trip', blank=True)
+	drivers = models.ManyToManyField(UserProfile, related_name='drivers', help_text='Users who have committed to driving', blank=True)
 
 	class Meta:
 		ordering = ['start_time']
 
 	# returns whether trip is full
 	def is_full(self):
-		return len(self.participants) < self.num_seats
+		return len(self.participants) < self.capacity
 
 	# return full tag name
 	def get_tag_name(self):
