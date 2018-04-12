@@ -27,6 +27,7 @@ class UserProfile(models.Model):
 	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
 	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact', blank=True)
 	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex], blank=True)
+	#last_payment = models.DateField(blank=True)
 	can_comment = models.BooleanField(help_text='Set whether user can leave comments on trips', default=True)
 	can_join_trip = models.BooleanField(help_text='Allow user to sign up for trips?', default=False)
 	
@@ -76,8 +77,19 @@ class Trip(models.Model):
 	end_time = models.DateTimeField(help_text='Select End Time of the Trip')
 	cancelled = models.BooleanField(default=False, help_text='Click to Cancel')
 	
-	# Allowed Tags a trip can have
-	TAGS = (
+	# Allowed Tags a trip can have: code - (name, color)
+	TAGS = {
+		'': ('', ''),  # shouldn't be necessary; currently a work-around
+		'r': ('Rock Climbing', '#ffff66'),
+		'h': ('Hiking', '#5080ef'),
+		's': ('Ski and Board', '#00dfff'),
+		'sk': ('Skiing', '#99b3ff'),
+		'sn': ('Snowboarding', '#ff5050'),
+		'c': ('Cabin Trip', '#e7e042'),
+	}
+	
+	# Made for Django choice field
+	TAG_CHOICES = (
 		('r', 'Rock Climbing'),
 		('h', 'Hiking'),
 		('s', 'Ski and Board'),
@@ -86,7 +98,7 @@ class Trip(models.Model):
 		('c', 'Cabin Trip'),
 	)
 	
-	tag = models.CharField(max_length=2, choices=TAGS, blank=True, help_text='Select a tag to help classify this trip')
+	tag = models.CharField(max_length=2, choices=TAG_CHOICES, blank=True, help_text='Select a tag to help classify this trip')
 	leader = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, help_text='Select a user to be in charge of organizing and leading this trip', verbose_name='Trip Leader/Organizer', related_name='trip_leader') # NOTE: NOT SURE IF ON_DELETE AND NULL ARE SET AS WE WANT
 	participants = models.ManyToManyField(UserProfile, help_text='Select users who are signed up to go on the trip', blank=True) # TODO: VALIDATE IT IS LESS THAN NUM_SEATS. Also, figure out if this works.
 
@@ -97,12 +109,17 @@ class Trip(models.Model):
 	def is_full(self):
 		return len(self.participants) < self.num_seats
 
-	# returns a string of details: members signed up, emergency contacts, etc. TODO: PDF?
-	def get_details(self):
-		for participant in self.participants_set:
-			print(participant.first_name)
-		return ''
+	# return full tag name
+	def get_tag_name(self):
+		print ('tag name {}'.format(self.tag))
+		print ('{}'.format(self.TAGS[self.tag]))
+		print ('{}'.format(self.tag in self.TAGS))
+		return self.TAGS[self.tag][0] if self.tag in self.TAGS else ''
 		
+	# return hex string of this Trip's tag
+	def get_tag_color(self):
+		return self.TAGS[self.tag][1] if self.tag in self.TAGS else ''
+	
 	# route to trip page
 	def get_absolute_url(self):
 		return reverse('trip_info', args=[str(self.id)])

@@ -2,7 +2,6 @@ from django.shortcuts import render
 from .models import UserProfile, Trip
 from datetime import datetime
 from django.views import generic
-from django.contrib.auth.decorators import login_required
 
 def index(request):
 	"""
@@ -96,7 +95,6 @@ class TripInfoView(generic.DetailView):
 		)
 		
 		
-#@login_required
 class UserInfoView(generic.DetailView):
 	model = UserProfile
 	template_name = 'public_profile.html'
