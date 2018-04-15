@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import UserProfile, Trip
+from .models import UserProfile, Trip, Comment
 from datetime import datetime
 from django.views import generic
+from django.http import JsonResponse
 
 def index(request):
 	"""
@@ -91,10 +92,10 @@ class TripInfoView(generic.DetailView):
 		return render(
 			request,
 			'trip_info.html',
-			context={'trip': queried_trip, 'num_seats_remaining': 2} # queried_trip.num_seats - queried_trip.participants.count()}
+			context={'trip': queried_trip} # queried_trip.num_seats - queried_trip.participants.count()}
 		)
 		
-		
+	
 class UserInfoView(generic.DetailView):
 	model = UserProfile
 	template_name = 'public_profile.html'
@@ -123,6 +124,19 @@ def trip_info(request, trip_id):  # TODO: IS THIS EVEN USED???
 		context={'trip': Trip.objects.get(pk=pk)},
 	)
 
+	
+def trip_comments(request, pk):
+	""" 
+	Return JSON of all comments for a given trip id.
+	"""
+	print ('Retrieving comments for trip id {}'.format(pk))
+	# TODO: CHECK IF TRIP IS IN DATABASE
+	comments = Comment.objects.all()
+	data = {}
+	for comment in comments:
+		data[comment.id] = comment
+	print (data)
+	return JsonResponse(data)
 
 def trip_planner(request):
 	"""

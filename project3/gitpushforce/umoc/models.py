@@ -63,7 +63,8 @@ class Trip(models.Model):
 	"""
 	name = models.CharField(max_length=20, help_text='Enter Trip Name')
 	description = models.TextField(help_text='Enter description and informatin for trip')
-	num_seats = models.PositiveSmallIntegerField(verbose_name='Total Trip Capacity', help_text='Enter number of seats available for the trip')
+	# TODO: DEPRECATE AND REMOVE THIS FIELD.
+	num_seats = models.PositiveSmallIntegerField(verbose_name='Number of seats remaining', help_text='Enter number of seats available for the trip')
 	capacity = models.PositiveSmallIntegerField(verbose_name='Total Trip Capacity', help_text='Enter number of seats available for the trip')
 	thumbnail = models.ImageField(help_text='Upload an image to show alongside this trip')
 	start_time = models.DateTimeField(help_text='Select Start Time of the Trip')
