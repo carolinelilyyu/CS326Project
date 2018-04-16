@@ -180,11 +180,12 @@ def admin_management(request):
 	num_users=UserProfile.objects.all().count()
 	num_leaders=UserProfile.objects.filter(admin_level__exact='l').count()
 	num_admins=UserProfile.objects.filter(admin_level__exact='a').count()
+	names_list=UserProfile.objects.all()
 
 	return render(
 		request,
 		'admin_management.html',
-		context={'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins}
+		context={'names_list':names_list,'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins}
 	)
 
 
