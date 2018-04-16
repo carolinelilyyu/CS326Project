@@ -19,11 +19,16 @@
 			<div class="content">
 			
 					<h2>Trip Finder</h2>
-					<a href = "{% url 'trip_planner'%}">	
+					{% if user.is_authenticated %}
+					{% if perms.catalog.can_be_edited %}
+					<a href = "{% url 'trip_create'%}">	
 						<button type="button" class="btn btn-primary">
 							Leader Only: Add a Trip	
 						</button>
 					</a>
+
+					{% endif %}
+					{% endif %}
 					<p>The database has the following record counts:</p>
 					
 					<ul>

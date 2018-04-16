@@ -1,0 +1,47 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Trip Planner (Leader) - UMOC</title>{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">UMOC Trip Planner (Leader)</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				<!--
+				<h2>Dynamic content</h2>
+				<p>The database has the following record counts:</p>
+				
+				<ul>
+					<li><strong>Trips:</strong> {{ num_trips }}</li>
+				</ul>
+				-->
+				<div class = "row">
+					<div class = "col-md-5">
+						<form action="" method="post">
+						    {% csrf_token %}
+						    <table>
+						    {{ form.as_table }}
+						    </table>
+
+								<div class="col-md-4">
+									<div class="form-group">
+										<label>Submit</label>
+										<button class="btn btn-success btn-block btn-lg" type="submit">Submit</button>
+									</div>
+								</div>
+
+						    <input type="submit" value="Submit" />
+						    
+{% endblock %}	
+
