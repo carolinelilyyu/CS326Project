@@ -4,13 +4,20 @@
 
 {% block content %}
 
-	{% load static %}
-	<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">Trip Details</h1>
+		</div>
+	</div>
+</div>
 
-    <div id="headingbox"><h1>Trip Details</h1></div>
-    <div id="form">
-      <div id="wrapper">
-        <div id="white_form">
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
         {% load static %}
         <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
         <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
@@ -47,5 +54,6 @@
         </div>
       </div>
     </div>
+</div>
 
 {% endblock %}

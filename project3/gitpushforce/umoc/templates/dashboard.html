@@ -5,52 +5,60 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
-<div id="headingbox"><h1>UMOC Activities</h1></div>
-<body>
-
-<div id="form">
-	<div id = "wrapper">
-		<div id = "white_form">
-				<h2>Trip Finder</h2>
-				<a href = "{% url 'trip_planner'%}">	
-					<button type="button" class="btn btn-primary">
-						Leader Only: Add a Trip	
-					</button>
-				</a>
-				<p>The database has the following record counts:</p>
-				
-				<ul>
-					{# use built-in length filter. This is equivalent to calling len(trips). See https://docs.djangoproject.com/en/2.0/ref/templates/builtins/ for more #}
-					<li><strong>Trips:</strong> {{ count }}</li>
-				</ul>
-				
-				{% if trip_list %}
-					<ul>
-						{% for trip in trip_list %}
-							<!-- In proj1 we had the dashboard have its own css; don't know if we want that here  -->
-							<div class = "row">
-							<div class = "col-md-10" id = "trip_widget">
-					
-								<h3>
-									<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
-								</h3> 
-								{% if trip.get_tag_name %}
-									<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
-								{% endif %}
-								<p>Led by {{ trip.leader.first_name }}</p>
-								<p>From {{ trip.start_time }} to {{ trip.end_time }}</p>
-								<p>{{ trip.description }}</p>
-							</div>
-							</div>
-						{% endfor %}
-					</ul>
-				{% else %}
-					<p>There are no trips in the database.</p>
-				{% endif %}
-			
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">UMOC Activities</h1>
 		</div>
 	</div>
 </div>
-</body>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class = "wrapper">
+			<div class="content">
+			
+					<h2>Trip Finder</h2>
+					<a href = "{% url 'trip_planner'%}">	
+						<button type="button" class="btn btn-primary">
+							Leader Only: Add a Trip	
+						</button>
+					</a>
+					<p>The database has the following record counts:</p>
+					
+					<ul>
+						{# use built-in length filter. This is equivalent to calling len(trips). See https://docs.djangoproject.com/en/2.0/ref/templates/builtins/ for more #}
+						<li><strong>Trips:</strong> {{ count }}</li>
+					</ul>
+					
+					{% if trip_list %}
+						<ul>
+							{% for trip in trip_list %}
+								
+								<div class = "row">
+								<div class = "col-md-10" id = "trip_widget">
+						
+									<h3>
+										<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
+									</h3> 
+									{% if trip.get_tag_name %}
+										<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
+									{% endif %}
+									<p>Led by {{ trip.leader.first_name }}</p>
+									<p>From {{ trip.start_time }} to {{ trip.end_time }}</p>
+									<p>{{ trip.description }}</p>
+									
+								</div>
+								</div>
+							{% endfor %}
+						</ul>
+					{% else %}
+						<p>There are no trips in the database.</p>
+					{% endif %}
+				
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}

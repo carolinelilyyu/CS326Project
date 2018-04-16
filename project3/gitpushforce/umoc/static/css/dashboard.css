@@ -1,9 +1,7 @@
 #trip_widget {
-	background-color: #CCC;
 	margin: 4rem;
 	padding: 1.5rem;
-	border: 2px solid gray;
-	border-radius: 10px;
+	border-top: 2px solid black
 }
 
 #headingbox {
