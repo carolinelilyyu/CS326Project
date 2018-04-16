@@ -28,18 +28,11 @@
 				-->
 				<div class = "row">
 					<div class = "col-md-5">
-						<form action="" method="post">
+						<form action="{% url 'dashboard'%}" method="post">
 						    {% csrf_token %}
 						    <table>
 						    {{ form.as_table }}
 						    </table>
-
-								<div class="col-md-4">
-									<div class="form-group">
-										<label>Submit</label>
-										<button class="btn btn-success btn-block btn-lg" type="submit">Submit</button>
-									</div>
-								</div>
 
 						    <input type="submit" value="Submit" />
 						    

@@ -224,7 +224,7 @@ class TripUpdate(UpdateView):
 
 class TripDelete(DeleteView):
     model = Trip
-    success_url = reverse_lazy('authors')
+    success_url = reverse_lazy('dashboard')
 
 
 

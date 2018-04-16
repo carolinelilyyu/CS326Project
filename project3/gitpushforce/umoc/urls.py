@@ -13,4 +13,10 @@ urlpatterns = [
     path('waiver/', views.waiver, name = 'waiver'),
     path('trip_planner/', views.trip_planner, name='trip_planner'),
     path('administration/', views.admin_management, name='admin_management'),
+   	path('trip/create/', views.TripCreate.as_view(), name='trip_create'),
+   	path('trip/<int:pk>/update/', views.TripUpdate.as_view(), name='trip_update'),
+   	path('trip/<int:pk>/delete/', views.TripDelete.as_view(), name='trip_delete'),
+
+
+
 ]
