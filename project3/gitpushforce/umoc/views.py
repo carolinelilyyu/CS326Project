@@ -2,7 +2,9 @@ from django.views import generic
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from datetime import datetime
 import json
 
@@ -192,3 +194,36 @@ def waiver(request):
       'waiver.html',
       context={},
    )
+
+
+class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
+	model = Trip
+	template_name = 'trip_planner.html'
+	permission_required = 'catalog.can_be_edited'
+
+	#permission_required = 'catalog.can_mark_returned'
+
+	def get_context_data(self, **kwargs):
+		user = User.objects.filter(first_name__exact='Stefan')[0]
+		notifications = user.notification_set.all()
+		context = super(AdminTripPlanner, self).get_context_data(**kwargs)
+		context['profiles'] = [UserProfile.objects.all()]
+		return context
+
+
+
+class TripCreate(CreateView):
+    model = Trip
+    fields = '__all__'
+    # initial={'description':'05/01/2018',}
+
+class TripUpdate(UpdateView):
+    model = Trip
+    fields = ['name','description','num_seats','start_time', 'end_time', 'cancelled']
+
+class TripDelete(DeleteView):
+    model = Trip
+    success_url = reverse_lazy('authors')
+
+
+
