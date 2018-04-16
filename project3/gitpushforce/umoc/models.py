@@ -99,6 +99,7 @@ class Trip(models.Model):
 
 	class Meta:
 		ordering = ['start_time']
+		
 
 	# returns whether trip is full
 	def is_full(self):
