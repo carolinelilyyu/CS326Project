@@ -33,17 +33,11 @@
 							<li><strong>Admins:</strong> {{ num_admins }}</li>
 							<li><strong>Leaders:</strong> {{ num_leaders }}</li>
 							<li><strong>Users:</strong> {{ num_users }}</li>
-							{% if user_list %}
-								<ul>
-									{% for user in user_list %}
-										<li>
-											<a href="{{ user.id }}">{{ user.first_name }}</a> 
-										</li>
-									{% endfor %}
-								</ul>
-							{% else %}
-								<p>work in progress</p>
-							{% endif %}
+							<ul>
+								{% for user in names_list %}
+								    <li>{{ user }}, <strong>Admin Level:</strong> {{ user.admin_level }}</li>
+								{% endfor %}
+							</ul>
 						</ul>
 					</div>
 				</div>
