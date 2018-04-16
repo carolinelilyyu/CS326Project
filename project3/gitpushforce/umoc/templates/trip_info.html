@@ -39,10 +39,7 @@
 			<button id="sign_up" class="btn btn-info">Join Trip!</button>
 		{% endif %}
         
-		<h3 id="comments">Comments</h3>
-		{% for comment in trip.comment_set.all %}
-			{% include 'snippets/comment.html' with comment=comment %}
-		{% endfor %}
+		<h3 id="comments-header">Comments</h3>
 		
 		<!-- import Javascript for Comment functionality -->
 		{% load static %}

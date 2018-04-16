@@ -1,7 +1,61 @@
-// Handles user replying to a comment
+// Handles loading and replying to comments. Retrieves comments for given trip id using AJAX.
 
-console.log('Found the file')
+var trip_id = 6;
 
+$(document).ready(function(){
+	console.log('Doc ready');
+	$.ajax({
+		type: "get",
+		url: "http://localhost:8000/trip/6/comments",
+		contentType: "application/json",
+		success: function(data) {
+			console.log('Received response');
+			console.log(data);
+			
+			// mapping of comment ids to created html
+			var comments = new Map();
+			// list of ids of parent comments 
+			var parent_ids = [];
+			
+			var comment_header = document.getElementById('comments-header');
+			
+			for (var i = 0; i < data.length; i++) {
+				console.log('Elem ' + i + ' is ' + data[i].id);
+				
+				var div = document.createElement('div');
+				div.setAttribute('id', 'comment-' + data[i].id);
+				div.className = 'comment';
+				div.style.backgroundColor = '#CCC';
+				
+				div.innerHTML = '<p>' + data[i].author_name + '<p>';
+				
+				// comment does not have a parent
+				if (data[i].parent === 0) {
+					parent_ids.push(data[i].id);
+				} else {
+					div.innerHTML = '<p>Replying to ' + data[i].parent + '</p>';
+				}
+				
+				div.innerHTML = div.innerHTML + '<p>' + data[i].timestamp + '</p>' + '<p>' + data[i].text + '</p>';
+				
+				comments.set(data[i].id, div);
+				console.log(comments.size);
+				console.log(comments.get(data[i].id));
+			}
+			
+			console.log('Parents are ' + parent_ids);
+			// add comments that do not have a parent (replies will already have been chained)
+			for (var i = 0; i < parent_ids.length; i++) {
+				console.log('hey');
+				comment_header.append(comments.get(parent_ids[i]));
+			}
+		},
+		error: function(){
+			console.log('AJAX error');
+		}
+	});
+});
+/*
 var comments = document.getElementsByClassName('comment');
 var reply_btns = document.getElementsByClassName('comment-reply-btn');
 
@@ -28,7 +82,7 @@ function onClickReply(comment_index) {
 	console.log(comment_index);
 	
 }*/
-
+/*
 function handleElement(i) {
     reply_btns[i].onclick=function() {
 		console.log('Comment ' + i + ' clicked. Replied = ' + reply_btns[i].dataset.replied);
@@ -51,4 +105,4 @@ function handleElement(i) {
 			comments[i].appendChild(reply_div);
 		}
     };
-}
+}*/

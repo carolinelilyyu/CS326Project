@@ -3,6 +3,7 @@ from .models import UserProfile, Trip, Comment
 from datetime import datetime
 from django.views import generic
 from django.http import JsonResponse
+import json
 
 def index(request):
 	"""
@@ -132,11 +133,11 @@ def trip_comments(request, pk):
 	print ('Retrieving comments for trip id {}'.format(pk))
 	# TODO: CHECK IF TRIP IS IN DATABASE
 	comments = Comment.objects.all()
-	data = {}
+	data = []
 	for comment in comments:
-		data[comment.id] = comment
+		data.append({ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp})
 	print (data)
-	return JsonResponse(data)
+	return JsonResponse(data, safe=False)
 
 def trip_planner(request):
 	"""
