@@ -1,9 +1,13 @@
-from django.shortcuts import render
-from .models import UserProfile, Trip, Comment
-from datetime import datetime
 from django.views import generic
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+
+from datetime import datetime
 import json
+
+from .models import UserProfile, Trip, Comment
+from .forms import *
 
 def index(request):
 	"""
@@ -49,11 +53,27 @@ def register(request):
 	"""
 	View function where new users register.
 	"""
-	return render(
-		request,
-		'register.html',
-		context={},
-	)
+	# return render(
+		# request,
+		# 'register.html',
+		# context={},
+	# )
+	
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
+		
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			raw_password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password=raw_password)
+			login(request, user)
+			return redirect('dashboard')
+	
+	else:
+		form = RegisterForm()
+	
+	return render(request, 'register.html', {'form': form})
 		
 		
 def profile(request):

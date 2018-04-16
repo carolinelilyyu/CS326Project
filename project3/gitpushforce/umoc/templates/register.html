@@ -27,56 +27,14 @@
 				<div class="row">
 					<div class="col-md-12">
 						<form method="post" action="">
+							
 							{% csrf_token %}
 							<div class="row">
-								<div class="col-md-2"></div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label>First Name</label>
-										<input type="text" class="form-control" placeholder="John">
-									</div>
+								<div class="col-md-12">
+									<table>
+										{{ form }}
+									</table>
 								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label>Last Name</label>
-										<input type="text" class="form-control" placeholder="Smith">
-									</div>
-								</div>
-								<div class="col-md-2"></div>
-							</div>
-							
-							<div class="row">
-								<div class="col-md-2"></div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="InputEmail">Email Address</label>
-										<input type="email" class="form-control" placeholder="email@domain.com">
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="InputEmail">Confirm Email Address</label>
-										<input type="email" class="form-control" placeholder="email@domain.com">
-									</div>
-								</div>
-								<div class="col-md-2"></div>
-							</div>
-							
-							<div class="row">
-								<div class="col-md-2"></div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="InputPassword1">Change Password</label>
-										<input type="password" class="form-control" placeholder="*******">
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<label for="InputPassword2">Confirm Password</label>
-										<input type="password" class="form-control" placeholder="*******">
-									</div>
-								</div>
-								<div class="col-md-2"></div>
 							</div>
 							
 							<div class="row">
@@ -90,13 +48,84 @@
 								<div class="col-md-4">
 									<div class="form-group">
 										<label>Submit</label>
-										<button class="btn btn-primary btn-block btn-lg" type="submit">Submit</button>
+										<button class="btn btn-success btn-block btn-lg" type="submit">Submit</button>
 									</div>
 								</div>
 								<div class="col-md-2"></div>
 							</div>
+							
 						</form>
 					</div>
+				</div>
+				
+				<p>------------------------------------------------------------------------------------------------------------------------------------------------------<p>
+				
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>First Name</label>
+							<input type="text" class="form-control" placeholder="John">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Last Name</label>
+							<input type="text" class="form-control" placeholder="Smith">
+						</div>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="InputEmail">Email Address</label>
+							<input type="email" class="form-control" placeholder="email@domain.com">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="InputEmail">Confirm Email Address</label>
+							<input type="email" class="form-control" placeholder="email@domain.com">
+						</div>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="InputPassword1">Change Password</label>
+							<input type="password" class="form-control" placeholder="*******">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="InputPassword2">Confirm Password</label>
+							<input type="password" class="form-control" placeholder="*******">
+						</div>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Reset</label>
+							<button class="btn btn-danger btn-block btn-lg" type="reset">Reset</button>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Submit</label>
+							<button class="btn btn-primary btn-block btn-lg" type="submit">Submit</button>
+						</div>
+					</div>
+					<div class="col-md-2"></div>
 				</div>
 				
 				
