@@ -1,0 +1,108 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Register - UMOC</title>{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">New User Registration</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				
+				
+				<div class="row">
+					<div class="col-md-12">
+						<p>"Anyone can join. Everyone is welcome with open arms, smiles and handshakes (whichever you prefer). Our leaders are ready to accommodate everyone and their ability levels. You literally need ZERO experience to participate in any of our activities! No matter who you are, what your ability is, what your experience level is, you can join and come on trips with us."</p>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<form method="post" action="">
+							{% csrf_token %}
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label>First Name</label>
+										<input type="text" class="form-control" placeholder="John">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label>Last Name</label>
+										<input type="text" class="form-control" placeholder="Smith">
+									</div>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="InputEmail">Email Address</label>
+										<input type="email" class="form-control" placeholder="email@domain.com">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="InputEmail">Confirm Email Address</label>
+										<input type="email" class="form-control" placeholder="email@domain.com">
+									</div>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="InputPassword1">Change Password</label>
+										<input type="password" class="form-control" placeholder="*******">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="InputPassword2">Confirm Password</label>
+										<input type="password" class="form-control" placeholder="*******">
+									</div>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label>Reset</label>
+										<button class="btn btn-danger btn-block btn-lg" type="reset">Reset</button>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label>Submit</label>
+										<button class="btn btn-primary btn-block btn-lg" type="submit">Submit</button>
+									</div>
+								</div>
+								<div class="col-md-2"></div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

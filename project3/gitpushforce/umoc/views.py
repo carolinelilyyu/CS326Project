@@ -51,7 +51,8 @@ def register(request):
 	"""
 	return render(
 		request,
-		'index.html' # TODO: registration page
+		'register.html',
+		context={},
 	)
 		
 		
