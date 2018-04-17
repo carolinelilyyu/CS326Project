@@ -58,20 +58,19 @@ $(document).ready(function(){
 function renderThread(comments, id, depth) {
 	var div = document.createElement('div');
 	div.setAttribute('id', 'comment-' + comments.get(id).id);
-	div.setAttribute('padding-left', depth * 30);
+	div.style.paddingLeft = 30 * depth + 'px';
+	div.style.paddingBottom = 10;
+	
 	div.className = 'comment';
-	div.style.backgroundColor = '#CCC';
+	div.style.backgroundColor = '#d3d3d3';
 	
-	div.innerHTML = '<p>' + comments.get(id).author_name + '<p>';
+	div.innerHTML = '<p>' + comments.get(id).author_name + (comments.get(id).parent !== 0 ? ' Replying to ' + comments.get(comments.get(id).parent).author_name : '') + ' on ' + comments.get(id).timestamp  + '</p>';
 	
-	if (comments.get(id).parent !== 0) {
-		div.innerHTML = '<p>Replying to ' + comments.get(comments.get(id).parent).author_name + '</p>';
-	}
-	
-	div.innerHTML = div.innerHTML + '<p>' + comments.get(id).timestamp + '</p>' + '<p>' + comments.get(id).text + '</p>';
+	div.innerHTML += '<p>' + comments.get(id).text + '</p>';
+	div.innerHTML += '<button type="button" class="btn btn-primary">Reply</button>';
 	
 	for (var i = 0; i < comments.get(id).replies.length; i++) {
-			div.append(renderThread(comments, comments.get(id).replies[i], depth + 1));
+		div.append(renderThread(comments, comments.get(id).replies[i], depth + 1));
 	}
 	return div;
 }
