@@ -7,7 +7,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="headingbox">
-			<h1 class="heading">{{user.first_name}}'s Profile</h1>
+			<h1 class="heading">{{user.profile.first_name}}'s Profile</h1>
 		</div>
 	</div>
 </div>
@@ -40,7 +40,7 @@
 										<h4 class="todo-name">Fill out <strong>Emergency Contacts Info</strong></h4>Required once each year, valid for all trips
 									</div>
 								</li>
-								<li {% if user.can_join_trip %}class="todo-done"{% endif %}>
+								<li {% if user.profile.can_join_trip %}class="todo-done"{% endif %}>
 									<div class="todo-icon fui-heart"></div>
 									<div class="todo-content">
 										  <h4 class="todo-name">Pay the <strong>Membership Fee</strong></h4>"Required" once each year, valid for  all trips
