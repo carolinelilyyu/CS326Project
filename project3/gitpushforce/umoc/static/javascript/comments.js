@@ -12,42 +12,40 @@ $(document).ready(function(){
 			console.log('Received response');
 			console.log(data);
 			
-			// mapping of comment ids to created html
+			// mapping of comment ids to comment objects
 			var comments = new Map();
-			// list of ids of parent comments 
-			var parent_ids = [];
-			
-			var comment_header = document.getElementById('comments-header');
 			
 			for (var i = 0; i < data.length; i++) {
 				console.log('Elem ' + i + ' is ' + data[i].id);
 				
-				var div = document.createElement('div');
-				div.setAttribute('id', 'comment-' + data[i].id);
-				div.className = 'comment';
-				div.style.backgroundColor = '#CCC';
+				// list of ids of replies to this comment
+				data[i].replies = []
 				
-				div.innerHTML = '<p>' + data[i].author_name + '<p>';
-				
-				// comment does not have a parent
-				if (data[i].parent === 0) {
-					parent_ids.push(data[i].id);
-				} else {
-					div.innerHTML = '<p>Replying to ' + data[i].parent + '</p>';
-				}
-				
-				div.innerHTML = div.innerHTML + '<p>' + data[i].timestamp + '</p>' + '<p>' + data[i].text + '</p>';
-				
-				comments.set(data[i].id, div);
+				comments.set(data[i].id, data[i]);
 				console.log(comments.size);
 				console.log(comments.get(data[i].id));
 			}
 			
-			console.log('Parents are ' + parent_ids);
-			// add comments that do not have a parent (replies will already have been chained)
-			for (var i = 0; i < parent_ids.length; i++) {
-				console.log('hey');
-				comment_header.append(comments.get(parent_ids[i]));
+			// list of comment ids that are base comments
+			base_comments = []
+			
+			// build parent associations
+			for (const id of comments) {
+				console.log('id is ' + id[0]);
+
+				if (comments.get(id[0]).parent === 0) {
+					base_comments.push(id[0]);
+				} else {
+					comments.get(comments.get(id[0]).parent).replies.push(id[0]);
+				}
+			}
+
+			var comment_header = document.getElementById('comments-header');
+			
+			// render comment threads
+			for (var i = 0; i < base_comments.length; i++) {
+				var rendered_dom = renderThread(comments, base_comments[i], 0);
+				comment_header.append(rendered_dom); // TODO: this will add them in reverse order of creation
 			}
 		},
 		error: function(){
@@ -55,6 +53,28 @@ $(document).ready(function(){
 		}
 	});
 });
+
+// renders comment thread starting with given id. comments is a mapping of ids to comment objects. Depth is the depth of the current thread. Returns rendered DOM element
+function renderThread(comments, id, depth) {
+	var div = document.createElement('div');
+	div.setAttribute('id', 'comment-' + comments.get(id).id);
+	div.setAttribute('padding-left', depth * 30);
+	div.className = 'comment';
+	div.style.backgroundColor = '#CCC';
+	
+	div.innerHTML = '<p>' + comments.get(id).author_name + '<p>';
+	
+	if (comments.get(id).parent !== 0) {
+		div.innerHTML = '<p>Replying to ' + comments.get(comments.get(id).parent).author_name + '</p>';
+	}
+	
+	div.innerHTML = div.innerHTML + '<p>' + comments.get(id).timestamp + '</p>' + '<p>' + comments.get(id).text + '</p>';
+	
+	for (var i = 0; i < comments.get(id).replies.length; i++) {
+			renderThread(comments, comments.get(id).replies[i], depth + 1);
+	}
+	return div;
+}
 /*
 var comments = document.getElementsByClassName('comment');
 var reply_btns = document.getElementsByClassName('comment-reply-btn');
