@@ -31,6 +31,20 @@ class AdminTripForm(forms.Form):
         class Meta:
                 model = User
                 fields = ('name', 'description', 'num_seats', 'capacity', 'thumbnail', 'start_time', 'end_time')
+                name = forms.CharField(max_length=20, help_text='Enter Trip Name', error_messages={'required': 'Please enter your name'})
+                description = forms.CharField(widget=forms.Textarea, help_text='Enter description and informatin for trip', error_messages={'required': 'Please enter your description'})
+                num_seats = forms.IntegerField(help_text='Enter number of seats available for the trip', error_messages={'required': 'Please enter the number of seats'})
+                capacity = forms.IntegerField(help_text='Enter number of seats available for the trip', error_messages={'required': 'Please enter the capacity'})
+                thumbnail = forms.ImageField(help_text='Upload an image to show alongside this trip', error_messages={'required': 'Please enter a thumbnail picture'})
+                start_time = forms.DateTimeField(help_text='Select Start Time of the Trip', error_messages={'required': 'Please enter a date'})
+                end_time = forms.DateTimeField(help_text='Select End Time of the Trip', error_messages={'required': 'Please enter a date'})
+                cancelled = forms.BooleanField(required=False, help_text='Click to Cancel', error_messages={'required': 'Please enter whether is cancelled or not'})
+                tag = forms.CharField(help_text='Select a tag to help classify this trip', error_messages={'required': 'Please enter the tags'})
+                leader = forms.ChoiceField(help_text='Select a user to be in charge of organizing and leading this trip', error_messages={'required': 'Please enter the leader\'s name'})
+                participants = forms.MultipleChoiceField(help_text='Select users who are signed up to go on the trip', error_messages={'required': 'Please enter the participants\' names'})
+                drivers = forms.MultipleChoiceField(help_text='Users who have committed to driving', error_messages={'required': 'Please enter the drivers'})
+
+
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -45,4 +59,3 @@ class UpdateProfileForm(forms.Form):
     dob = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
     phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$', help_text = ("Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."))
     spire_id = forms.RegexField(regex=r'\d{8}$', help_text = ("SPIRE ID must be 8 digits"))
-    
