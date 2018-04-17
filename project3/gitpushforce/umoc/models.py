@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from datetime import datetime
 
 
 # used for validating phone numbers entered (9 digits)
@@ -70,7 +71,7 @@ class Trip(models.Model):
 	start_time = models.DateTimeField(help_text='Select Start Time of the Trip')
 	end_time = models.DateTimeField(help_text='Select End Time of the Trip')
 	cancelled = models.BooleanField(default=False, help_text='Click to Cancel')
-	
+
 	# Allowed Tags a trip can have: code - (name, color)
 	TAGS = {
 		'': ('', ''),  # shouldn't be necessary; currently a work-around

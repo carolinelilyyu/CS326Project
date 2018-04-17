@@ -45,16 +45,6 @@ def index(request):
 		context={'num_users':num_users,'num_trips':num_trips, 'num_admins':num_admins },
 	)
 
-def dashboard(request):
-	"""
-	View function for home page of site.
-	"""
-	return render(
-		request,
-		'dashboard.html',
-		context={'trips': Trip.objects.all() },
-	)
-
 
 def register(request):
 	"""
@@ -97,13 +87,14 @@ class TripListView(generic.ListView):
 	model = Trip
 	template_name = 'dashboard.html'  # Specify your own template name/location
 	num_trips=Trip.objects.all().count()
-	
+
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get the context
 		context = super(TripListView, self).get_context_data(**kwargs)
 		# Create any data and add it to the context
 		context['some_data'] = 'This is just some data'
 		context['count'] = self.get_queryset().count()
+		context['today'] = datetime.now()
 		return context
 
 
@@ -142,16 +133,6 @@ class UserInfoView(generic.DetailView):
 			'public_profile.html',
 			context={'profile': profile}
 		)
-
-def trip_info(request, trip_id):  # TODO: IS THIS EVEN USED???
-	"""
-	Serves information page for trip with given trip_id.
-	"""
-	return render(
-		request,
-		'trip_info.html',
-		context={'trip': Trip.objects.get(pk=pk)},
-	)
 
 	
 def trip_comments(request, pk):
