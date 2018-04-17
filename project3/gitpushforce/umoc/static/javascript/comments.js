@@ -71,7 +71,7 @@ function renderThread(comments, id, depth) {
 	div.innerHTML = div.innerHTML + '<p>' + comments.get(id).timestamp + '</p>' + '<p>' + comments.get(id).text + '</p>';
 	
 	for (var i = 0; i < comments.get(id).replies.length; i++) {
-			renderThread(comments, comments.get(id).replies[i], depth + 1);
+			div.append(renderThread(comments, comments.get(id).replies[i], depth + 1));
 	}
 	return div;
 }

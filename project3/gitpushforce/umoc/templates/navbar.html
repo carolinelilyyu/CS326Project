@@ -50,8 +50,8 @@
 									<li {% if request.path == "/trip_planner/" %}class="active"{% endif %}><a href="{% url 'trip_planner' %}">Leader Menu</a></li>
 								{% endif %}
 								{% if user.profile.admin_level == "a" %}
-									{% url 'administration' as admin_url %}
-									<li {% if request.path == admin_url %}class="active"{% endif %}><a href="{% url 'administration' %}">Admin Menu</a></li>
+									{% url 'admin_management' as admin_url %}
+									<li {% if request.path == admin_url %}class="active"{% endif %}><a href="{% url 'admin_management' %}">Admin Menu</a></li>
 								{% endif %}
 								<li class="divider"></li>
 								<li><a href="{% url 'logout' %}">Log Out</a></li>
