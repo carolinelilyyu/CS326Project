@@ -62,7 +62,7 @@ class Trip(models.Model):
 	""" 
 	Represents a scheduled trip.
 	"""
-	name = models.CharField(max_length=20, help_text='Enter Trip Name')
+	name = models.CharField(max_length=40, help_text='Enter Trip Name')
 	description = models.TextField(help_text='Enter description and informatin for trip')
 	# TODO: DEPRECATE AND REMOVE THIS FIELD.
 	num_seats = models.PositiveSmallIntegerField(verbose_name='Number of seats remaining', help_text='Enter number of seats available for the trip')
