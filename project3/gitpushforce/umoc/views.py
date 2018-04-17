@@ -12,9 +12,7 @@ import json
 from django import forms
 from django.core.exceptions import ValidationError
 from django.http import Http404
-
 from django.http import HttpResponseRedirect
-
 
 from .models import UserProfile, Trip, Comment
 from .forms import *
@@ -50,25 +48,29 @@ def index(request):
 
 
 def register(request):
-		"""
-		View function where new users register.
-		"""
+	"""
+	View function where new users register.
+	"""
+	
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
 		
-		if request.method == 'POST':
-				form = RegisterForm(request.POST)
-				
-				if form.is_valid():
-						form.save()
-						username = form.cleaned_data.get('username')
-						raw_password = form.cleaned_data.get('password1')
-						user = authenticate(username=username, password=raw_password)
-						login(request, user)
-						return redirect('dashboard')
-		
-		else:
-				form = RegisterForm()
-		
-		return render(request, 'register.html', {'form': form})
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			raw_password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password=raw_password)
+			
+			userpro = UserProfile(user=user, first_name = form.cleaned_data.get('first_name'), last_name = form.cleaned_data.get('last_name'))
+			userpro.save()
+			
+			login(request, user)
+			return redirect('dashboard')
+	
+	else:
+		form = RegisterForm()
+	
+	return render(request, 'register.html', {'form': form})
 				
 				
 def profile(request):
