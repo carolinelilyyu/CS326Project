@@ -7,6 +7,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from datetime import datetime
 import json
+from django import forms
+from django.core.exceptions import ValidationError
+
+
 
 from .models import UserProfile, Trip, Comment
 from .forms import *
@@ -203,13 +207,24 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 	permission_required = 'catalog.can_be_edited'
 
 	#permission_required = 'catalog.can_mark_returned'
-
+	def post(self, request):
+		if request.method == 'POST':
+			form = AdminTripForm(request.POST)
+			
+			if form.is_valid():
+				text = form.cleaned_data['post']
+		else:
+			form = RegisterForm()
+		args = {'form': form, 'text': text}
+		return render(request, 'dashboard.html', args)
+		
 	def get_context_data(self, **kwargs):
 		user = User.objects.filter(first_name__exact='Stefan')[0]
 		notifications = user.notification_set.all()
 		context = super(AdminTripPlanner, self).get_context_data(**kwargs)
 		context['profiles'] = [UserProfile.objects.all()]
 		return context
+
 
 
 
@@ -220,7 +235,7 @@ class TripCreate(CreateView):
 
 class TripUpdate(UpdateView):
     model = Trip
-    fields = ['name','description','num_seats','start_time', 'end_time', 'cancelled']
+    fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time', 'cancelled', 'tag', 'leader', 'participants', 'drivers']
 
 class TripDelete(DeleteView):
     model = Trip
