@@ -25,16 +25,44 @@
 					<li><strong>Trips:</strong> {{ num_trips }}</li>
 				</ul>
 				-->
-				<div class = "row">
-					<div class = "col-md-5">
-						<form action="{% url 'trip_create'%}" method="post">
-						    {% csrf_token %}
-						    <table>
-						    {{ form.as_table }}
-						    </table>					    
-						    {{ form.errors }}
-						    {{ form.non_field_errors }}
-						    <input type="submit" value="Submit" />
+				<div class="row">
+					<div class="col-md-12">
+						{% load myfilters %}
+						<form method="post" action="">
+							{% csrf_token %}
+							{% for field in form %}
+								<div class="row">
+									<div class="col-md-2">
+										{{ field.label_tag }}
+									</div>
+									<div class="col-md-9">
+										{{ field|addclass:'form-control' }}
+										{% if field.help_text %}
+											<div class="help">{{ field.help_text|safe }}</div>
+										{% endif %}
+										<div class="warn">{{ field.errors }}</div>										
+									</div>
+								</div>
+								<br>
+							{% endfor %}
+							<div class="row">
+								<div class="col-md-2"><label>Submit:</label></div>
+								<div class="col-md-9">
+									<button class="btn btn-success btn-block btn-lg" type="submit">Submit</button>
+								</div>
+							</div>
+						</form>
+						<br>
+						<div class="row">
+							<div class="col-md-2"><label>Reset:</label></div>
+							<div class="col-md-9">
+								<form method="get" action="">
+									<button class="btn btn-danger btn-block btn-lg" type="submit">Reset</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 						    
 {% endblock %}	
 
