@@ -10,6 +10,7 @@ import json
 from django import forms
 from django.core.exceptions import ValidationError
 
+from django.http import HttpResponseRedirect
 
 
 from .models import UserProfile, Trip, Comment
@@ -206,16 +207,6 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 	permission_required = 'catalog.can_be_edited'
 
 	#permission_required = 'catalog.can_mark_returned'
-	def post(self, request):
-		if request.method == 'POST':
-			form = AdminTripForm(request.POST)
-			
-			if form.is_valid():
-				text = form.cleaned_data['post']
-		else:
-			form = RegisterForm()
-		args = {'form': form, 'text': text}
-		return render(request, 'dashboard.html', args)
 		
 	def get_context_data(self, **kwargs):
 		user = User.objects.filter(first_name__exact='Stefan')[0]
@@ -230,11 +221,21 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 class TripCreate(CreateView):
     model = Trip
     fields = '__all__'
-    # initial={'description':'05/01/2018',}
+
+    def post(self, request):
+    	if request.method == 'POST':
+    		form = AdminTripForm(request.POST)
+    		if form.is_valid():
+    			text = form.cleaned_data['post']
+    			return HttpResponseRedirect(reverse('dashboard'))
+    		else:
+    			form = RegisterForm()
+    		args = {'form': form}
+    		return render(request, self.template_name, args)
 
 class TripUpdate(UpdateView):
     model = Trip
-    fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time', 'cancelled', 'tag', 'leader', 'participants', 'drivers']
+    fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time']#, 'cancelled', 'tag', 'leader', 'participants', 'drivers']
 
 class TripDelete(DeleteView):
     model = Trip
