@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.conf.urls import url
 
@@ -16,7 +16,8 @@ urlpatterns = [
    	path('trip/create/', views.TripCreate.as_view(), name='trip_create'),
    	path('trip/<int:pk>/update/', views.TripUpdate.as_view(), name='trip_update'),
    	path('trip/<int:pk>/delete/', views.TripDelete.as_view(), name='trip_delete'),
-
-
-
+]
+#Add Django site authentication urls (for login, logout, password management)
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
