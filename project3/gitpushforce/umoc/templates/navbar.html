@@ -53,7 +53,7 @@
 									<li {% if request.path == admin_url %}class="active"{% endif %}><a href="{% url 'admin_management' %}">Admin Menu</a></li>
 								{% endif %}
 								<li class="divider"></li>
-								<li><a href="{% url 'logout'%}">Log Out</a></li>
+								<li><a href="{% url 'logout' %}">Log Out</a></li>
 							</ul>
 						</li>
 						<li {% if request.path == "/profile/" %}class="active"{% endif %}>
@@ -65,12 +65,13 @@
 					</ul>
 				{% else %}
 					<ul class="nav navbar-nav navbar-right">
-						<form class="navbar-form navbar-right" role="form">
+						<form class="navbar-form navbar-right" method="post" action="{% url 'login' %}">
+							{% csrf_token %}
 							<div class="form-group">
-								<input type="text" placeholder="Email" class="form-control">
+								<input type="text" name="username" placeholder="Username" class="form-control">
 							</div>
 							<div class="form-group">
-								<input type="password" placeholder="Password" class="form-control">
+								<input type="password" name="password" placeholder="Password" class="form-control">
 							</div>
 							<button type="submit" class="btn btn-primary">Sign in</button>
 							<a href="{% url 'register' %}">
