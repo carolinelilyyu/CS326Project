@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views import generic
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -80,20 +81,21 @@ def profile(request):
                 context={},
         )
 
+def get_matching_userprofile(user_inst):
+    for p in UserProfile.objects.all():
+            if str(p.user) == str(user_inst.username):
+                return p
+
+
 def profile2(request, pk):
     """
     View function for profile page of site.
     """
+    model = UserProfile
     user_inst = get_object_or_404(User, pk = pk)
     #user_prof_inst = get_object_or_404(UserProfile, pk = pk)
-
-    for p in UserProfile.objects.all():
-            print(p.pk)
-    # try:
-    #     user_id = UserProfile.objects.get(pk=user_inst.pk)
-    # except UserProfile.DoesNotExist:
-    #     raise Http404("UserProfile does not exist")
-
+    user_profile_inst = get_matching_userprofile(user_inst)
+    
     # If this is a POST request then process the Form data
     if request.method == 'POST':
 
@@ -103,17 +105,25 @@ def profile2(request, pk):
         # Check if the form is valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
-            book_inst.due_back = form.cleaned_data['renewal_date']
-            book_inst.save()
+            user_inst.first_name = form.cleaned_data['first_name']
+            user_inst.last_name = form.cleaned_data['last_name']
+            user_inst.email = form.cleaned_data['email']
+            user_inst.save()
+
+            user_profile_inst.dob = form.cleaned_data['dob']
+            user_profile_inst.phone_num = form.cleaned_data['phone_num']
+            user_profile_inst.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('all-borrowed') )
+            return HttpResponseRedirect(reverse('dashboard') )
 
     # If this is a GET (or any other method) create the default form.
     else:
         form = UpdateProfileForm(initial={'first_name': user_inst.first_name,
                                           'last_name': user_inst.last_name,
-                                          'email': user_inst.email})
+                                          'email': user_inst.email,
+                                          'dob': user_profile_inst.dob,
+                                          'phone_num': user_profile_inst.phone_num})
 
     return render(request, 'profile2.html', {'form': form, 'userinst':user_inst})
 

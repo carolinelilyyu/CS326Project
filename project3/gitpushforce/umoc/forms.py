@@ -53,8 +53,8 @@ import datetime #for checking renewal date range.
 class UpdateProfileForm(forms.Form):
     print("Update profile form")
     email = forms.EmailField()
-    first_name = forms.CharField(max_length=30, help_text='Enter First Name')
-    last_name = forms.CharField(max_length=30, help_text='Enter Last Name')
-    dob = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
-    phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$', help_text = ("Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."))
-    spire_id = forms.RegexField(regex=r'\d{8}$', help_text = ("SPIRE ID must be 8 digits"))
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    dob = forms.DateField()
+    phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$')
+    #spire_id = forms.RegexField(regex=r'\d{8}$', help_text = ("SPIRE ID must be 8 digits"))
