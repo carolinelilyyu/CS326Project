@@ -50,11 +50,6 @@ def register(request):
 	"""
 	View function where new users register.
 	"""
-	# return render(
-		# request,
-		# 'register.html',
-		# context={},
-	# )
 	
 	if request.method == 'POST':
 		form = RegisterForm(request.POST)
@@ -148,6 +143,7 @@ def trip_comments(request, pk):
 	print (data)
 	return JsonResponse(data, safe=False)
 
+
 def trip_planner(request):
 	"""
 	View function for home page of site.
@@ -157,6 +153,7 @@ def trip_planner(request):
 		'trip_planner.html',
 		context={'profiles': [UserProfile.objects.all()]},
 	)
+
 
 def admin_management(request):
 	"""
@@ -175,7 +172,7 @@ def admin_management(request):
 
 
 def waiver(request):
-   return render(
+	return render(
       request,
       'waiver.html',
       context={},
@@ -201,36 +198,33 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 from django.http import Http404
 
 class TripCreate(CreateView):
-    model = Trip
-    fields = '__all__'
-    template_name = 'umoc/trip_form.html'
+	model = Trip
+	fields = '__all__'
+	template_name = 'umoc/trip_form.html'
 
-    def post(self, request):
-    	if request.method == 'POST':
-    		form = AdminTripForm(request.POST)
-    		if form.is_valid():
-    			text = form.cleaned_data['post']
-    			name = request.POST.get('name')
-    			description = request.POST.get('description')
-    			form.save()
-    			print(text)
-    			print(name)
-    			print(description)
-    			return HttpResponseRedirect(reverse('dashboard'))
-    	else:
-    		print("failed")
-    		form = AdminTripForm()
+	def post(self, request):
+		if request.method == 'POST':
+			form = AdminTripForm(request.POST)
+			if form.is_valid():
+				text = form.cleaned_data['post']
+				name = request.POST.get('name')
+				description = request.POST.get('description')
+				form.save()
+				print(text)
+				print(name)
+				print(description)
+				return HttpResponseRedirect(reverse('dashboard'))
+		else:
+			print("failed")
+			form = AdminTripForm()
 
-    	args = {'form': form}
-    	return render(request, self.template_name, args)
+		args = {'form': form}
+		return render(request, self.template_name, args)
 
 class TripUpdate(UpdateView):
-    model = Trip
-    fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time']#, 'cancelled', 'tag', 'leader', 'participants', 'drivers']
+	model = Trip
+	fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time']#, 'cancelled', 'tag', 'leader', 'participants', 'drivers']
 
 class TripDelete(DeleteView):
-    model = Trip
-    success_url = reverse_lazy('dashboard')
-
-
-
+	model = Trip
+	success_url = reverse_lazy('dashboard')
