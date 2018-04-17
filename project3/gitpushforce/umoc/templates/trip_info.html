@@ -45,6 +45,13 @@
 		{% else %}
 			<button id="sign_up" class="btn btn-info">Join Trip!</button>
 		{% endif %}
+		{% if user.is_authenticated %}
+		{% if perms.catalog.can_be_edited %}
+		<p>
+			<a style="color:red" href="{% url 'trip_delete' trip.id %}">Delete</a>
+		</p>
+		{% endif %}
+		{% endif %}
         
 		<h3 id="comments-header">Comments</h3>
 		
