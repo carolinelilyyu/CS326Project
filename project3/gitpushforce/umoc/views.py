@@ -209,9 +209,11 @@ class TripCreate(CreateView):
     		form = AdminTripForm(request.POST)
     		if form.is_valid():
     			text = form.cleaned_data['post']
+    			print(text)
     			return HttpResponseRedirect(reverse('dashboard'))
     		else:
-    			form = RegisterForm()
+    			print("failed")
+    			form = AdminTripForm()
     		args = {'form': form}
     		return render(request, self.template_name, args)
 
