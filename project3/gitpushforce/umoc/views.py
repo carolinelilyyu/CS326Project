@@ -189,14 +189,17 @@ def trip_comments(request, pk):
 		""" 
 		Return JSON of all comments for a given trip id.
 		"""
-		print ('Retrieving comments for trip id {}'.format(pk))
-		# TODO: CHECK IF TRIP IS IN DATABASE
-		comments = Comment.objects.filter(trip_id=pk)
-		data = []
-		for comment in comments:
-				data.append({ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp})
-		print (data)
-		return JsonResponse(data, safe=False)
+		if request.method == 'POST':
+			print ('Saving new comment')
+		else:
+			print ('Retrieving comments for trip id {}'.format(pk))
+			# TODO: CHECK IF TRIP IS IN DATABASE
+			comments = Comment.objects.filter(trip_id=pk)
+			data = []
+			for comment in comments:
+					data.append({ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp})
+			print (data)
+			return JsonResponse(data, safe=False)
 
 			
 def trip_planner(request):

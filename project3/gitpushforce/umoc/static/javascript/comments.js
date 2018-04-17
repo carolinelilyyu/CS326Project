@@ -1,12 +1,10 @@
 // Handles loading and replying to comments. Retrieves comments for given trip id using AJAX.
 
-var trip_id = 6;
-
 $(document).ready(function(){
 	console.log('Doc ready');
 	$.ajax({
 		type: "get",
-		url: "http://localhost:8000/trip/6/comments",
+		url: "http://localhost:8000/trip/" + trip_id + "/comments",
 		contentType: "application/json",
 		success: function(data) {
 			console.log('Received response');
@@ -57,7 +55,7 @@ $(document).ready(function(){
 // renders comment thread starting with given id. comments is a mapping of ids to comment objects. Depth is the depth of the current thread. Returns rendered DOM element
 function renderThread(comments, id, depth) {
 	var div = document.createElement('div');
-	div.setAttribute('id', 'comment-' + comments.get(id).id);
+	div.setAttribute('id', 'comment-' + id);
 	div.style.paddingLeft = 30 * depth + 'px';
 	div.style.paddingBottom = 10;
 	
@@ -67,10 +65,44 @@ function renderThread(comments, id, depth) {
 	div.innerHTML = '<p>' + comments.get(id).author_name + (comments.get(id).parent !== 0 ? ' Replying to ' + comments.get(comments.get(id).parent).author_name : '') + ' on ' + comments.get(id).timestamp  + '</p>';
 	
 	div.innerHTML += '<p>' + comments.get(id).text + '</p>';
-	div.innerHTML += '<button type="button" class="btn btn-primary">Reply</button>';
+	
+	var reply_btn = document.createElement('buton');
+	reply_btn.setAttribute('id', 'reply-btn-' + id);
+	reply_btn.className = 'btn btn-primary';
+	reply_btn.innerHTML = 'Reply';
+	reply_btn.onclick = function() {
+		console.log('Clicked button' + id);
+		reply_btn.remove();
+		
+		var reply_form = document.createElement('div');
+		reply_form.setAttribute('id', 'reply-form-' + id);
+		reply_form.innerHTML = '<input></input>';
+		
+		var submit_btn = document.createElement('button');
+		submit_btn.className = 'btn btn-primary';
+		submit_btn.innerHTML = 'Reply';
+		submit_btn.onclick = function() {
+			console.log('Clicked button');
+			$.post("http://localhost:8000/trip/" + trip_id + "/comments",
+			{
+				name: "Donald Duck",
+				city: "Duckburg"
+			},
+			function(data, status){
+				alert("Data: " + data + "\nStatus: " + status);
+			});
+		}
+		
+		reply_form.append(submit_btn);
+		
+		div.append(reply_form);
+	}
+	//div.innerHTML += '<button type="button" class="btn btn-primary" id="reply-"' + id + '>Reply</button>';
+	
+	div.append(reply_btn);
 	
 	for (var i = 0; i < comments.get(id).replies.length; i++) {
-		div.append(renderThread(comments, comments.get(id).replies[i], depth + 1));
+		div.appendChild(renderThread(comments, comments.get(id).replies[i], depth + 1));
 	}
 	return div;
 }
