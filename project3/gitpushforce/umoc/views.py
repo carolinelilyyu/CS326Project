@@ -7,6 +7,11 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from datetime import datetime
 import json
+from django import forms
+from django.core.exceptions import ValidationError
+
+from django.http import HttpResponseRedirect
+
 
 from .models import UserProfile, Trip, Comment
 from .forms import *
@@ -159,14 +164,13 @@ def admin_management(request):
 	"""
 	# Generate counts of some of the main objects
 	num_users=UserProfile.objects.all().count()
-	num_leaders=UserProfile.objects.filter(admin_level__exact='l').count()
 	num_admins=UserProfile.objects.filter(admin_level__exact='a').count()
 	names_list=UserProfile.objects.all()
 
 	return render(
 		request,
 		'admin_management.html',
-		context={'names_list':names_list,'num_users':num_users, 'num_leaders': num_leaders, 'num_admins': num_admins}
+		context={'names_list':names_list,'num_users':num_users, 'num_admins': num_admins}
 	)
 
 
@@ -184,7 +188,7 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 	permission_required = 'catalog.can_be_edited'
 
 	#permission_required = 'catalog.can_mark_returned'
-
+		
 	def get_context_data(self, **kwargs):
 		user = User.objects.filter(first_name__exact='Stefan')[0]
 		notifications = user.notification_set.all()
@@ -194,14 +198,25 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 
 
 
+
 class TripCreate(CreateView):
     model = Trip
     fields = '__all__'
-    # initial={'description':'05/01/2018',}
+
+    def post(self, request):
+    	if request.method == 'POST':
+    		form = AdminTripForm(request.POST)
+    		if form.is_valid():
+    			text = form.cleaned_data['post']
+    			return HttpResponseRedirect(reverse('dashboard'))
+    		else:
+    			form = RegisterForm()
+    		args = {'form': form}
+    		return render(request, self.template_name, args)
 
 class TripUpdate(UpdateView):
     model = Trip
-    fields = ['name','description','num_seats','start_time', 'end_time', 'cancelled']
+    fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time']#, 'cancelled', 'tag', 'leader', 'participants', 'drivers']
 
 class TripDelete(DeleteView):
     model = Trip
