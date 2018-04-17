@@ -44,23 +44,24 @@
 								</p>
 							</div>
 							{% for trip in trip_list %}
-								{% if trip.end_time.year >= today.year and trip.end_time.month >= today.month and trip.end_time.day >= today.day %}
+								{% if trip.end_time.year > today.year or trip.end_time.year == today.year and trip.end_time.month > today.month or trip.end_time.year == today.year and trip.end_time.month == today.month and trip.end_time.day >= today.day %}
 								
 									<div class = "row">
-									<div class = "col-md-10" id = "trip_widget">
-							
-										<h3>
-											<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
-										</h3> 
-										{% if trip.get_tag_name %}
-											<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
-										{% endif %}
-										<p>Led by {{ trip.leader.first_name }}</p>
-										<p>{{ trip.start_time }} - {{ trip.end_time }}</p>
-										<p>{{ trip.description }}</p>
-										
+										<div class = "col-md-10" id = "trip_widget">
+								
+											<h3>
+												<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
+											</h3> 
+											{% if trip.get_tag_name %}
+												<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
+											{% endif %}
+											<p>Led by {{ trip.leader.first_name }}</p>
+											<p>{{ trip.start_time }} - {{ trip.end_time }}</p>
+											<p>{{ trip.description }}</p>
+											
+										</div>
 									</div>
-									</div>
+
 								{% endif %}
 							{% endfor %}
 							
@@ -70,7 +71,7 @@
 								</p>
 							</div>
 							{% for trip in trip_list %}
-								{% if trip.end_time.year <= today.year and trip.end_time.month <= today.month and trip.end_time.day <= today.day %}
+								{% if trip.end_time.year < today.year or trip.end_time.year == today.year and trip.end_time.month < today.month or trip.end_time.year == today.year and trip.end_time.month == today.month and trip.end_time.day < today.day%}
 								
 									<div class = "row">
 									<div class = "col-md-10" id = "trip_widget">
