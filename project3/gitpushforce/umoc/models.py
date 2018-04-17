@@ -28,10 +28,10 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User, related_name='profile', on_delete='models.SET_NULL')
 	first_name = models.CharField(max_length=20, help_text='Enter your first name', verbose_name='First Name')
 	last_name = models.CharField(max_length=20, help_text='Enter your last name', verbose_name='Last Name')
-	dob = models.DateField(verbose_name='Date of Birth', help_text='Enter your birth date in the format "YYYY-MM-DD"')
+	dob = models.DateField(verbose_name='Date of Birth', help_text='Enter your birth date in the format "YYYY-MM-DD"', blank=True, null=True)
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
-	profile_img = models.ImageField(verbose_name='Profile Image', upload_to=profile_directory_path)
-	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex]) 
+	profile_img = models.ImageField(verbose_name='Profile Image', upload_to=profile_directory_path, blank=True)
+	phone_num = models.CharField(max_length=10, verbose_name='Phone Number', validators=[phone_regex], blank=True) 
 	contact_name = models.CharField(max_length=40, help_text='Enter name of an emergency contact', blank=True)
 	contact_phone = models.CharField(max_length=10, verbose_name='Contact Phone Number', help_text='Enter phone number for emergency contact', validators=[phone_regex], blank=True)
 	# date of last club payment
