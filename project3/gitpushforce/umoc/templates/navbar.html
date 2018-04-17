@@ -58,7 +58,7 @@
 							</ul>
 						</li>
 						<li {% if request.path == "/profile/" %}class="active"{% endif %}>
-							<a href="{% url 'profile' %}">
+							<a href="{% url 'profile2' user.pk %}">
 								<span class="visible-sm visible-xs">Settings<span class="fui-gear"></span></span>
 								<span class="visible-md visible-lg"><span class="fui-gear"></span></span>
 							</a>
