@@ -32,4 +32,4 @@ class AdminTripForm(forms.Form):
 
 	class Meta:
 		model = User
-		fields = ('name', 'description', 'num_seats', 'capacity', 'thumbnail', 'start_time', 'end_time', 'cancelled', 'tag', 'leader', 'participants', 'drivers')
+		fields = ('name', 'description', 'num_seats', 'capacity', 'thumbnail', 'start_time', 'end_time')

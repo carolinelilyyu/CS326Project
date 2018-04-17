@@ -198,6 +198,7 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 
 
 
+from django.http import Http404
 
 class TripCreate(CreateView):
     model = Trip
@@ -209,13 +210,19 @@ class TripCreate(CreateView):
     		form = AdminTripForm(request.POST)
     		if form.is_valid():
     			text = form.cleaned_data['post']
+    			name = request.POST.get('name')
+    			description = request.POST.get('description')
+    			form.save()
     			print(text)
+    			print(name)
+    			print(description)
     			return HttpResponseRedirect(reverse('dashboard'))
-    		else:
-    			print("failed")
-    			form = AdminTripForm()
-    		args = {'form': form}
-    		return render(request, self.template_name, args)
+    	else:
+    		print("failed")
+    		form = AdminTripForm()
+
+    	args = {'form': form}
+    	return render(request, self.template_name, args)
 
 class TripUpdate(UpdateView):
     model = Trip
