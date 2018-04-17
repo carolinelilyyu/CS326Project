@@ -221,6 +221,7 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 class TripCreate(CreateView):
     model = Trip
     fields = '__all__'
+    template_name = 'umoc/trip_form.html'
 
     def post(self, request):
     	if request.method == 'POST':
