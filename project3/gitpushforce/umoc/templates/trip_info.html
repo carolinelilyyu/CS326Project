@@ -55,17 +55,15 @@
         
 		<h3 id="comments-header">Comments</h3>
 		
-		<form method="post" action="">
-			{% csrf_token %}
+		{% csrf_token %}
 		
-			<script>
-				const trip_id = {{ trip.id }};
-			</script>
-			
-			<!-- import Javascript for Comment functionality -->
-			{% load static %}
-			<script src="{% static 'javascript/comments.js' %}"></script>
-		</form>
+		<script>
+			const trip_id = {{ trip.id }};
+		</script>
+		
+		<!-- import Javascript for Comment functionality -->
+		{% load static %}
+		<script src="{% static 'javascript/comments.js' %}"></script>
         </div>
       </div>
     </div>

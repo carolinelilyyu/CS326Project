@@ -1,5 +1,36 @@
 // Handles loading and replying to comments. Retrieves comments for given trip id using AJAX.
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+console.log('Got CSRF token: ' + csrftoken);
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
 $(document).ready(function(){
 	console.log('Doc ready');
 	$.ajax({
@@ -83,14 +114,23 @@ function renderThread(comments, id, depth) {
 		submit_btn.innerHTML = 'Reply';
 		submit_btn.onclick = function() {
 			console.log('Clicked button');
-			$.post("http://localhost:8000/trip/" + trip_id + "/comments",
-			{
-				name: "Donald Duck",
-				city: "Duckburg"
-			},
-			function(data, status){
-				alert("Data: " + data + "\nStatus: " + status);
-			});
+			$.ajax({
+				type: "POST",
+				dataType: "application/json",
+				url: "http://localhost:8000/trip/" + trip_id + "/comments",
+				data: {'test': 1},
+				beforeSend: function(xhr, settings) {
+					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+				},
+				success: function(result) {
+					console.log(result);
+				},
+				error: function(result) {
+					console.log('Error with POST');
+				}
+			})
 		}
 		
 		reply_form.append(submit_btn);
