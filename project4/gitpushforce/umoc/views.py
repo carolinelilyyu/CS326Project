@@ -282,6 +282,11 @@ class TripCreate(CreateView):
 		fields = '__all__'
 		template_name = 'umoc/trip_form.html'
 
+		def get(self, request):
+					form = AdminTripForm()
+					args = {'form': form}
+					return render(request, self.template, args)
+
 		def post(self, request):
 				if request.method == 'POST':
 						print("this is a post")
