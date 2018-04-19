@@ -13,6 +13,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import UserProfile, Trip, Comment
 from .forms import *
@@ -186,7 +187,8 @@ class UserInfoView(generic.DetailView):
 						context={'profile': profile}
 				)
 
-		
+
+@csrf_exempt				
 def trip_comments(request, pk):
 		""" 
 		Return JSON of all comments for a given trip id.
