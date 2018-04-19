@@ -1,0 +1,53 @@
+body {
+	background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url("http://mediad.publicbroadcasting.net/p/ktep/files/styles/x_large/public/201701/combination1_blk-maroon.jpg");
+}
+
+.center-image {
+	
+}
+
+.centered {
+	text-align: center;
+}
+
+.heading {
+	color: white;
+	text-align: center;
+}
+
+/* Allow menu dropdown to be scrolled when more than 200px tall */
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+/*.dropdown-menu {
+	width: 300px;
+}*/
+
+.headingbox {
+	background: linear-gradient(#202a35, #3b5666);
+    padding: 1px;
+	margin-top: -30px;
+}
+
+.wrapper {
+	background: #e7e7e7;
+	padding: 50px;
+}
+
+.content {
+	background: white;
+	padding: 50px;
+}
+
+.help {
+	font-size: 1.25rem;
+	color: blue;
+}
+
+.warn {
+	font-size: 1.5rem;
+	color: red;
+}

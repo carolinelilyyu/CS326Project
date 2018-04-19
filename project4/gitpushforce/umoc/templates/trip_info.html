@@ -1,0 +1,74 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Trip Info - UMOC</title>{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">Trip Details</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+        {% load static %}
+        <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
+        <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
+        <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
+
+        <!-- TODO <p><strong>Number of Seats Available:</strong> {{ num_seats_remaining }} of {{ trip.num_seats }}</p> <!-- todo: what's the issue here? -->
+        <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
+
+          <div class="btn-group"> <!-- todo: why isn't trip.participants|length working correctly? -->
+            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.participants.all|length }} Users Going On Trip <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+              {% for participant in trip.participants.all %}
+              <li><a href="{{ participant.get_absolute_url }}">{{participant}}</a></li>
+              {% endfor %}
+
+            </ul>
+
+        </div>
+		
+		{% if user.profile == trip.leader %} <!-- TODO: THIS DOESN'T WORK -->
+			<button id="cancel" class="btn btn-danger">Cancel Trip</button>
+		{% elif user.profile in trip.participants.all %}
+			<button id="sign_up" class="btn btn-info">Withdraw</button>
+		{% else %}
+			<button id="sign_up" class="btn btn-info">Join Trip!</button>
+		{% endif %}
+		{% if user.is_authenticated %}
+		{% if perms.catalog.can_be_edited %}
+		<p>
+			<a style="color:red" href="{% url 'trip_delete' trip.id %}">Delete</a>
+		</p>
+		{% endif %}
+		{% endif %}
+        
+		<h3 id="comments-header">Comments</h3>
+		
+		<form method="post" action="">
+			{% csrf_token %}
+		
+			<script>
+				const trip_id = {{ trip.id }};
+			</script>
+			
+			<!-- import Javascript for Comment functionality -->
+			{% load static %}
+			<script src="{% static 'javascript/comments.js' %}"></script>
+		</form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

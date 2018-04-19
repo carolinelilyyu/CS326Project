@@ -1,0 +1,103 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Activities - UMOC</title>{% endblock %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">UMOC Activities</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class = "wrapper">
+			<div class="content">
+			
+					<h2>Trip Finder</h2>
+					{% if user.is_authenticated %}
+					{% if perms.catalog.can_be_edited %}
+					<a href = "{% url 'trip_create'%}">	
+						<button type="button" class="btn btn-primary">
+							Leader Only: Add a Trip	
+						</button>
+					</a>
+
+					{% endif %}
+					{% endif %}
+					<p>The database has the following record counts:</p>
+					
+					<ul>
+						{# use built-in length filter. This is equivalent to calling len(trips). See https://docs.djangoproject.com/en/2.0/ref/templates/builtins/ for more #}
+						<li><strong>Trips:</strong> {{ count }}</li>
+					</ul>
+					
+					{% if trip_list %}
+						<ul>
+							<div class = "row">
+								<p>
+									<strong>Current Trips:</strong>
+								</p>
+							</div>
+							{% for trip in trip_list %}
+								{% if trip.end_time.year > today.year or trip.end_time.year == today.year and trip.end_time.month > today.month or trip.end_time.year == today.year and trip.end_time.month == today.month and trip.end_time.day >= today.day %}
+								
+									<div class = "row">
+										<div class = "col-md-10" id = "trip_widget">
+								
+											<h3>
+												<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
+											</h3> 
+											{% if trip.get_tag_name %}
+												<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
+											{% endif %}
+											<p>Led by {{ trip.leader.first_name }}</p>
+											<p>{{ trip.start_time }} - {{ trip.end_time }}</p>
+											<p>{{ trip.description }}</p>
+											
+										</div>
+									</div>
+
+								{% endif %}
+							{% endfor %}
+							
+							<div class = "row">
+								<p>
+									<strong>Past Trips:</strong>
+								</p>
+							</div>
+							{% for trip in trip_list %}
+								{% if trip.end_time.year < today.year or trip.end_time.year == today.year and trip.end_time.month < today.month or trip.end_time.year == today.year and trip.end_time.month == today.month and trip.end_time.day < today.day%}
+								
+									<div class = "row">
+									<div class = "col-md-10" id = "trip_widget">
+							
+										<h3>
+											<a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a>
+										</h3> 
+										{% if trip.get_tag_name %}
+											<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
+										{% endif %}
+										<p>Led by {{ trip.leader.first_name }}</p>
+										<p>{{ trip.start_time }} - {{ trip.end_time }}</p>
+										<p>{{ trip.description }}</p>
+										
+									</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					{% else %}
+						<p>There are no trips in the database.</p>
+					{% endif %}
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

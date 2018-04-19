@@ -1,0 +1,50 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Profile - UMOC</title>{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">{{user.profile.first_name}}'s Profile</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				{% load myfilters %}
+				<form action="" method="post">
+					{% csrf_token %}
+					{% for field in form %}
+						<div class="row">
+							<div class="col-md-2">
+								{{ field.label_tag }}
+							</div>
+							<div class="col-md-9">
+								{{ field|addclass:'form-control' }}
+								{% if field.help_text %}
+									<div class="help">{{ field.help_text|safe }}</div>
+								{% endif %}
+								<div class="warn">{{ field.errors }}</div>
+							</div>
+						</div>
+						<br>
+					{% endfor %}
+					<div class="row">
+						<div class="col-md-2"><label>Submit:</label></div>
+						<div class="col-md-9">
+							<button class="btn btn-info btn-block btn-lg" type="submit">Submit</button>
+							<input type="hidden" name="next" value="{{ next }}" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

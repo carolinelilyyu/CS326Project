@@ -1,0 +1,32 @@
+{% extends "template.html" %}
+
+
+{% block title %}<title>Delete Trip - UMOC</title>{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">UMOC Trip Planner (Leader)</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+
+<p>Delete Trip</p>
+
+<p>Are you sure you want to delete the trip: {{ trip }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete." />
+</form>
+
+{% endblock %}

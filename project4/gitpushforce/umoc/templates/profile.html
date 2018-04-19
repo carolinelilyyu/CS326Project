@@ -1,0 +1,112 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Profile - UMOC</title>{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">{{user.profile.first_name}}'s Profile</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				
+				<div class="row">
+					<div class="col-md-4">
+						<a class="thumbnail" href="#">
+							<img src="{{ user.get_profile_img_url }}" alt="Profile Picture" style="height: 230px; width: 100%;">
+						</a>
+					</div>
+					<div class="col-md-8">
+						<div class="todo">
+							<ul style="border-radius: 6px;">
+								<a href="{% url 'waiver'%}">
+									<li class="todo-done">
+										<div class="todo-icon fui-alert-circle"></div>
+										<div class="todo-content">
+											<h4 class="todo-name">Sign the <strong>Release of Liability</strong> Form</h4>Required once, valid for all trips
+										</div>
+									</li>
+								</a>
+								<li class="todo-done">
+									<div class="todo-icon fui-user"></div>
+									<div class="todo-content">
+										<h4 class="todo-name">Fill out <strong>Emergency Contacts Info</strong></h4>Required once each year, valid for all trips
+									</div>
+								</li>
+								<li {% if user.profile.can_join_trip %}class="todo-done"{% endif %}>
+									<div class="todo-icon fui-heart"></div>
+									<div class="todo-content">
+										  <h4 class="todo-name">Pay the <strong>Membership Fee</strong></h4>"Required" once each year, valid for  all trips
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<form action="" method="post">
+            {% csrf_token %}
+				    <div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="InputEmail">Change Email Address</label>
+							<input type="email" class="form-control" id="email" placeholder="{{ user.email }}">
+						</div>
+					</div>
+				</div>				
+				<div class="row">
+					<div class="col-md-2">
+						<div class="form-group">
+							<label>First Name</label>
+							<input type="text" class="form-control" id="first_name" placeholder="{{ user.first_name }}">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							  <label>Last Name</label>
+							  <input type="text" class="form-control" id="last_name" placeholder="{{ user.last_name }}">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							  <label>Date of Birth</label>
+							  <input type="text" class="form-control" id="dob" placeholder="{{ user.dob }}">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							  <label>Phone Number</label>
+							  <input type="tel" class="form-control" id="phone_num" placeholder="{{ user.phone_num }}">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							  <label>SpireID</label>
+							  <input type="number" class="form-control" id="spire_id" placeholder="12345678" min="10000000" max="99999999">
+						</div>
+					</div>
+
+
+					<div class="col-md-2">
+						<div class="form-group">
+							<label>Submit</label>
+							<button class="btn btn-primary btn-block" type="submit" value="Submit">Submit</button>
+						</div>
+					</div>
+				</div>
+            <input type="submit" value="Submit" />
+        </form>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

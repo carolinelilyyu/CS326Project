@@ -1,0 +1,56 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Management (Leader) - UMOC</title>{% endblock %}
+
+{% block content %}
+
+<div class="row">
+<div class="col-md-12">
+	<div class="headingbox">
+		<h1 class="heading">Management</h1>
+	</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+	<div class="wrapper">
+		<div class="content">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>UMOC Managment</h1>
+					<p>This is the page for <em>Admin Management</em></p>
+					<p>The database has the following record counts:</p>
+					<ul>
+						<li><strong>Admins:</strong> {{ num_admins }}</li>
+						<li><strong>Users:</strong> {{ num_users }}</li>
+						<ul>
+							{% for user in names_list %}
+							    <li>{{ user }}, <strong>Admin Level:</strong> {{ user.admin_level }}</li>
+							    <div class="form-inline">
+								    <div class="form-group">
+									    <label for="adminlevelchange">Admin Level Change to:</label>
+									    <select class="form-control" id="adminlevelchange">
+										    <option>u</option>
+										    <option>l</option>
+										    <option>a</option>
+									    </select>
+									</div>
+								</div>
+							{% endfor %}
+						</ul>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					<button class="btn btn-primary btn-block" type="submit">Submit</button>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+
+#headingbox {
+    border: 10px;
+    background: #202a35;
+    padding:50px;
+    margin-top:-50px;
+    background: linear-gradient(#202a35, #3b5666);
+    background-clip: border-box;
+}
+
+#form {
+    background: #e7e7e7;
+    margin-top: -30px;
+    height:100%;
+    background-clip: border-box;
+}
+
+h1{
+  text-align: center;
+  color: white;
+}
+#background{
+  background: #202a35;
+  height: 100%;
+  background-position: center;
+}
+
+#wrapper{
+  padding: 50px;
+}
+
+#white_form{
+  background-color: white;
+  padding: 50px;
+}
+#trip_name{
+  display: inline;
+  padding-left: 20px;
+  vertical-align: bottom;
+  padding-bottom: 30px;
+}
+#clipboard{
+  display: inline;
+  height:50px;
+}
+#location{
+  padding-bottom: 50px;
+}
+#description{
+  padding-bottom:30px;
+}
+#comments{
+  padding-top: 50px;
+}
+#sign_up{
+  float:right;
+}
+#emergency_contacts{
+  float:right;
+  margin-top:20px;
+}
