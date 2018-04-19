@@ -27,7 +27,7 @@ class AdminTripForm(forms.Form):
 	start_time = forms.DateTimeField(widget=forms.SelectDateWidget(empty_label="Nothing"), help_text='Select Start Time of the Trip', error_messages={'required': 'Please enter a date'})
 	end_time = forms.DateTimeField(widget=forms.SelectDateWidget(empty_label="Nothing"), help_text='Select End Time of the Trip', error_messages={'required': 'Please enter a date'})
 	cancelled = forms.BooleanField(required=False, help_text='Click to Cancel', error_messages={'required': 'Please enter whether is cancelled or not'})
-	tag = forms.CharField(choices=OPTIONS, help_text='Select a tag to help classify this trip', error_messages={'required': 'Please enter the tags'})
+	tag = forms.CharField(help_text='Select a tag to help classify this trip', error_messages={'required': 'Please enter the tags'})
 	leader = forms.ChoiceField(help_text='Select a user to be in charge of organizing and leading this trip', error_messages={'required': 'Please enter the leader\'s name'})
 	participants = forms.MultipleChoiceField(help_text='Select users who are signed up to go on the trip', error_messages={'required': 'Please enter the participants\' names'})
 	drivers = forms.MultipleChoiceField(help_text='Users who have committed to driving', error_messages={'required': 'Please enter the drivers'})

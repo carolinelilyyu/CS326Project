@@ -285,7 +285,7 @@ class TripCreate(CreateView):
 		def get(self, request):
 					form = AdminTripForm()
 					args = {'form': form}
-					return render(request, self.template, args)
+					return render(request, self.template_name, args)
 
 		def post(self, request):
 				if request.method == 'POST':
