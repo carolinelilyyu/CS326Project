@@ -111,7 +111,9 @@ function renderThread(comments, id, depth) {
 		
 		var reply_form = document.createElement('div');
 		reply_form.setAttribute('id', 'reply-form-' + id);
-		reply_form.innerHTML = '<input></input>';
+		var comment_input = document.createElement('input');
+		reply_form.append(comment_input);
+		// reply_form.innerHTML = '<input></input>';
 		
 		var submit_btn = document.createElement('button');
 		submit_btn.className = 'btn btn-primary';
@@ -122,17 +124,13 @@ function renderThread(comments, id, depth) {
 				type: "POST",
 				dataType: "application/json",
 				url: "http://localhost:8000/trip/" + trip_id + "/comments",
-				data: {'test': 1},
-				beforeSend: function(xhr, settings) {
-					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-						xhr.setRequestHeader("X-CSRFToken", csrftoken);
-					}
-				},
+				data: {'text': comment_input.value, 'reply': id},
 				success: function(result) {
 					console.log(result);
 				},
 				error: function(result) {
 					console.log('Error with POST');
+					console.log(result)
 				}
 			})
 		}
@@ -141,7 +139,6 @@ function renderThread(comments, id, depth) {
 		
 		div.append(reply_form);
 	}
-	//div.innerHTML += '<button type="button" class="btn btn-primary" id="reply-"' + id + '>Reply</button>';
 	
 	div.append(reply_btn);
 	

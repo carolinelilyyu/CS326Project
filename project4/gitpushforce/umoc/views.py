@@ -11,8 +11,7 @@ from datetime import *
 import json
 from django import forms
 from django.core.exceptions import ValidationError
-from django.http import Http404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 
 from .models import UserProfile, Trip, Comment
 from .forms import *
@@ -192,15 +191,21 @@ def trip_comments(request, pk):
 		Return JSON of all comments for a given trip id.
 		"""
 		if request.method == 'POST':
+			print (request.POST)
 			print ('Saving new comment')
+			print (request.user)
+			print (request.user.profile)
+			if request.user.is_authenticated:
+				print('Saving new comment by {}'.format(request.user.profile))
+				#return JsonResponse({'success': True})
+				return HttpResponse({'success': True}, content_type="application/json")
+			else:
+				return JsonResponse({'success': False}) # TODO: RETURN PERMISSION ERROR
 		else:
 			print ('Retrieving comments for trip id {}'.format(pk))
 			# TODO: CHECK IF TRIP IS IN DATABASE
 			comments = Comment.objects.filter(trip_id=pk)
-			data = []
-			for comment in comments:
-					data.append({ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp})
-			print (data)
+			data = [{ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp} for comment in comments]
 			return JsonResponse(data, safe=False)
 
 			
