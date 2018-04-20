@@ -14,18 +14,8 @@
 				<ul class="nav navbar-nav">
 					<li {% if request.path == "/dashboard/" %}class="active"{% endif %}><a href="{% url 'dashboard' %}">Activites<span class="navbar-unread">4</span></a></li>
 				</ul>
+				<!-- Show logged-in features -->
 				{% if user.is_authenticated %}
-					<form class="navbar-form navbar-left" action="#" role="search">
-						<div class="form-group">
-							<div class="input-group">
-								<input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
-								<span class="input-group-btn">
-									<button type="submit" class="btn"><span class="fui-search"></span></button>
-								</span>
-							</div>
-						</div>
-					</form>
-
 					<ul class="nav navbar-nav navbar-right">				
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="navbar-new">{{ user.profile.notification_set.all|length }}</span></a>
@@ -34,13 +24,14 @@
 							
 							<ul class="dropdown-menu scrollable-menu">
 								<!-- todo: make for-else -->
-								{% if user.profile.notification_set.all %}
-									{% for notification in user.profile.notification_set.all %}
-										<li><span><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a><button>Dismiss</button></span></li>
-									{% endfor %}
-								{% else %}
-									<li><a>No Notifications</a></li>
-								{% endif %}
+								{% for notification in user.profile.notification_set.all %}
+									<li><span><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a><button class='dismiss-notification-btn' id="dismiss-notification-{{ notification.id }}">Dismiss</button></span></li>
+								{% empty %}
+									<li><a href="#">No Notifications</a></li>
+								{% endfor %}
+								<!-- import Javascript for Notification functionality -->
+								{% load static %}
+								<script src="{% static 'javascript/notifications.js' %}"></script>
 							</ul> <!-- /Sub menu -->
 						</li>
 						<li class="dropdown">
