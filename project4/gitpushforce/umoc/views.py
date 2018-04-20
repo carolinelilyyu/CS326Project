@@ -258,29 +258,6 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 				context['profiles'] = [UserProfile.objects.all()]
 				return context
 
-class TripCreate(CreateView):
-		model = Trip
-		fields = '__all__'
-		template_name = 'umoc/trip_form.html'
-
-		def post(self, request):
-				if request.method == 'POST':
-						form = AdminTripForm(request.POST)
-						if form.is_valid():
-								text = form.cleaned_data['post']
-								name = request.POST.get('name')
-								description = request.POST.get('description')
-								form.save()
-								print(text)
-								print(name)
-								print(description)
-								return HttpResponseRedirect(reverse('dashboard'))
-				else:
-						print("failed")
-						form = AdminTripForm()
-
-				args = {'form': form}
-				return render(request, self.template_name, args)
 
 class TripCreate(CreateView):
 		model = Trip
