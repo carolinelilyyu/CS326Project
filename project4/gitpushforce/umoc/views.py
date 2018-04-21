@@ -185,12 +185,68 @@ class UserInfoView(generic.DetailView):
 						context={'profile': profile}
 				)
 
+class ProcessedComment:
+	# initialize with a Comment var
+	def __init__(self, comment, depth=0):
+		self.author = comment.author
+		self.text = comment.text
+		self.time_stamp = comment.time_stamp
+		self.replies = []
+		self.depth = depth
+		
+	# Unravels child comments and threads, running recursively and returning a list of ordered comments. Sets depth for each. 
+	def unravel(self):
+		ordered = [self]
+		for comment in self.replies:
+			comment.depth = self.depth + 1
+			ordered += comment.unravel()
+		return ordered
+		
+	def __repr__(self):
+		return 'ProcessedComment(author="{}", text="{}", time_stamp="{}". {} replies'.format(self.author, self.text, self.time_stamp, len(self.replies))
+		
 		
 def trip_comments(request, pk):
 	""" 
-	Return JSON of all comments for a given trip id.
+	Manages comments for a trip of given id (/trip/<id>/comments). Only available via AJAX on properly authenticated users.
+	GET: Renders HTML comment section for given trip
+	POST: Creates the added comment. Requires a 'text' field storing the text body of the comment and a 'parent' field storing the id of the comment the new comment is replying to (0 if none). Returns 'success': boolean and 'message': string (will be empty if success=True) 
 	"""
-	if request.method == 'POST':
+	if request.method == 'GET':
+		print ('Retrieving comments for trip id {}'.format(pk))
+		# TODO: CHECK IF TRIP IS IN DATABASE
+		
+		# retrieve comments on given trip in order of posting
+		trip_comments = Comment.objects.filter(trip_id=pk).order_by('time_stamp')
+		data = [{ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp} for comment in trip_comments]
+		
+		# map id->ProcessedComment
+		processed_comments = {}
+		# top-level comments
+		top_level_comments = []
+		
+		for comment in trip_comments:
+			# create ProcessedComment wrapper and add to dictionary
+			processed = ProcessedComment(comment)
+			processed_comments[comment.id] = processed
+			
+			if comment.parent:
+				# add comment as reply to parent
+				print('Adding reply to parent')
+				processed_comments[comment.parent.id].replies.append(processed)
+			else:
+				# comment must be top-level
+				top_level_comments.append(processed)
+				
+		# unravel top-level comments, creating list of ordered ProcessedComments
+		ordered_comments = []
+		for processed_comment in top_level_comments:
+			ordered_comments += processed_comment.unravel()
+			
+		print (ordered_comments)
+			
+		return JsonResponse(data, safe=False)
+	elif request.method == 'POST': # and request.is_ajax()
 		print (request.POST)
 		print ('Saving new comment')
 		print (request.user)
@@ -210,12 +266,9 @@ def trip_comments(request, pk):
 			return HttpResponse({'success': True}, content_type="application/json")
 		else:
 			return JsonResponse({'success': False}) # TODO: RETURN PERMISSION ERROR
+	
 	else:
-		print ('Retrieving comments for trip id {}'.format(pk))
-		# TODO: CHECK IF TRIP IS IN DATABASE
-		comments = Comment.objects.filter(trip_id=pk)
-		data = [{ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp} for comment in comments]
-		return JsonResponse(data, safe=False)
+		raise Http404('Access Denied')
 
 			
 def trip_planner(request):
