@@ -4,7 +4,7 @@ Input: 'notifications', a list of Notification objects IN RENDERING ORDER (by ti
 OUTPUT: list of rendered notifications, each in <li><span> tags
 -->
 {% for notification in notifications %}
-	<li><span>
+	<li class='notification-li' id='notification-li-{{ notification.id }}'><span class='notification-list'>
 		<a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a>
 		<button class='dismiss-notification-btn' id="dismiss-notification-{{ notification.id }}">Dismiss</button>
 	</span></li>

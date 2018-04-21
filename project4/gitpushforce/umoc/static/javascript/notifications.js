@@ -38,11 +38,16 @@ $(document).ready(function(){
 			console.log('Received response');
 			console.log(data);
 			
-			//$('notifications-dropdown')
+			// add rendered html to dropdown
+			$('#notifications-dropdown').append(data);
+			
+			// set number of notifications 
+			var num_notifications = $('.notification-li').length;
+			$('#notifications-counter').text(num_notifications);
 			
 			// click handlers for each dismiss-notification-btn
 			$('.dismiss-notification-btn').on('click', function() {
-				var id = $(this).attr('id');
+				var id = $(this).attr('id').substring(21);
 				console.log('clicked to dismiss ' + id);
 				
 				// submit AJAX post saying notification was dismissed
@@ -54,6 +59,7 @@ $(document).ready(function(){
 					success: function(result) {
 						console.log(result);
 						// remove notification html
+						$('#notification-li-' + id).remove();
 						
 					},
 					error: function(result) {

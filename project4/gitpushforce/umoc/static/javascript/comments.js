@@ -18,7 +18,6 @@ function getCookie(name) {
 
 // cookie is 'csrftoken', HTTP header is 'X-CRSFToken'
 var csrftoken = getCookie('csrftoken');
-console.log('Got CSRF token: ' + csrftoken);
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -40,9 +39,6 @@ $(document).ready(function(){
 		url: "http://localhost:8000/trip/" + trip_id + "/comments",
 		contentType: "application/json",
 		success: function(data) {
-			console.log('Received response');
-			console.log(data);
-			
 			// append rendered comment section below comments-header element
 			$('#comments-header').append(data);
 			

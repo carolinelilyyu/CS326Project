@@ -19,16 +19,8 @@
 					<ul class="nav navbar-nav navbar-right">				
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Notifications<span class="navbar-new" id="notifications-counter">0</span></a>
-							<!-- TODO: show "No Notifications" if none. Color differently for seen. Allow dismissal (?). Link to full notifications page (?). Use render_notification snippet -->
-							<!-- for some reason "notifications" is not being found. We'll want to use the passed-in notifications object, which allows it to be filtered -->
 							
 							<ul class="dropdown-menu scrollable-menu" id="notifications-dropdown">
-								<!-- todo: make for-else -->
-								{% for notification in user.profile.notification_set.all %}
-									<li><span><a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a><button class='dismiss-notification-btn' id="dismiss-notification-{{ notification.id }}">Dismiss</button></span></li>
-								{% empty %}
-									<li><a href="#">No Notifications</a></li>
-								{% endfor %}
 								<!-- import Javascript for Notification functionality -->
 								{% load static %}
 								<script src="{% static 'javascript/notifications.js' %}"></script>
