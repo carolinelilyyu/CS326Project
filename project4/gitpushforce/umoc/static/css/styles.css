@@ -22,6 +22,11 @@ body {
     overflow-x: hidden;
 }
 
+/* style on containing div of a comment on a Trip page */
+.trip-comment {
+	background-color: #CCC;
+}
+
 /*.dropdown-menu {
 	width: 300px;
 }*/
