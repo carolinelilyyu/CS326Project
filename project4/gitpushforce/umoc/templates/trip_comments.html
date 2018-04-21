@@ -1,0 +1,16 @@
+<!-- 
+Renders comment section ONLY for a trip. 
+Input: 'comments', a list of ProcessedComment objects IN RENDERING ORDER. 
+OUTPUT: rendered comments, with threads
+-->
+{% for comment in comments %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="comment" id="comment-{{ comment.id }}" style="padding-left: {{ comment.get_padding }}px">
+				<h4>{{ comment.author }} on {{ comment.time_stamp }} </h4>
+				<p>{{ comment.text }}</p>
+				<button id="reply-btn-{{ comment.id }}">Reply</button>
+			</div>
+		</div>
+	</div>
+{% endfor %}

@@ -188,6 +188,7 @@ class UserInfoView(generic.DetailView):
 class ProcessedComment:
 	# initialize with a Comment var
 	def __init__(self, comment, depth=0):
+		self.id = comment.id
 		self.author = comment.author
 		self.text = comment.text
 		self.time_stamp = comment.time_stamp
@@ -202,8 +203,11 @@ class ProcessedComment:
 			ordered += comment.unravel()
 		return ordered
 		
+	def get_padding(self):
+		return self.depth * 30
+		
 	def __repr__(self):
-		return 'ProcessedComment(author="{}", text="{}", time_stamp="{}". {} replies'.format(self.author, self.text, self.time_stamp, len(self.replies))
+		return 'ProcessedComment(id="{}", author="{}", text="{}", time_stamp="{}". {} replies'.format(self.id, self.author, self.text, self.time_stamp, len(self.replies))
 		
 		
 def trip_comments(request, pk):
@@ -244,8 +248,12 @@ def trip_comments(request, pk):
 			ordered_comments += processed_comment.unravel()
 			
 		print (ordered_comments)
-			
-		return JsonResponse(data, safe=False)
+		return render(
+			request,
+			'trip_comments.html',
+			context={'comments': ordered_comments}
+		)
+		#return JsonResponse(data, safe=False)
 	elif request.method == 'POST': # and request.is_ajax()
 		print (request.POST)
 		print ('Saving new comment')
