@@ -162,4 +162,4 @@ class Notification(models.Model):
 		ordering = ['time_stamp']
 		
 	def __str__(self):
-		return 'Notification for {} on {}: "{}"'.format(self.recipient.first_name, self.time_stamp, self.message)
+		return 'Notification for {} on {}: "{}. Dismissed = {}"'.format(self.recipient.first_name, self.time_stamp, self.message, self.dismissed)

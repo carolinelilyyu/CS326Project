@@ -55,7 +55,7 @@ $(document).ready(function(){
 					type: "POST",
 					dataType: "application/json",
 					url: "http://localhost:8000/notifications",
-					data: {'dismissed': id},
+					data: {'dismissed_id': id},
 					success: function(result) {
 						console.log(result);
 						// remove notification html
@@ -65,6 +65,7 @@ $(document).ready(function(){
 					error: function(result) {
 						console.log('Error with POST');
 						console.log(result)
+						//console.log(result.responseText);
 					}
 				})
 			});

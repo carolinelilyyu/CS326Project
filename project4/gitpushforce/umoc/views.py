@@ -227,18 +227,22 @@ def trip_comments(request, pk):
 
 def notifications(request):
 	"""
-	AJAX handler managing currently signed in user's notifications. Only accessible via AJAX requests. Returns rendered HTML of user's notifications, for insertion into the navbar on GET. POST accepts 'dismissed': <int:id> as the id of the notification the user has dismissed. 
+	AJAX handler managing currently signed in user's notifications. Only accessible via AJAX requests. Returns rendered HTML of user's notifications, for insertion into the navbar on GET. POST accepts 'dismissed_id': <int:id> as the id of the notification the user has dismissed. 
 	"""
 	if request.method == 'GET':
-		print ('retrieving notifications for user {}'.format(request.user.id))
-		print ('Found {}'.format(Notification.objects.filter(recipient_id=request.user.profile.id).order_by('time_stamp').all()))
+		print ('Retrieving notifications for user {}'.format(request.user.id))
 		return render(
 			request,
 			'notifications.html',
-			context={'notifications': Notification.objects.filter(recipient_id=request.user.profile.id).order_by('time_stamp')}
+			context={'notifications': Notification.objects.filter(recipient_id=request.user.profile.id, dismissed=False).order_by('time_stamp')}
 		)
 	elif request.method == 'POST':
-		print ('Received {}'.format(request.POST))
+		print ('Received request to dismiss notification {}'.format(request.POST))
+		requested = Notification.objects.get(pk=request.POST['dismissed_id'])
+		print (requested)
+		requested.dismissed = True
+		requested.save()
+		print (requested)
 		return JsonResponse({'success': True})
 	else:
 		raise Http404('Access Denied')
