@@ -67,7 +67,7 @@ def profile(request):
 	profile = user.profile
 	
 	if request.method == 'POST':
-		form = UpdateProfileForm(request.POST)
+		form = UpdateProfileForm(request.POST, request.FILES)
 		
 		if form.is_valid():
 			user.first_name = form.cleaned_data['first_name']
