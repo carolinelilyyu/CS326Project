@@ -1,18 +1,24 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
+
+import datetime
+
 from umoc.models import Trip
 from django.forms import ModelForm
 
 
 class RegisterForm(UserCreationForm):
-        first_name = forms.CharField(max_length=30, help_text='Required - Please enter your first name.')
-        last_name = forms.CharField(max_length=30, help_text='Required - Please enter your last name.')
-        email = forms.EmailField(max_length=150, help_text='Required. Please enter your email address.')
+	first_name = forms.CharField(max_length=30, help_text='Required. Please enter your first name.')
+	last_name = forms.CharField(max_length=30, help_text='Required. Please enter your last name.')
+	email = forms.EmailField(max_length=150, help_text='Required. Please enter your email address.', error_messages={'invalid': 'Please enter a valid email address.'})
 
-        class Meta:
-                model = User
-                fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+	class Meta:
+		model = User
+		fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+
 
 class AdminTripForm(ModelForm):
 	OPTIONS = (
@@ -23,6 +29,7 @@ class AdminTripForm(ModelForm):
 		('sn', 'Snowboarding'),
 		('c', 'Cabin Trip'),
 		)
+	
 	valid_dates= ['%Y-%m-%d %H:%M:%S',    # '2006-10-25 14:30:59'
 				 '%Y-%m-%d %H:%M',       # '2006-10-25 14:30'
 				 '%Y-%m-%d',             # '2006-10-25'
@@ -32,6 +39,7 @@ class AdminTripForm(ModelForm):
 				 '%m/%d/%y %H:%M:%S',    # '10/25/06 14:30:59'
 				 '%m/%d/%y %H:%M',       # '10/25/06 14:30'
 				 '%m/%d/%y']             # '10/25/06'
+	
 	choices = Trip.participants
 	name = forms.CharField(max_length=20, help_text='Enter Trip Name', error_messages={'required': 'Please enter your name'})
 	description = forms.CharField(widget=forms.Textarea, help_text='Enter description and informatin for trip', error_messages={'required': 'Please enter your description'})
@@ -50,16 +58,11 @@ class AdminTripForm(ModelForm):
 		model = Trip
 		fields = ('name', 'description', 'num_seats', 'capacity', 'thumbnail', 'start_time', 'end_time', 'cancelled', 'tag', 'leader', 'participants', 'drivers')
 
-from django import forms
-from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
-import datetime #for checking renewal date range.
-    
+
 class UpdateProfileForm(forms.Form):
-    print("Update profile form")
-    email = forms.EmailField()
-    first_name = forms.CharField(max_length=30)
-    last_name = forms.CharField(max_length=30)
-    dob = forms.DateField()
-    phone_num = forms.RegexField(regex=r'^\+?1?\d{9,15}$')
-    #spire_id = forms.RegexField(regex=r'\d{8}$', help_text = ("SPIRE ID must be 8 digits"))
+	first_name = forms.CharField(max_length=30, help_text='Required. Please enter your first name.')
+	last_name = forms.CharField(max_length=30, help_text='Required. Please enter your last name.')
+	email = forms.EmailField(max_length=150, help_text='Required. Please enter your email address.', error_messages={'invalid': 'Please enter a valid email address.'})
+	date_of_birth = forms.DateField(help_text='Required. Please enter your date of birth (yyyy/mm/dd).')
+	phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', help_text='Required - Please enter your phone number (ten digits only).', error_messages={'invalid': 'Please enter a valid phone number.'})
+	profile_image = forms.ImageField()
