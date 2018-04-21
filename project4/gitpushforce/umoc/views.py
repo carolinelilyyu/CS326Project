@@ -12,7 +12,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from datetime import *
 import json
 
-from .models import UserProfile, Trip, Comment
+from .models import UserProfile, Trip, Comment, Notification
 from .forms import *
 
 
@@ -91,7 +91,7 @@ def profile(request):
 										  'date_of_birth': profile.dob,
 										  'phone_number': profile.phone_num})
 
-	return render(request, 'profile2.html', {'form': form})
+	return render(request, 'profile.html', {'form': form})
 
 
 class TripListView(generic.ListView):
@@ -181,15 +181,14 @@ def trip_comments(request, pk):
 		print ('Retrieving comments for trip id {}'.format(pk))
 		# TODO: CHECK IF TRIP IS IN DATABASE
 		
-		# retrieve comments on given trip in order of posting
-		trip_comments = Comment.objects.filter(trip_id=pk).order_by('time_stamp')
-		data = [{ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp} for comment in trip_comments]
-		
 		# map id->ProcessedComment
 		processed_comments = {}
 		# top-level comments
 		top_level_comments = []
 		
+		# retrieve comments on given trip in order of posting
+		trip_comments = Comment.objects.filter(trip_id=pk).order_by('time_stamp')
+
 		for comment in trip_comments:
 			# create ProcessedComment wrapper and add to dictionary
 			processed = ProcessedComment(comment)
@@ -197,7 +196,6 @@ def trip_comments(request, pk):
 			
 			if comment.parent:
 				# add comment as reply to parent
-				print('Adding reply to parent')
 				processed_comments[comment.parent.id].replies.append(processed)
 			else:
 				# comment must be top-level
@@ -208,38 +206,44 @@ def trip_comments(request, pk):
 		for processed_comment in top_level_comments:
 			ordered_comments += processed_comment.unravel()
 			
-		print (ordered_comments)
 		return render(
 			request,
 			'trip_comments.html',
 			context={'comments': ordered_comments}
 		)
 		#return JsonResponse(data, safe=False)
-	elif request.method == 'POST': # and request.is_ajax()
-		print (request.POST)
-		print ('Saving new comment')
-		print (request.user)
-		print (request.user.profile)
-		if request.user.is_authenticated:
-			print('Saving new comment by {}'.format(request.user.profile))
-			print(request.POST['text'])
-			print (UserProfile.objects.get(pk=request.user.profile.id))
-			print(Comment.objects.get(pk=request.POST['parent']).parent)
-			print(request.POST['text'])
-			print(Trip.objects.get(pk=pk))
-			# TODO: COULD BE A VULNERABILITY (NOT ENOUGH DATA VALIDATION)
-			comment = Comment(author=UserProfile.objects.get(pk=request.user.profile.id), parent=Comment.objects.get(pk=request.POST['parent']), text=request.POST['text'], trip=Trip.objects.get(pk=pk))
-			comment.save()
-			
-			#return JsonResponse({'success': True})
-			return HttpResponse({'success': True}, content_type="application/json")
-		else:
-			return JsonResponse({'success': False}) # TODO: RETURN PERMISSION ERROR
-	
+	elif request.method == 'POST' and request.user.is_authenticated: # and request.is_ajax()
+		print('Saving new comment by {}'.format(request.user.profile))
+		# TODO: COULD BE A VULNERABILITY (NOT ENOUGH DATA VALIDATION)
+		
+		# create Comment object and save to database
+		Comment(author=UserProfile.objects.get(pk=request.user.profile.id), parent=Comment.objects.get(pk=request.POST['parent']), text=request.POST['text'], trip=Trip.objects.get(pk=pk)).save()
+		
+		return JsonResponse({'success': True})
+		#return HttpResponse({'success': True}, content_type="application/json")
 	else:
 		raise Http404('Access Denied')
 
 
+def notifications(request):
+	"""
+	AJAX handler managing currently signed in user's notifications. Only accessible via AJAX requests. Returns rendered HTML of user's notifications, for insertion into the navbar on GET. POST accepts 'dismissed': <int:id> as the id of the notification the user has dismissed. 
+	"""
+	if request.method == 'GET':
+		print ('retrieving notifications for user {}'.format(request.user.id))
+		print ('Found {}'.format(Notification.objects.filter(recipient_id=request.user.profile.id).order_by('time_stamp').all()))
+		return render(
+			request,
+			'notifications.html',
+			context={'notifications': Notification.objects.filter(recipient_id=request.user.profile.id).order_by('time_stamp')}
+		)
+	elif request.method == 'POST':
+		print ('Received {}'.format(request.POST))
+		return JsonResponse({'success': True})
+	else:
+		raise Http404('Access Denied')
+		
+		
 def trip_planner(request):
 	"""
 	View function for home page of site.
@@ -319,8 +323,8 @@ class TripCreate(CreateView):
 			print("failed. this is not a post")
 			form = AdminTripForm()
 
-	args = {'form': form}
-	return render(request, self.template_name, args)
+		args = {'form': form}
+		return render(request, self.template_name, args)
 
 
 class TripUpdate(UpdateView):

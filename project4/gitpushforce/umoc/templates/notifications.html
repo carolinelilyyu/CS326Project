@@ -1,0 +1,13 @@
+<!-- 
+Renders notifications ONLY. 
+Input: 'notifications', a list of Notification objects IN RENDERING ORDER (by time_stamp increasing). 
+OUTPUT: list of rendered notifications, each in <li><span> tags
+-->
+{% for notification in notifications %}
+	<li><span>
+		<a href="{% if notification.link %} {{ notification.link }} {% else %} # {% endif %}">{{ notification.message }} at {{ notification.time_stamp }}</a>
+		<button class='dismiss-notification-btn' id="dismiss-notification-{{ notification.id }}">Dismiss</button>
+	</span></li>
+{% empty %}
+	<li><a href="#">No Notifications</a></li>
+{% endfor %}	
