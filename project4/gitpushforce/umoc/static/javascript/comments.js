@@ -1,6 +1,5 @@
 // Handles loading and replying to comments. Retrieves comments for given trip id using AJAX.
 
-console.log('Hi');
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -35,9 +34,6 @@ $.ajaxSetup({
 });
 
 $(document).ready(function(){
-	console.log('Doc ready');
-	console.log('Got CSRF token: ' + getCookie('csrftoken'));
-	console.log('Passed');
 	$.ajax({
 		type: "get",
 		url: "http://localhost:8000/trip/" + trip_id + "/comments",
@@ -124,7 +120,7 @@ function renderThread(comments, id, depth) {
 				type: "POST",
 				dataType: "application/json",
 				url: "http://localhost:8000/trip/" + trip_id + "/comments",
-				data: {'text': comment_input.value, 'reply': id},
+				data: {'text': comment_input.value, 'parent': id},
 				success: function(result) {
 					console.log(result);
 				},

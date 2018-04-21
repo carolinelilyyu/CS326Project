@@ -187,26 +187,35 @@ class UserInfoView(generic.DetailView):
 
 		
 def trip_comments(request, pk):
-		""" 
-		Return JSON of all comments for a given trip id.
-		"""
-		if request.method == 'POST':
-			print (request.POST)
-			print ('Saving new comment')
-			print (request.user)
-			print (request.user.profile)
-			if request.user.is_authenticated:
-				print('Saving new comment by {}'.format(request.user.profile))
-				#return JsonResponse({'success': True})
-				return HttpResponse({'success': True}, content_type="application/json")
-			else:
-				return JsonResponse({'success': False}) # TODO: RETURN PERMISSION ERROR
+	""" 
+	Return JSON of all comments for a given trip id.
+	"""
+	if request.method == 'POST':
+		print (request.POST)
+		print ('Saving new comment')
+		print (request.user)
+		print (request.user.profile)
+		if request.user.is_authenticated:
+			print('Saving new comment by {}'.format(request.user.profile))
+			print(request.POST['text'])
+			print (UserProfile.objects.get(pk=request.user.profile.id))
+			print(Comment.objects.get(pk=request.POST['parent']).parent)
+			print(request.POST['text'])
+			print(Trip.objects.get(pk=pk))
+			# TODO: COULD BE A VULNERABILITY (NOT ENOUGH DATA VALIDATION)
+			comment = Comment(author=UserProfile.objects.get(pk=request.user.profile.id), parent=Comment.objects.get(pk=request.POST['parent']), text=request.POST['text'], trip=Trip.objects.get(pk=pk))
+			comment.save()
+			
+			#return JsonResponse({'success': True})
+			return HttpResponse({'success': True}, content_type="application/json")
 		else:
-			print ('Retrieving comments for trip id {}'.format(pk))
-			# TODO: CHECK IF TRIP IS IN DATABASE
-			comments = Comment.objects.filter(trip_id=pk)
-			data = [{ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp} for comment in comments]
-			return JsonResponse(data, safe=False)
+			return JsonResponse({'success': False}) # TODO: RETURN PERMISSION ERROR
+	else:
+		print ('Retrieving comments for trip id {}'.format(pk))
+		# TODO: CHECK IF TRIP IS IN DATABASE
+		comments = Comment.objects.filter(trip_id=pk)
+		data = [{ 'id': comment.id, 'parent': comment.parent.id if comment.parent else 0, 'author_id': comment.author.id, 'author_name': '{} {}'.format(comment.author.first_name, comment.author.last_name), 'text': comment.text, 'timestamp': comment.time_stamp} for comment in comments]
+		return JsonResponse(data, safe=False)
 
 			
 def trip_planner(request):
