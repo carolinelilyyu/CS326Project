@@ -46,8 +46,12 @@ def register(request):
 			raw_password = form.cleaned_data.get('password1')
 			user = authenticate(username=username, password=raw_password)
 			
+			# create and save corresponding user profile
 			userpro = UserProfile(user=user, first_name = form.cleaned_data.get('first_name'), last_name = form.cleaned_data.get('last_name'))
 			userpro.save()
+			
+			# create a welcome notification
+			Notification(recipient=userpro, message='Welcome to UMOC! Click here to fill out your profile', link=reverse('profile')).save()
 			
 			login(request, user)
 			return redirect('dashboard')
@@ -67,7 +71,7 @@ def profile(request):
 	profile = user.profile
 	
 	if request.method == 'POST':
-		form = UpdateProfileForm(request.POST, request.FILES)
+		form = UpdateProfileForm(request.POST)
 		
 		if form.is_valid():
 			user.first_name = form.cleaned_data['first_name']
@@ -148,12 +152,14 @@ class UserInfoView(generic.DetailView):
 
 class ProcessedComment:
 	# initialize with a Comment var
-	def __init__(self, comment, depth=0):
+	def __init__(self, comment, parent=None, depth=0):
 		self.id = comment.id
 		self.author = comment.author
 		self.text = comment.text
 		self.time_stamp = comment.time_stamp
+		self.href = comment.author.get_absolute_url()
 		self.replies = []
+		self.parent = parent
 		self.depth = depth
 		
 	# Unravels child comments and threads, running recursively and returning a list of ordered comments. Sets depth for each. 
@@ -192,10 +198,12 @@ def trip_comments(request, pk):
 		for comment in trip_comments:
 			# create ProcessedComment wrapper and add to dictionary
 			processed = ProcessedComment(comment)
+			print (processed.href)
 			processed_comments[comment.id] = processed
 			
 			if comment.parent:
-				# add comment as reply to parent
+				# set comment's parent and add comment as reply to parent
+				processed.parent = processed_comments[comment.parent.id]
 				processed_comments[comment.parent.id].replies.append(processed)
 			else:
 				# comment must be top-level
@@ -216,8 +224,18 @@ def trip_comments(request, pk):
 		print('Saving new comment by {}'.format(request.user.profile))
 		# TODO: COULD BE A VULNERABILITY (NOT ENOUGH DATA VALIDATION)
 		
+		# retrieve relevant database records
+		author = UserProfile.objects.get(pk=request.user.profile.id)
+		parent_comment = Comment.objects.get(pk=request.POST['parent'])
+		trip = Trip.objects.get(pk=pk)
+		
 		# create Comment object and save to database
-		Comment(author=UserProfile.objects.get(pk=request.user.profile.id), parent=Comment.objects.get(pk=request.POST['parent']), text=request.POST['text'], trip=Trip.objects.get(pk=pk)).save()
+		comment = Comment(author=author, parent=parent_comment, text=request.POST['text'], trip=trip)
+		comment.save()
+		
+		# create Notification for comment's parent if one exists and author is not equal to current signed-in user
+		if parent_comment.author.id != request.user.profile.id:
+			Notification(recipient=parent_comment.author, message='{} {} replied to your comment'.format(parent_comment.author.first_name, parent_comment.author.last_name), link=comment.get_absolute_url()).save()
 		
 		return JsonResponse({'success': True})
 		#return HttpResponse({'success': True}, content_type="application/json")

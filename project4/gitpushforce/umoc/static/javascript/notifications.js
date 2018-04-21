@@ -16,6 +16,11 @@ function getCookie(name) {  // TODO: IMPORT ON ALL SCRIPTS
     return cookieValue;
 }
 
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
 // cookie is 'csrftoken', HTTP header is 'X-CRSFToken'
 var csrftoken = getCookie('csrftoken');
 

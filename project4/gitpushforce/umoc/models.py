@@ -135,12 +135,9 @@ class Comment(models.Model):
 	time_stamp = models.DateTimeField(auto_now_add=True)
 	trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
 	
-	#class Meta:
-	#	ordering = ['trip.id']
-
 	# route to trip page comment is on
 	def get_absolute_url(self):
-		return reverse('trip_info', args=[str(self.trip.id)])
+		return reverse('trip_info', args=[str(self.trip.id)]) + '#comment-{}'.format(self.id)
     
 	def __str__(self):
 		return 'Comment by {} on trip {}. Replying to {} on {}'.format(self.author.first_name, self.trip.name, self.parent.author.first_name if self.parent else '', self.time_stamp)
