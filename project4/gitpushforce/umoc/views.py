@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ValidationError
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from datetime import *
+from datetime import datetime, timezone
 import json
 
 from .models import UserProfile, Trip, Comment, Notification
@@ -98,19 +98,12 @@ def profile(request):
 	return render(request, 'profile.html', {'form': form})
 
 
-class TripListView(generic.ListView):
-	model = Trip
-	template_name = 'dashboard.html'  # Specify your own template name/location
-	num_trips=Trip.objects.all().count()
-
-	def get_context_data(self, **kwargs):
-		# Call the base implementation first to get the context
-		context = super(TripListView, self).get_context_data(**kwargs)
-		# Create any data and add it to the context
-		context['some_data'] = 'This is just some data'
-		context['count'] = self.get_queryset().count()
-		context['today'] = datetime.datetime.now()
-		return context
+def dashboard(request):
+	""" 
+	Renders page with menu of upcoming trips, in order of start time.
+	"""
+	# filter trips by those starting after current time, and order by start time
+	return render(request, 'dashboard.html', {'trips': Trip.objects.filter(start_time__gte=datetime.datetime.now(timezone.utc)).order_by('start_time')})
 
 		
 def trip_info(request, pk):

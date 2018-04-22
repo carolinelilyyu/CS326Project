@@ -4,7 +4,8 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('dashboard/', views.TripListView.as_view(), name='dashboard'),
+	path('notifications', views.notifications, name='notifications'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
     url(r'^profile/(?P<pk>\d+)/$', views.public_profile, name='public_profile'),
@@ -18,7 +19,6 @@ urlpatterns = [
 	path('trip/<int:pk>/join/', views.join_trip, name='trip_join'),
 	path('trip/<int:pk>/leave/', views.leave_trip, name='trip_leave'),
 	path('trip/<int:pk>/report/', views.trip_report, name='trip_report'),
-	path('notifications', views.notifications, name='notifications'),
 ]
 
 urlpatterns += [
