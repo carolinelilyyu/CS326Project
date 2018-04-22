@@ -50,7 +50,7 @@
 		<!-- TODO: ALLOW LEADER, OR ADMIN, TO EDIT/CANCEL. Fully disable links!!! -->
 
 		{% if user.profile == trip.leader or user.profile.admin_level == 'a' %} 
-			<a id="trip-cancel" class="btn btn-danger" href="{% url 'trip_delete' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Cancel Trip</a>
+			<a id="trip-cancel" class="btn btn-danger" href="{% url 'trip_cancel' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Cancel Trip</a>
 			<a id="trip-edit" class="btn btn-primary" href="{% url 'trip_update' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Edit Trip</a>
 			<p>User is leader</p>
 		{% endif %}

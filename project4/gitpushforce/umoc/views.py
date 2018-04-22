@@ -333,14 +333,31 @@ class TripUpdate(UpdateView):
 	fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time']#, 'cancelled', 'tag', 'leader', 'participants', 'drivers']
 
 
-class TripDelete(DeleteView):
-	model = Trip
-	success_url = reverse_lazy('dashboard')
-
+def cancel_trip(request, pk):
+	""" 
+	Cancels trip of the given id. Requires requesting user to be trip leader or an admin. Returns 404 if the trip is over or has already been canceled. Creates notification for each user who had been signed up to participate.
+	"""
+	try:
+		trip = Trip.objects.get(pk=pk)
+		if trip.is_over():
+			raise Http404("You can't cancel a trip that is over")
+		elif request.user.profile.admin_level != 'a' and request.user.profile != trip.leader:
+			raise Http404("You do not have permission")
+		else:  # success
+			trip.cancelled = True
+			trip.save()
+			
+			# create notifications
+			for participant in trip.participants.all():
+				Notification(recipient=participant, message='{} was cancelled'.format(trip.name), link=trip.get_absolute_url()).save()
+				
+			return redirect('trip_info', pk=pk)
+	except Trip.DoesNotExist:
+		raise Http404('Sorry, that trip does not exist')
 
 def join_trip(request, pk):
 	"""
-	Adds user to specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Reloads trip page on success.
+	Adds user to specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Sends user a notification and reloads trip page on success. 
 	"""
 	try:
 		trip = Trip.objects.get(pk=pk)
@@ -354,6 +371,10 @@ def join_trip(request, pk):
 			trip.participants.add(request.user.profile)
 			trip.num_seats -= 1
 			trip.save()
+			
+			# create notification
+			Notification(recipient=request.user.profile, message='You joined {} successfully!'.format(trip.name), link=trip.get_absolute_url()).save()
+			
 			return redirect('trip_info', pk=pk)
 	except Trip.DoesNotExist:
 		raise Http404('Sorry, that trip does not exist')
