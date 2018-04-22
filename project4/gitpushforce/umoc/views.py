@@ -249,15 +249,38 @@ def notifications(request):
 
 def admin_management(request):
 	"""
-	Allows an administrator to set user permission levels.
+	Allows an administrator to set user permission levels. IMPORTANT: This must only be accessible by admins. admin_edit is used to make AJAX calls to receive and update specific user data.
 	"""
-	return render(
-		request,
-		'admin_management.html',
-		context={'users': UserProfile.objects.all().order_by('last_name')}
-	)
+	if request.user.profile.admin_level != 'a':
+		raise Http404('You do not have access to this page')
+	else:
+		return render(
+			request,
+			'admin_management.html',
+			context={'users': UserProfile.objects.all().order_by('last_name')}
+		)
 
 
+def admin_edit(request):
+	"""
+	Manages AJAX calls for the admin page. IMPORTANT: This must only be accessible by admins. Run AJAX GET 'user_id': <id> to retrieve JSON data for a specific user. Run AJAX POST 'user_id': <id>, 'admin_level': <a/l/u> to set admin level for the specified user.
+	"""
+	if request.user.profile.admin_level != 'a':
+		raise Http404('You do not have access to this page')
+	elif request.method == 'GET':
+		print ('Received GET {}'.format(request.GET))
+		try:
+			user = UserProfile.objects.get(pk=request.GET['user_id'])
+			return JsonResponse({'first_name': user.first_name, 'last_name': user.last_name, 'href': user.get_absolute_url(), 'email': '', 'admin_level': user.admin_level })
+		except UserProfile.DoesNotExist:
+			return JsonResponse({'success': False})  # todo: return error
+	elif request.method == 'POST':
+		print ('Received POST {}'.format(request.POST))
+		return JsonResponse({'success': True})
+	else:
+		raise Http404("This url is not being used correctly")
+		
+		
 def waiver(request):
 	return render(
 		request,

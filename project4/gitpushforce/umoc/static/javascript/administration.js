@@ -45,5 +45,18 @@ $('.user-select').on('click', function() {
 	// check if user data in cache
 	
 	// make AJAX query to get JSON data for queried user
-	
+	$.ajax({
+		type: 'GET',
+		dataType: 'application/json',
+		url: 'http://localhost:8000/administration_edit',
+		data: {'user_id': user_id },
+		success: function(result) {
+			console.log('Received successful response ' + result)
+		},
+		error: function(result) { // TODO: WHY IS THIS ALWAYS AN ERROR?
+			console.log('Received error response ' + result)
+			console.log(result)
+			console.log(JSON.parse(result.responseText))
+		}
+	});
 });

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^trip/(?P<pk>\d+)/comments$', views.trip_comments, name='trip_comments'),
     path('waiver/', views.waiver, name = 'waiver'),
     path('administration/', views.admin_management, name='admin_management'),
+	path('administration_edit/', views.admin_edit, name='admin_edit'),
     path('trip/create/', views.TripCreate.as_view(), name='trip_create'),
     path('trip/<int:pk>/edit/', views.TripUpdate.as_view(), name='trip_update'),
     path('trip/<int:pk>/cancel/', views.cancel_trip, name='trip_cancel'),
