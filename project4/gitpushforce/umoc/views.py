@@ -271,11 +271,19 @@ def admin_edit(request):
 		print ('Received GET {}'.format(request.GET))
 		try:
 			user = UserProfile.objects.get(pk=request.GET['user_id'])
-			return JsonResponse({'first_name': user.first_name, 'last_name': user.last_name, 'href': user.get_absolute_url(), 'email': '', 'admin_level': user.admin_level })
+			return JsonResponse({'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'href': user.get_absolute_url(), 'email': '', 'admin_level': user.admin_level })
 		except UserProfile.DoesNotExist:
 			return JsonResponse({'success': False})  # todo: return error
 	elif request.method == 'POST':
 		print ('Received POST {}'.format(request.POST))
+		try:
+			user = UserProfile.objects.get(pk=request.POST['user_id'])
+			user.admin_level = request.POST['admin_level'];
+			user.save();
+			print('Set {} to {}'.format(user, user.admin_level))
+			return JsonResponse({'success': True});
+		except UserProfile.DoesNotExist:
+			return JsonResponse({'success': False})  # todo: return error
 		return JsonResponse({'success': True})
 	else:
 		raise Http404("This url is not being used correctly")

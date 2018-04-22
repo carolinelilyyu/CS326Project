@@ -40,8 +40,8 @@ $(document).ready(function(){
 		url: "http://localhost:8000/notifications",
 		contentType: "application/json",
 		success: function(data) {
-			console.log('Received response');
-			console.log(data);
+			// console.log('Received response');
+			// console.log(data);
 			
 			// add rendered html to dropdown
 			$('#notifications-dropdown').append(data);
