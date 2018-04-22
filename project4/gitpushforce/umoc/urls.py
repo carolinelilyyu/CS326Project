@@ -8,13 +8,15 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
     url(r'^profile/(?P<pk>\d+)/$', views.UserInfoView.as_view(), name='public_profile'),
-    url(r'^trip/(?P<pk>\d+)/$', views.TripInfoView.as_view(), name='trip_info'),
+    url(r'^trip/(?P<pk>\d+)/$', views.trip_info, name='trip_info'),
     url(r'^trip/(?P<pk>\d+)/comments$', views.trip_comments, name='trip_comments'),
     path('waiver/', views.waiver, name = 'waiver'),
     path('administration/', views.admin_management, name='admin_management'),
     path('trip/create/', views.TripCreate.as_view(), name='trip_create'),
     path('trip/<int:pk>/update/', views.TripUpdate.as_view(), name='trip_update'),
     path('trip/<int:pk>/delete/', views.TripDelete.as_view(), name='trip_delete'),
+	path('trip/<int:pk>/join/', views.join_trip, name='trip_join'),
+	path('trip/<int:pk>/leave/', views.leave_trip, name='trip_leave'),
 	path('notifications', views.notifications, name='notifications'),
 ]
 

@@ -105,6 +105,10 @@ class Trip(models.Model):
 	def is_over(self):
 		return self.end_time < datetime.now(timezone.utc)
 		
+	# returns number of seats still open
+	def get_seats_remaining(self):
+		return self.capacity - len(self.participants.all())
+		
 	# return full tag name
 	def get_tag_name(self):
 		return self.TAGS[self.tag][0] if self.tag in self.TAGS else ''

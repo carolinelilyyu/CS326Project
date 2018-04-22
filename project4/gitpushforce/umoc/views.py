@@ -112,42 +112,34 @@ class TripListView(generic.ListView):
 		context['today'] = datetime.datetime.now()
 		return context
 
-
-class TripInfoView(generic.DetailView):
-	model = Trip
-	template_name = 'trip_info.html'
-	
-	def trip_detail_view(request,pk):
-		print ('received id {}'.format(pk))  # TODO: WHY IS IT NOT PRINTING???
-		try:
-				queried_trip = Trip.objects.get(pk=pk)
-		except Trip.DoesNotExist:
-				raise Http404("Trip does not exist")
-
+		
+def trip_info(request, pk):
+	"""
+	Info page for a trip. Allows users to sign up, withdraw, and comment. Trip's leader and admins can edit or cancel the trip.
+	"""
+	try:
 		return render(
-				request,
-				'trip_info.html',
-				context={'trip': queried_trip} # queried_trip.num_seats - queried_trip.participants.count()}
+			request,
+			'trip_info.html',
+			context={'trip': Trip.objects.get(pk=pk)}
 		)
+	except Trip.DoesNotExist:
+		raise Http404('Sorry! That trip does not exist')
 
-
+		
 class UserInfoView(generic.DetailView):
 	model = UserProfile
 	template_name = 'public_profile.html'
 	
 	def user_detail_view(request,pk):
 		try:
-			user_id = UserProfile.objects.get(pk=pk)
+			return render(
+				request,
+				'public_profile.html',
+				context={'profile': UserProfile.objects.get(pk=pk)}
+			)
 		except UserProfile.DoesNotExist:
 			raise Http404("UserProfile does not exist")
-
-		profile = UserProfile.objects.get(pk=pk)
-
-		return render(
-			request,
-			'public_profile.html',
-			context={'profile': profile}
-		)
 
 
 class ProcessedComment:
@@ -268,7 +260,7 @@ def notifications(request):
 
 def admin_management(request):
 	"""
-	View function for home page of site.
+	Allows an administrator to set user permission levels.
 	"""
 	# Generate counts of some of the main objects
 	num_users=UserProfile.objects.all().count()
@@ -297,8 +289,6 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 	#permission_required = 'catalog.can_mark_returned'
 	
 	def get_context_data(self, **kwargs):
-		user = User.objects.filter(first_name__exact='Stefan')[0]
-		notifications = user.notification_set.all()
 		context = super(AdminTripPlanner, self).get_context_data(**kwargs)
 		context['profiles'] = [UserProfile.objects.all()]
 		return context
@@ -306,7 +296,7 @@ class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
 
 class TripCreate(CreateView):
 	model = Trip
-	fields = '__all__'
+	fields = ['name', 'description', 'capacity', 'start_time', 'end_time', 'tag']
 	template_name = 'umoc/trip_form.html'
 
 	def get(self, request):
@@ -346,3 +336,44 @@ class TripUpdate(UpdateView):
 class TripDelete(DeleteView):
 	model = Trip
 	success_url = reverse_lazy('dashboard')
+
+
+def join_trip(request, pk):
+	"""
+	Adds user to specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Reloads trip page on success.
+	"""
+	try:
+		trip = Trip.objects.get(pk=pk)
+		if trip.is_over():
+			raise Http404("You can't join a trip that is over")
+		elif request.user.profile in trip.participants.all():
+			raise Http404('You are already signed up!')
+		elif not trip.num_seats:
+			raise Http404('This trip is full')
+		else:  # success
+			trip.participants.add(request.user.profile)
+			trip.num_seats -= 1
+			trip.save()
+			return redirect('trip_info', pk=pk)
+	except Trip.DoesNotExist:
+		raise Http404('Sorry, that trip does not exist')
+	
+def leave_trip(request, pk):
+	"""
+	Removes user from specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Reloads trip page on success.
+	"""
+	try:
+		trip = Trip.objects.get(pk=pk)
+		if trip.is_over():
+			raise Http404("You can't leave a trip that is over")
+		elif request.user.profile not in trip.participants.all():
+			raise Http404("You aren't signed up for this trip")
+		elif request.user.profile == trip.leader:
+			raise Http404("You're the leader, you can't leave! You must cancel the trip or have an admin switch you out.")
+		else:  # success
+			trip.participants.remove(request.user.profile)
+			trip.num_seats += 1
+			trip.save()
+			return redirect('trip_info', pk=pk)
+	except Trip.DoesNotExist:
+		raise Http404('Sorry, that trip does not exist')

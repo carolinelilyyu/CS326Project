@@ -56,10 +56,10 @@
 		{% endif %}
 		
 		{% if user.profile != trip.leader and user.profile in trip.participants.all %}
-			<a id="trip-withdraw" class="btn btn-danger" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Withdraw</a>
+			<a id="trip-leave" class="btn btn-danger" href="{% url 'trip_leave' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Leave Trip</a>
 			<p>User is already signed up</p>
 		{% elif user.profile != trip.leader %}
-			<a id="trip-sign-up" class="btn btn-info" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip!</a>
+			<a id="trip-sign-up" class="btn btn-info" href="{% url 'trip_join' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip</a>
 			<p>User is not signed up</p>
 		{% endif %}
         
