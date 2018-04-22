@@ -126,20 +126,16 @@ def trip_info(request, pk):
 	except Trip.DoesNotExist:
 		raise Http404('Sorry! That trip does not exist')
 
-		
-class UserInfoView(generic.DetailView):
-	model = UserProfile
-	template_name = 'public_profile.html'
 	
-	def user_detail_view(request,pk):
-		try:
-			return render(
-				request,
-				'public_profile.html',
-				context={'profile': UserProfile.objects.get(pk=pk)}
-			)
-		except UserProfile.DoesNotExist:
-			raise Http404("UserProfile does not exist")
+def public_profile(request, pk):
+	try:
+		return render(
+			request,
+			'public_profile.html',
+			context={'profile': UserProfile.objects.get(pk=pk)}
+		)
+	except UserProfile.DoesNotExist:
+		raise Http404("UserProfile does not exist")
 
 
 class ProcessedComment:
@@ -379,6 +375,7 @@ def join_trip(request, pk):
 	except Trip.DoesNotExist:
 		raise Http404('Sorry, that trip does not exist')
 	
+	
 def leave_trip(request, pk):
 	"""
 	Removes user from specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Reloads trip page on success.
@@ -396,5 +393,19 @@ def leave_trip(request, pk):
 			trip.num_seats += 1
 			trip.save()
 			return redirect('trip_info', pk=pk)
+	except Trip.DoesNotExist:
+		raise Http404('Sorry, that trip does not exist')
+		
+
+def trip_report(request, pk):
+	"""
+	Generates a report on the given trip: Includes signed up users, with emergency information, along with other things. Only accessible for the trip leader, and any admins. Returns 404 if this is not the case.
+	"""
+	try:
+		trip = Trip.objects.get(pk=pk)
+		if request.user.profile.admin_level != 'a' and request.user.profile != trip.leader:
+			raise Http404("You do not have permission to view this page.")
+		else:  # success
+			return render(request, 'trip_report.html', context={'trip': trip})
 	except Trip.DoesNotExist:
 		raise Http404('Sorry, that trip does not exist')

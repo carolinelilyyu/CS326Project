@@ -1,0 +1,16 @@
+{# Template for generating a report trip leader can take with them. Includes information on all signed up participants. Expects a trip parameter. May be converted to pdf and offered as a download. #}
+
+<h3>{{ trip.name }}</h3>
+</h4><em>{{ trip.start_time }} - {{ trip.end_time }}</em></h4>
+
+<h4><strong>{{ trip.participants.all|length }} Participants</strong><h4>
+
+{% for participant in trip.participants.all %}
+
+	<hr>
+	<strong>{{ participant.last_name }}, {{ participant.first_name }}</strong><br>
+	<p>D.O.B. {{ participant.dob }}</p>
+	<p>Phone Number: {{ participant.phone_num }}</p>
+	<p>Emergency Contact: {{ participant.contact_name }} {{ participant.contact_phone }}</p>
+
+{% endfor %}
