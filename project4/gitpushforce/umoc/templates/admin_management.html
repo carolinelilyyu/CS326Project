@@ -1,3 +1,8 @@
+<!-- 
+Page for administrators to manage user permissions and admin levels.
+This is managed by a <select> element populated with the name of each user. Selecting one auto-fills more information about the user.
+User information will be managed Javascript-side, and populated with JSON data from an AJAX call.
+-->
 {% extends "template.html" %}
 
 {% block title %}<title>Management (Leader) - UMOC</title>{% endblock %}
@@ -18,36 +23,45 @@
 		<div class="content">
 			<div class="row">
 				<div class="col-md-12">
-					<h1>UMOC Managment</h1>
-					<p>This is the page for <em>Admin Management</em></p>
-					<p>The database has the following record counts:</p>
-					<ul>
-						<li><strong>Admins:</strong> {{ num_admins }}</li>
-						<li><strong>Users:</strong> {{ num_users }}</li>
-						<ul>
-							{% for user in names_list %}
-							    <li>{{ user }}, <strong>Admin Level:</strong> {{ user.admin_level }}</li>
-							    <div class="form-inline">
-								    <div class="form-group">
-									    <label for="adminlevelchange">Admin Level Change to:</label>
-									    <select class="form-control" id="adminlevelchange">
-										    <option>u</option>
-										    <option>l</option>
-										    <option>a</option>
-									    </select>
-									</div>
-								</div>
-							{% endfor %}
-						</ul>
-					</ul>
+					<p>Use this page to manage users</p>
+					
+					<p>Filter by user last name</p>
+					<input id='user-filter'></input>
+					
+					<select id='user-listbox' size="{{ users|length }}">
+						{% for user in users %}
+							<option class='user-select' id="user-select-{{user.id}}">{{ user.first_name }} {{ user.last_name }}</option>
+						{% endfor %}
+					</select>
+					<!-- Table displaying user information -->
+					<table id='user-info' style='width: 100%'>
+						<tr>
+						<th>Firstname</th>
+						<th>Lastname</th>
+						<th>Profile</th>
+						<th>Email</th>
+						<th>Admin Level</th>
+						</tr>
+						<tr>
+						<td id='user-firstname'></td>
+						<td id='user-lastname'></td>
+						<td id='user-profile'></td>
+						<td id='user-email'></td>
+						<td id='user-adminlevel'></td>
+						</tr>
+					</table>
+					<p>Set User's Admin Level</p>
+					<select id='admin-level-box' size="3">
+						<option id='u'>User</option>
+						<option id='l'>Leader</option>
+						<option id='a'>Admin</option>
+					</select>
+					<button class="btn btn-primary" id='submit-btn'>Save</button>
+					
+					{% load static %}
+					<script src="{% static 'javascript/administration.js' %}"></script>
 				</div>
 			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					<button class="btn btn-primary btn-block" type="submit">Submit</button>
-				</div>
-			</div>
-			
 		</div>
 	</div>
 </div>

@@ -251,15 +251,10 @@ def admin_management(request):
 	"""
 	Allows an administrator to set user permission levels.
 	"""
-	# Generate counts of some of the main objects
-	num_users=UserProfile.objects.all().count()
-	num_admins=UserProfile.objects.filter(admin_level__exact='a').count()
-	names_list=UserProfile.objects.all()
-
 	return render(
 		request,
 		'admin_management.html',
-		context={'names_list':names_list,'num_users':num_users, 'num_admins': num_admins}
+		context={'users': UserProfile.objects.all().order_by('last_name')}
 	)
 
 
