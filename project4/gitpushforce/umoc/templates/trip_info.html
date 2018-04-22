@@ -6,6 +6,7 @@
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/trip_info.css' %}">
+
 <div class="row">
 	<div class="col-md-12">
 		<div class="headingbox">
@@ -20,52 +21,60 @@
 			<div class="content">
         {% load static %}
         <img id="clipboard" src="{% static 'img/clipboard.png' %}" alt="clipboard"><h3 id="trip_name">{{trip.name}}</h3>
-        <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
-        <h6><i>{{trip.start_time}} - {% if trip.end_time %}{{trip.end_time}}{% endif %}</i></h6>
-
-        <!-- TODO <p><strong>Number of Seats Available:</strong> {{ num_seats_remaining }} of {{ trip.num_seats }}</p> <!-- todo: what's the issue here? -->
-        <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
-
-          <div class="btn-group"> <!-- todo: why isn't trip.participants|length working correctly? -->
-            <button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.participants.all|length }} Users Going On Trip <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-inverse" role="menu">
-              {% for participant in trip.participants.all %}
-              <li><a href="{{ participant.get_absolute_url }}">{{participant}}</a></li>
-              {% endfor %}
-
-            </ul>
-
-        </div>
 		
-		{% if user.profile == trip.leader %} <!-- TODO: THIS DOESN'T WORK -->
-			<button id="cancel" class="btn btn-danger">Cancel Trip</button>
-		{% elif user.profile in trip.participants.all %}
-			<button id="sign_up" class="btn btn-info">Withdraw</button>
-		{% else %}
-			<button id="sign_up" class="btn btn-info">Join Trip!</button>
+        <h5>Led by: <a href="{{ trip.leader.get_absolute_url }}">{{trip.leader.first_name}}</a></h5>
+        
+		<h6><i>{{trip.start_time}} - {{trip.end_time}}</i></h6>
+
+		{% if trip.cancelled %}
+			<button class="btn btn-danger">This Trip Was Cancelled</button>
+		{% elif trip.is_over %}
+			<button class="btn btn-danger">This Trip Already Happened</button>
 		{% endif %}
-		{% if user.is_authenticated %}
-		{% if perms.catalog.can_be_edited %}
-		<p>
-			<a style="color:red" href="{% url 'trip_delete' trip.id %}">Delete</a>
-		</p>
+		
+        <p id="description"><strong>Description:</strong> {{ trip.description }}</p>
+		<p>{{ trip.num_seats }} of {{ trip.capacity }} Seats Remaining</p> 
+		
+		<div class="btn-group">
+			<button class="btn btn-inverse dropdown-toggle" type="button" data-toggle="dropdown">{{ trip.participants.all|length }} {% if trip.participants.all|length == 1 %}Person{% else %}People{% endif %} Signed Up<span class="caret"></span>
+			</button>
+		
+			<ul class="dropdown-menu dropdown-menu-inverse" role="menu">
+				{% for participant in trip.participants.all %}
+					<li><a href="{{ participant.get_absolute_url }}">{{participant}}</a></li>
+				{% endfor %}
+			</ul>
+
+		</div>
+		
+		<!-- TODO: ALLOW LEADER, OR ADMIN, TO EDIT/CANCEL. Fully disable links!!! -->
+
+		{% if user.profile == trip.leader or user.profile.admin_level == 'a' %} 
+			<a id="trip-cancel" class="btn btn-danger" href="{% url 'trip_delete' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Cancel Trip</a>
+			<a id="trip-edit" class="btn btn-primary" href="{% url 'trip_update' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Edit Trip</a>
+			<p>User is leader</p>
 		{% endif %}
+		
+		{% if user.profile != trip.leader and user.profile in trip.participants.all %}
+			<a id="trip-withdraw" class="btn btn-danger" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Withdraw</a>
+			<p>User is already signed up</p>
+		{% elif user.profile != trip.leader %}
+			<a id="trip-sign-up" class="btn btn-info" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip!</a>
+			<p>User is not signed up</p>
 		{% endif %}
         
 		<h3 id="comments-header">Comments</h3>
 		
-		<form method="post" action="">
-			{% csrf_token %}
+		{% csrf_token %}
+	
+		<script>
+			const trip_id = {{ trip.id }};
+		</script>
 		
-			<script>
-				const trip_id = {{ trip.id }};
-			</script>
-			
-			<!-- import Javascript for Comment functionality -->
-			{% load static %}
-			<script src="{% static 'javascript/comments.js' %}"></script>
-		</form>
+		<!-- import Javascript for Comment functionality -->
+		{% load static %}
+		<script src="{% static 'javascript/comments.js' %}"></script>
+		
         </div>
       </div>
     </div>

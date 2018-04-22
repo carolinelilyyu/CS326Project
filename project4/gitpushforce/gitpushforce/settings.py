@@ -124,6 +124,9 @@ MEDIA_ROOT = 'media/'
 
 MEDIA_URL = 'media/'
 
+# time-zone support for stored datetime objects
+#USE_TZ = True
+
 # Redirect to dashboard URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/dashboard'
 LOGOUT_REDIRECT_URL = '/'

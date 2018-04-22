@@ -252,7 +252,7 @@ def notifications(request):
 		return render(
 			request,
 			'notifications.html',
-			context={'notifications': Notification.objects.filter(recipient_id=request.user.profile.id, dismissed=False).order_by('time_stamp')}
+			context={'notifications': Notification.objects.filter(recipient_id=request.user.profile.id, dismissed=False).order_by('-time_stamp')}
 		)
 	elif request.method == 'POST':
 		print ('Received request to dismiss notification {}'.format(request.POST))
@@ -265,17 +265,6 @@ def notifications(request):
 	else:
 		raise Http404('Access Denied')
 		
-		
-def trip_planner(request):
-	"""
-	View function for home page of site.
-	"""
-	return render(
-		request,
-		'trip_planner.html',
-		context={'profiles': [UserProfile.objects.all()]}
-	)
-
 
 def admin_management(request):
 	"""

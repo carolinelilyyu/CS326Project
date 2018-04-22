@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 # used for validating phone numbers entered (9 digits)
@@ -99,18 +99,14 @@ class Trip(models.Model):
 	drivers = models.ManyToManyField(UserProfile, related_name='drivers', help_text='Users who have committed to driving', blank=True)
 
 	class Meta:
-		ordering = ['start_time']
+		ordering = ['-start_time']
 		
-
-	# returns whether trip is full
-	def is_full(self):
-		return len(self.participants) < self.capacity
-
+	# return whether trip has already ended. Compares using UTC time.
+	def is_over(self):
+		return self.end_time < datetime.now(timezone.utc)
+		
 	# return full tag name
 	def get_tag_name(self):
-		print ('tag name {}'.format(self.tag))
-		print ('{}'.format(self.TAGS[self.tag]))
-		print ('{}'.format(self.tag in self.TAGS))
 		return self.TAGS[self.tag][0] if self.tag in self.TAGS else ''
 		
 	# return hex string of this Trip's tag
