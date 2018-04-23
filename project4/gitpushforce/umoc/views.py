@@ -5,8 +5,8 @@ from django.views import generic
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.decorators import permission_required
-from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import permission_required, login_required
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from datetime import datetime, timezone
@@ -54,6 +54,7 @@ def register(request):
 	return render(request, 'register.html', {'form': form})
 
 
+@login_required
 def profile(request):
 	user = request.user
 	profile = user.profile
@@ -90,9 +91,15 @@ def profile(request):
 	return render(request, 'profile.html', {'form': form})
 
 
+@login_required
 def waiver(request):
 	user = request.user
 	profile = user.profile
+	
+	if profile.dob and profile.phone_num and profile.contact_name and profile.contact_phone:
+		pass
+	else:
+		raise PermissionDenied("You must first fill out your profile page!")
 	
 	if request.method == 'POST':
 		form = WaiverForm(request.POST, profile=profile)

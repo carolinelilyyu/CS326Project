@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+
+{% block title %}<title>Forbidden - UMOC</title>{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="headingbox">
+			<h1 class="heading">Access Denied!</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<div class="content">
+				<p class="centered">{{exception}}</p>
+			</div>
+		</div>
+	</div>	
+</div>
+
+{% endblock %}
