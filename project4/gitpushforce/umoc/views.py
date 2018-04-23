@@ -17,10 +17,6 @@ from .forms import *
 
 
 def index(request):
-	"""
-	View function for home page of site.
-	"""
-	
 	num_users = UserProfile.objects.all().count()
 	num_trips = Trip.objects.all().count()
 	num_admins = UserProfile.objects.filter(admin_level__exact='a').count()
@@ -33,10 +29,6 @@ def index(request):
 
 
 def register(request):
-	"""
-	View function where new users register.
-	"""
-	
 	if request.method == 'POST':
 		form = RegisterForm(request.POST)
 		
@@ -63,10 +55,6 @@ def register(request):
 
 
 def profile(request):
-	"""
-	View function for profile page of site.
-	"""
-	
 	user = request.user
 	profile = user.profile
 	
@@ -84,18 +72,43 @@ def profile(request):
 			profile.dob = form.cleaned_data['date_of_birth']
 			profile.phone_num = form.cleaned_data['phone_number']
 			profile.profile_img = form.cleaned_data['profile_image']
+			profile.contact_name = form.cleaned_data['contact_name']
+			profile.contact_phone = form.cleaned_data['contact_number']
 			profile.save()
 			
 			return HttpResponseRedirect(reverse('dashboard'))
-
+			
 	else:
 		form = UpdateProfileForm(initial={'first_name': profile.first_name,
 										  'last_name': profile.last_name,
 										  'email': user.email,
 										  'date_of_birth': profile.dob,
-										  'phone_number': profile.phone_num})
+										  'phone_number': profile.phone_num,
+										  'contact_name': profile.contact_name,
+										  'contact_number': profile.contact_phone})
 
 	return render(request, 'profile.html', {'form': form})
+
+
+def waiver(request):
+	user = request.user
+	profile = user.profile
+	
+	if request.method == 'POST':
+		form = WaiverForm(request.POST, profile=profile)
+		
+		if form.is_valid():
+			profile.can_join_trip = True
+			profile.save()
+			
+			return redirect('dashboard')
+			
+	else:
+		form = WaiverForm(initial={'first_name': profile.first_name,
+									'last_name': profile.last_name,
+									'current_date': datetime.now(timezone.utc).date()})
+	
+	return render(request, 'waiver.html', {'form': form})
 
 
 def dashboard(request):
@@ -103,7 +116,7 @@ def dashboard(request):
 	Renders page with menu of upcoming trips, in order of start time.
 	"""
 	# filter trips by those starting after current time, and order by start time
-	return render(request, 'dashboard.html', {'trips': Trip.objects.filter(start_time__gte=datetime.datetime.now(timezone.utc)).order_by('start_time')})
+	return render(request, 'dashboard.html', {'trips': Trip.objects.filter(start_time__gte=datetime.now(timezone.utc)).order_by('start_time')})
 
 		
 def trip_info(request, pk):
@@ -287,14 +300,6 @@ def admin_edit(request):
 		return JsonResponse({'success': True})
 	else:
 		raise Http404("This url is not being used correctly")
-		
-		
-def waiver(request):
-	return render(
-		request,
-		'waiver.html',
-		context={}
-   )
 
 
 class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):

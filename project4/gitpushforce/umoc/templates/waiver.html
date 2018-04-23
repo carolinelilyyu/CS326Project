@@ -33,17 +33,19 @@
 				<div class="row">
 					<div class="col-md-6">
 						<p class="centered"><strong>TEAM MEMBER INFORMATION</strong></p>
-						<pre>Name: {{user.last_name}}, {{user.first_name}}</pre>
-						<pre>Phone: {{user.phone_num}}</pre>
-						<pre>Email: {{user.email}}</pre>
-						<pre>Permanent Address: Address here</pre>
+						<input type="text" class="form-control" placeholder="Name: {{user.profile.first_name}} {{user.profile.last_name}}" disabled>
+						<br>
+						<input type="text" class="form-control" placeholder="Phone: {{user.profile.phone_num}}" disabled>
+						<br>
+						<input type="text" class="form-control" placeholder="Email: {{user.email}}" disabled>
+						<br>
 					</div>
 					<div class="col-md-6">
 						<p class="centered"><strong>EMERGENCY CONTACT INFORMATION</strong></p>
-						<pre>Name: {{user.contact_name}}</pre>
-						<pre>Phone: {{user.contact_phone}}</pre>
-						<pre>Email: Email here</pre>
-						<pre>Emergency Contact's Address: Address here</pre>
+						<input type="text" class="form-control" placeholder="Contact's Name: {{user.profile.contact_name}}" disabled>
+						<br>
+						<input type="text" class="form-control" placeholder="Contact's Phone: {{user.profile.phone_num}}" disabled>
+						<br>
 					</div>
 				</div>
 				
@@ -59,39 +61,38 @@
 				
 				
 				<div class="row">
-					<p>I also accept the responsibility of reporting all injuries and illness, including the signs and symptoms for concussions, to SA&I staff. I have been educated (<strong>see reverse side</strong>) on what a concussion is and how I can prevent sustaining a concussion. I have been informed of the signs and symptoms for a concussion and instructed on what I should do if I think I have a concussion.</p>
+					<p>I also accept the responsibility of reporting all injuries and illness, including the signs and symptoms for concussions, to SA&I staff. I have been educated on what a concussion is and how I can prevent sustaining a concussion. I have been informed of the signs and symptoms for a concussion and instructed on what I should do if I think I have a concussion.</p>
 				</div>
 				
 				
-				<div class="row">
-					<div class="col-md-5">
-						<div class="form-group">
-							<label for="name">Legal Name (First, Last)</label>
-							<input type="text" class="form-control" id="name" value="{{user.first_name}} {{user.last_name}}">
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<label for="date">Current Date (mm/dd/yyyy)</label>
-							<input type="date" class="form-control" id="date" value="{% now 'Y-m-d' %}">
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="form-group">
-							<label>Spire ID</label>
-							<input type="number" class="form-control" placeholder="12345678" min="10000000" max="99999999">
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="form-group">
-							<label>I agree.</label>
-							<button class="btn btn-primary btn-block" type="submit">Submit</button>
-						</div>
-					</div>
-				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<p>Please note that information related to your submission (such as an <strong>IP address</strong> and <strong>browser information</strong>) will be recorded and stored along with your waiver.</p>
+						{% load myfilters %}
+						<form enctype="multipart/form-data" action="" method="post">
+							{% csrf_token %}
+							{% for field in form %}
+								<div class="row">
+									<div class="col-md-2">
+										{{ field.label_tag }}
+									</div>
+									<div class="col-md-9">
+										{{ field|addclass:'form-control' }}
+										{% if field.help_text %}
+											<div class="help">{{ field.help_text|safe }}</div>
+										{% endif %}
+										<div class="warn">{{ field.errors }}</div>
+									</div>
+								</div>
+								<br>
+							{% endfor %}
+							<div class="row">
+								<div class="col-md-2"><label>I agree:</label></div>
+								<div class="col-md-9">
+									<button class="btn btn-info btn-block btn-lg" type="submit">Submit</button>
+									<!-- <input type="hidden" name="next" value="{{ next }}" /> -->
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
 				

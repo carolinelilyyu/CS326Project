@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 
-{% block title %}<title>Profile - UMOC</title>{% endblock %}
+{% block title %}<title>My Profile - UMOC</title>{% endblock %}
 
 {% block content %}
 
@@ -33,20 +33,18 @@
 										  <h4 class="todo-name">Pay the <strong>Membership Fee</strong></h4>"Required" once each year, valid for  all trips
 									</div>
 								</li>
-								<li class="todo-done">
+								<li {% if user.profile.dob and user.profile.phone_num and user.profile.contact_name and user.profile.contact_phone %}class="todo-done"{% endif %}>
 									<div class="todo-icon fui-user"></div>
 									<div class="todo-content">
-										<h4 class="todo-name">Fill out <strong>Emergency Contacts Info</strong></h4>Required once each year, valid for all trips
+										<h4 class="todo-name">Fill out <strong>Profile Info</strong></h4>Required once each year, valid for all trips
 									</div>
 								</li>
-								<a href="{% url 'waiver'%}">
-									<li {% if user.profile.can_join_trip %}class="todo-done"{% endif %}>
-										<div class="todo-icon fui-alert-circle"></div>
-										<div class="todo-content">
-											<h4 class="todo-name">Sign the <strong>Release of Liability</strong> Form</h4>Required once, valid for all trips
-										</div>
-									</li>
-								</a>
+								<li {% if user.profile.can_join_trip %}class="todo-done"{% endif %}>
+									<div class="todo-icon fui-alert-circle"></div>
+									<div class="todo-content">
+										<h4 class="todo-name">Sign the <strong>Release of Liability</strong> Form</h4>Required once, valid for all trips
+									</div>
+								</li>
 							</ul>
 						</div>
 					</div>

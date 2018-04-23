@@ -8,7 +8,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="headingbox">
-			<h1 class="heading">{{ profile.first_name }} {{ profile.last_name }}User's Profile</h1>
+			<h1 class="heading">{{ profile.first_name }} {{ profile.last_name }}'s Profile</h1>
 		</div>
 	</div>
 </div>
@@ -17,7 +17,118 @@
 	<div class="col-md-12">
 		<div class="wrapper">
 			<div class="content">
-				<p>This page is a work in progress.</p>
+				
+				
+				{% if user.profile.admin_level == "a" %}
+					<div class="row">
+						<div class="col-md-4">
+							<a class="thumbnail">
+								<img src="{{ profile.get_profile_img_url }}" alt="Profile Picture" style="height: 230px; width: 100%;">
+							</a>
+						</div>
+						<div class="col-md-7">
+							<div class="todo">
+								<ul style="border-radius: 5px;">
+									<li class="todo-done">
+										<div class="todo-icon fui-heart"></div>
+										<div class="todo-content">
+											  <h4 class="todo-name">Pay the <strong>Membership Fee</strong></h4>"Required" once each year, valid for  all trips
+										</div>
+									</li>
+									<li {% if profile.dob and profile.phone_num and profile.contact_name and profile.contact_phone %}class="todo-done"{% endif %}>
+										<div class="todo-icon fui-user"></div>
+										<div class="todo-content">
+											<h4 class="todo-name">Fill out <strong>Profile Info</strong></h4>Required once each year, valid for all trips
+										</div>
+									</li>
+									<li {% if profile.can_join_trip %}class="todo-done"{% endif %}>
+										<div class="todo-icon fui-alert-circle"></div>
+										<div class="todo-content">
+											<h4 class="todo-name">Sign the <strong>Release of Liability</strong> Form</h4>Required once, valid for all trips
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+						
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>First Name</label>
+								<input type="text" class="form-control" placeholder="{{ profile.first_name }}" disabled>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								  <label>Last Name</label>
+								  <input type="text" class="form-control" placeholder="{{ profile.last_name }}" disabled>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="InputEmail">Email Address</label>
+								<input type="email" class="form-control" placeholder="{{ user.email }}" disabled>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								  <label>Date of Birth</label>
+								  <input type="text" class="form-control" placeholder="{{ profile.dob }}" disabled>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								  <label>Phone Number</label>
+								  <input type="tel" class="form-control" placeholder="{{ profile.phone_num }}" disabled>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Contact's Full Name</label>
+								<input type="text" class="form-control" placeholder="{{ profile.contact_name }}" disabled>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								  <label>Contact's Phone Number</label>
+								  <input type="tel" class="form-control" placeholder="{{ profile.contact_phone }}" disabled>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="row">
+						<div class="col-md-4">
+							<a class="thumbnail">
+								<img src="{{ profile.get_profile_img_url }}" alt="Profile Picture" style="height: 230px; width: 100%;">
+							</a>
+						</div>
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>First Name</label>
+										<input type="text" class="form-control" placeholder="{{ profile.first_name }}" disabled>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										  <label>Last Name</label>
+										  <input type="text" class="form-control" placeholder="{{ profile.last_name }}" disabled>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<p class="centered">No other info about this user is publicly available.</p>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				
+				
 			</div>
 		</div>
 	</div>
