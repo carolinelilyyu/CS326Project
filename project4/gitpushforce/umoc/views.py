@@ -357,8 +357,30 @@ class TripCreate(CreateView):
 
 class TripUpdate(UpdateView):
 	model = Trip
-	fields = ['name','description','num_seats','capacity', 'thumbnail','start_time', 'end_time']#, 'cancelled', 'tag', 'leader', 'participants', 'drivers']
+	fields = ('name', 'description', 'num_seats', 'capacity', 'thumbnail', 'start_time', 'end_time', 'cancelled', 'tag', 'leader', 'participants', 'drivers')
+	template_name = 'umoc/trip_form.html'
+	# def get(self, request, pk):
+	# 	obj = get_object_or_404(Location, pk=pk)
+ #    	form = LocationForm(request.POST or None, request.FILES or None, instance=obj)
+	# 	form = AdminUpdateTripForm()
+	# 	args = {'form': form}
+	# 	return render(request, self.template_name, args)
 
+	def update(self, request, pk):
+		if request.method == 'POST':
+			print("this is a post")
+			print(request.POST)
+			form = AdminUpdateTripForm(request.POST)
+			print(form.errors)
+			if form.is_valid():
+				form.save()
+				return HttpResponseRedirect(reverse('dashboard'))
+		else:
+			print("failed. this is not a post")
+			form = AdminTripForm()
+		# args.update(csrf(request))
+		args = {'form': form}
+		return render(request, self.template_name, args)
 
 def cancel_trip(request, pk):
 	""" 
