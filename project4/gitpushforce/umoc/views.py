@@ -339,7 +339,7 @@ class TripCreate(CreateView):
 			print(form.errors)
 			if form.is_valid():
 				print("this is valid")
-				text = form.cleaned_data['post']
+				text = form.cleaned_data['name']
 				name = request.POST.get('name')
 				description = request.POST.get('description')
 				form.save()
