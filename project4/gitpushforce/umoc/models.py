@@ -80,12 +80,13 @@ class Trip(models.Model):
 	# Allowed Tags a trip can have: code - (name, color)
 	TAGS = {
 		'': ('', ''),  # shouldn't be necessary; currently a work-around
-		'r': ('Rock Climbing', '#ffff66'),
+		'r': ('Rock Climbing', '#eeee66'),
 		'h': ('Hiking', '#5080ef'),
 		's': ('Ski and Board', '#00dfff'),
 		'sk': ('Skiing', '#99b3ff'),
 		'sn': ('Snowboarding', '#ff5050'),
 		'c': ('Cabin Trip', '#e7e042'),
+		'b': ('Biking', '#8c92ac'),
 	}
 	
 	# Made for Django choice field
@@ -96,6 +97,7 @@ class Trip(models.Model):
 		('sk', 'Skiing'),
 		('sn', 'Snowboarding'),
 		('c', 'Cabin Trip'),
+		('b', 'Biking'),
 	)
 	
 	tag = models.CharField(max_length=2, choices=TAG_CHOICES, blank=True, help_text='Select a tag to help classify this trip')

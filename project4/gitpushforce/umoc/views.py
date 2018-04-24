@@ -248,8 +248,13 @@ def trip_comments(request, pk):
 		elif not parent_comment and request.user.profile.id != trip.leader.id:
 			Notification(recipient=trip.leader, message='{} {} commented on one of your trips'.format(author.first_name, author.last_name), link=comment.get_absolute_url()).save()
 		
-		return JsonResponse({'success': True})
-		#return HttpResponse({'success': True}, content_type="application/json")
+		# return rendered comment
+		return render(
+			request, 
+			'trip_comments.html', 
+			context={'comments': [ProcessedComment(comment)]}
+		)
+		#return JsonResponse({'success': True})
 	else:
 		raise Http404('Access Denied')
 
