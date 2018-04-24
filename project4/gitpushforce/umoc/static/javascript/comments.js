@@ -32,6 +32,17 @@ $.ajaxSetup({
     }
 });
 
+// set up on-click for base reply button to create a new comment
+$('#base-reply-btn').on('click', function() { 
+	
+	// disable base reply button 
+	$('#base-reply-btn').prop('disabled', true);
+
+	// create reply and add it beneath new comment button
+	// $('#base-reply-btn').after(createReply(0));
+	createReply(0, $('#base-reply-btn'));
+});
+
 $(document).ready(function(){
 	// query trip comments and append HTML
 	$.ajax({
@@ -39,8 +50,8 @@ $(document).ready(function(){
 		url: "http://localhost:8000/trip/" + trip_id + "/comments",
 		contentType: "application/json",
 		success: function(data) {
-			// append rendered comment section below comments-header element
-			$('#comments-header').append(data);
+			// append rendered comment section below base-reply-btn element
+			$('#base-reply-btn').after(data);
 			
 			// create click handlers for each reply button
 			$('.comment-reply-btn').on('click', function() {
@@ -51,39 +62,11 @@ $(document).ready(function(){
 				// remove reply button from parent comment
 				$(this).remove();
 				
-				// create input element for reply
-				var reply_input = $('<input/>', {
-					id: 'reply-input-' + id
-				});
-			
-				// create button to submit reply
-				var reply_btn = $('<button/>', {
-					text: 'Reply', //set text 1 to 10
-					id: 'submit-btn-' + id,
-					click: function () { 
-						console.log('Clicked submit on ' + id);
-						// submit AJAX post with reply data
-						$.ajax({
-							type: "POST",
-							dataType: "application/json",
-							url: "http://localhost:8000/trip/" + trip_id + "/comments",
-							data: {'text': reply_input.val(), 'parent': id},
-							success: function(result) {
-								console.log(result);
-								
-							},
-							error: function(result) {
-								console.log('Error with POST');
-								console.log(result)
-							}
-						})
-					}
-				});
+				// create reply and add it after comment's div
+				//$('#comment-' + id).after(createReply(id));
+				createReply(id, $('#comment-' + id));
 				
-				// add input element and button after comment's div
-				$('#comment-' + id).after(reply_input);
-				$('#reply-input-' + id).after(reply_btn);
-				
+				console.log($('#reply-' + id).html())
 			});
 		},
 		error: function(){
@@ -91,3 +74,40 @@ $(document).ready(function(){
 		}
 	});
 });
+
+// creates html object for a reply to the given comment. Can be added into the page. Adds it after the given root_elem var
+function createReply(id, root_elem) {
+	// create input element for reply
+	var reply_input = $('<input/>', {
+		id: 'reply-input-' + id
+	});
+
+	// create button to submit reply
+	var reply_btn = $('<button/>', {
+		text: 'Reply', //set text 1 to 10
+		id: 'submit-btn-' + id,
+		click: function () { 
+			console.log('Clicked submit on ' + id);
+			// submit AJAX post with reply data
+			$.ajax({
+				type: "POST",
+				url: "http://localhost:8000/trip/" + trip_id + "/comments",
+				data: {'text': reply_input.val(), 'parent': id},
+				success: function(result) {
+					console.log('Successful post');
+					console.log(result);
+					
+				},
+				error: function(result) {
+					console.log('Error with POST');
+					console.log(result)
+				}
+			})
+		}
+	});
+	
+	root_elem.after(reply_input);
+	reply_input.after(reply_btn);
+	
+	return reply_input;
+}

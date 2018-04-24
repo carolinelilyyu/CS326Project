@@ -229,11 +229,12 @@ def trip_comments(request, pk):
 		#return JsonResponse(data, safe=False)
 	elif request.method == 'POST' and request.user.is_authenticated: # and request.is_ajax()
 		print('Saving new comment by {}'.format(request.user.profile))
+		print (request.POST)
 		# TODO: COULD BE A VULNERABILITY (NOT ENOUGH DATA VALIDATION)
 		
 		# retrieve relevant database records
 		author = UserProfile.objects.get(pk=request.user.profile.id)
-		parent_comment = Comment.objects.get(pk=request.POST['parent'])
+		parent_comment = Comment.objects.get(pk=request.POST['parent']) if request.POST['parent'] != '0' else None
 		trip = Trip.objects.get(pk=pk)
 		
 		# create Comment object and save to database
@@ -241,8 +242,11 @@ def trip_comments(request, pk):
 		comment.save()
 		
 		# create Notification for comment's parent if one exists and author is not equal to current signed-in user
-		if parent_comment.author.id != request.user.profile.id:
+		if parent_comment and request.user.profile.id != parent_comment.author.id:
 			Notification(recipient=parent_comment.author, message='{} {} replied to your comment'.format(parent_comment.author.first_name, parent_comment.author.last_name), link=comment.get_absolute_url()).save()
+		# no parent: create notification for trip leader 
+		elif not parent_comment and request.user.profile.id != trip.leader.id:
+			Notification(recipient=trip.leader, message='{} {} commented on one of your trips'.format(author.first_name, author.last_name), link=comment.get_absolute_url()).save()
 		
 		return JsonResponse({'success': True})
 		#return HttpResponse({'success': True}, content_type="application/json")
@@ -250,6 +254,7 @@ def trip_comments(request, pk):
 		raise Http404('Access Denied')
 
 
+@login_required
 def notifications(request):
 	"""
 	AJAX handler managing currently signed in user's notifications. Only accessible via AJAX requests. Returns rendered HTML of user's notifications, for insertion into the navbar on GET. POST accepts 'dismissed_id': <int:id> as the id of the notification the user has dismissed. 
@@ -273,6 +278,7 @@ def notifications(request):
 		raise Http404('Access Denied')
 		
 
+@login_required
 def admin_management(request):
 	"""
 	Allows an administrator to set user permission levels. IMPORTANT: This must only be accessible by admins. admin_edit is used to make AJAX calls to receive and update specific user data.
@@ -287,6 +293,7 @@ def admin_management(request):
 		)
 
 
+@login_required
 def admin_edit(request):
 	"""
 	Manages AJAX calls for the admin page. IMPORTANT: This must only be accessible by admins. Run AJAX GET 'user_id': <id> to retrieve JSON data for a specific user. Run AJAX POST 'user_id': <id>, 'admin_level': <a/l/u> to set admin level for the specified user.
@@ -313,18 +320,6 @@ def admin_edit(request):
 		return JsonResponse({'success': True})
 	else:
 		raise Http404("This url is not being used correctly")
-
-
-class AdminTripPlanner(PermissionRequiredMixin, generic.ListView):
-	model = Trip
-	template_name = 'trip_planner.html'
-	permission_required = 'catalog.can_be_edited'
-	#permission_required = 'catalog.can_mark_returned'
-	
-	def get_context_data(self, **kwargs):
-		context = super(AdminTripPlanner, self).get_context_data(**kwargs)
-		context['profiles'] = [UserProfile.objects.all()]
-		return context
 
 
 class TripCreate(CreateView):
@@ -388,6 +383,8 @@ class TripUpdate(UpdateView):
 		args = {'form': form}
 		return render(request, self.template_name, args)
 
+		
+@login_required
 def cancel_trip(request, pk):
 	""" 
 	Cancels trip of the given id. Requires requesting user to be trip leader or an admin. Returns 404 if the trip is over or has already been canceled. Creates notification for each user who had been signed up to participate.
@@ -410,6 +407,8 @@ def cancel_trip(request, pk):
 	except Trip.DoesNotExist:
 		raise Http404('Sorry, that trip does not exist')
 
+		
+@login_required
 def join_trip(request, pk):
 	"""
 	Adds user to specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Sends user a notification and reloads trip page on success. 
@@ -434,7 +433,8 @@ def join_trip(request, pk):
 	except Trip.DoesNotExist:
 		raise Http404('Sorry, that trip does not exist')
 	
-	
+
+@login_required	
 def leave_trip(request, pk):
 	"""
 	Removes user from specified trip. Trip must exist and have capacity for another user, and user must not already be signed up. Returns 404 if this is not the case (it shouldn't be). Reloads trip page on success.
@@ -456,6 +456,7 @@ def leave_trip(request, pk):
 		raise Http404('Sorry, that trip does not exist')
 		
 
+@login_required
 def trip_report(request, pk):
 	"""
 	Generates a report on the given trip: Includes signed up users, with emergency information, along with other things. Only accessible for the trip leader, and any admins. Returns 404 if this is not the case.

@@ -50,18 +50,23 @@
 		<!-- TODO: ALLOW LEADER, OR ADMIN, TO EDIT/CANCEL. Fully disable links!!! -->
 
 		{% if user.profile == trip.leader or user.profile.admin_level == 'a' %} 
-			<a id="trip-cancel" class="btn btn-danger" href="{% url 'trip_cancel' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Cancel Trip</a>
-			<a id="trip-edit" class="btn btn-primary" href="{% url 'trip_update' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Edit Trip</a>
+			<a id="trip-cancel" class="btn btn-danger" href="{% if trip.cancelled or trip.is_over %}#{% else %}{% url 'trip_cancel' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Cancel Trip</a>
+			<a id="trip-edit" class="btn btn-primary" href="{% if trip.cancelled or trip.is_over %}#{% else %}{% url 'trip_update' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Edit Trip</a>
 			<a id="trip-gen-report" class="btn btn-primary" href="{% url 'trip_report' trip.id %}">Generate Report</a>
 		{% endif %}
 		
 		{% if user.profile != trip.leader and user.profile in trip.participants.all %}
-			<a id="trip-leave" class="btn btn-danger" href="{% url 'trip_leave' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Leave Trip</a>
+			<a id="trip-leave" class="btn btn-danger" href="{% if trip.cancelled or trip.is_over %}#{% else %}{% url 'trip_leave' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Leave Trip</a>
 		{% elif user.profile != trip.leader %}
-			<a id="trip-sign-up" class="btn btn-info" href="{% url 'trip_join' trip.id %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip</a>
+			<a id="trip-sign-up" class="btn btn-info" href="{% if trip.cancelled or trip.is_over %}#{% else %}{% url 'trip_join' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip</a>
 		{% endif %}
         
-		<h3 id="comments-header">Comments</h3>
+		<div class="row">
+			<div class="col-md-12">
+				<h3 id="comments-header">Comments</h3>
+				<button id='base-reply-btn' class='btn btn-primary'>Reply</button>
+			</div>
+		</div>
 		
 		{% csrf_token %}
 	
