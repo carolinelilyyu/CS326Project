@@ -58,18 +58,22 @@ $(document).ready(function(){
 				// submit AJAX post saying notification was dismissed
 				$.ajax({
 					type: "POST",
-					dataType: "application/json",
 					url: "http://localhost:8000/notifications",
 					data: {'dismissed_id': id},
 					success: function(result) {
 						console.log(result);
+						console.log('Removing #notification-li-' + id);
 						// remove notification html
 						$('#notification-li-' + id).remove();
+						
+						// subtract one from number of notifications
+						$('#notifications-counter').text(parseInt($('#notifications-counter').text()) - 1);
 						
 					},
 					error: function(result) {
 						console.log('Error with POST');
 						console.log(result)
+						alert("Couldn't connect to server. Are you sure you're connected to the internet?");
 						//console.log(result.responseText);
 					}
 				})

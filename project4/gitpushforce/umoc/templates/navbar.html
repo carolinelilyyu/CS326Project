@@ -31,10 +31,6 @@
 							<ul class="dropdown-menu">
 								{% url 'waiver' as waiver_url %}
 								<li {% if request.path == waiver_url %}class="active"{% endif %}><a href="{% url 'waiver'%}">My Waiver</a></li>
-								{% if user.profile.admin_level == "l" %}
-									{% url 'trip_planner' as trip_url %}
-									<li {% if request.path == trip_url %}class="active"{% endif %}><a href="{% url 'trip_planner' %}">Leader Menu</a></li>
-								{% endif %}
 								{% if user.profile.admin_level == "a" %}
 									{% url 'admin_management' as admin_url %}
 									<li {% if request.path == admin_url %}class="active"{% endif %}><a href="{% url 'admin_management' %}">Admin Menu</a></li>
