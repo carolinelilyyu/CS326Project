@@ -37,6 +37,8 @@ $.ajaxSetup({
 var user_cache = new Map()
 // currently selected user object
 var selected_user = null;
+// currently selected admin level
+var selected_level = null;
 
 // mapping of admin level ids to words
 var admin_mapping = {'a': 'Admin', 'l': 'Leader', 'u': 'User'};
@@ -98,6 +100,8 @@ function populateUI(user) {
 	
 	if (selected_user === null) 
 		return;
+	if (selected_level !== null)
+		$('#submit-btn').prop('disabled', false);
 	
 	console.log('Populating with obj ');
 	console.log(user);
@@ -125,9 +129,6 @@ $('#submit-btn').on('click', function() {
 	if (selected_user === null) 
 		return;
 	
-	// enable submit button (since user and admin level have been selected)
-	$('#submit-btn').prop('disabled', false);
-	
 	// retrieve level selected in admin-level-box
 	var selected_level = $("#admin-level-box option:selected").attr("id");
 	
@@ -152,4 +153,12 @@ $('#submit-btn').on('click', function() {
 			}
 		});
 	}
+});
+
+// enable submit button (since user and admin level have been selected)
+$('#admin-level-box').on('change', function() {
+	selected_level = $(this).val;
+	console.log(selected_level);
+	if (selected_user !== null)
+		$('#submit-btn').prop('disabled', false);
 });

@@ -39,7 +39,7 @@ def register(request):
 			user = authenticate(username=username, password=raw_password)
 			
 			# create and save corresponding user profile
-			userpro = UserProfile(user=user, first_name = form.cleaned_data.get('first_name'), last_name = form.cleaned_data.get('last_name'))
+			userpro = UserProfile(user=user, first_name=form.cleaned_data.get('first_name'), last_name=form.cleaned_data.get('last_name'), email=form.cleaned_data.get('email'))
 			userpro.save()
 			
 			# create a welcome notification
@@ -291,7 +291,7 @@ def admin_edit(request):
 		print ('Received GET {}'.format(request.GET))
 		try:
 			user = UserProfile.objects.get(pk=request.GET['user_id'])
-			return JsonResponse({'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'href': user.get_absolute_url(), 'email': '', 'admin_level': user.admin_level })
+			return JsonResponse({'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'href': user.get_absolute_url(), 'email': user.email, 'admin_level': user.admin_level })
 		except UserProfile.DoesNotExist:
 			return JsonResponse({'success': False})  # todo: return error
 	elif request.method == 'POST':

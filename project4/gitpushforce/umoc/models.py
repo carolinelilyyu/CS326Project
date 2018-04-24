@@ -28,6 +28,7 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User, related_name='profile', on_delete='models.SET_NULL')
 	first_name = models.CharField(max_length=20, help_text='Enter your first name', verbose_name='First Name')
 	last_name = models.CharField(max_length=20, help_text='Enter your last name', verbose_name='Last Name')
+	email = models.EmailField(help_text="The user's email address")
 	dob = models.DateField(verbose_name='Date of Birth', help_text='Enter your birth date in the format "YYYY-MM-DD"', blank=True, null=True)
 	# upload profile to MEDIA_ROOT/profiles/<user_id>
 	profile_img = models.ImageField(verbose_name='Profile Image', upload_to=profile_directory_path, blank=True)
