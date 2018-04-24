@@ -6,7 +6,7 @@ OUTPUT: rendered comments, with threads
 {% for comment in comments %}
 	<div class="row">
 		<div class="col-md-12">
-			<div class="trip-comment" id="comment-{{ comment.id }}" style="padding-left: {{ comment.get_padding }}px">
+			<div class="trip-comment" id="comment-{{ comment.id }}" style="margin-left: {{ comment.get_padding }}px">
 				<h4><a href="{{ comment.href }}">{{ comment.author }}</a>{% if comment.parent %} replying to <a href="{{ comment.parent.href }}">{{ comment.parent.author }}</a>{% endif %} on {{ comment.time_stamp }} </h4>
 				<p>{{ comment.text }}</p>
 				<button class='comment-reply-btn' id="reply-btn-{{ comment.id }}">Reply</button>

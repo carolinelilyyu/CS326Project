@@ -46,7 +46,7 @@ Expects a 'trips': list/QuerySet parameter of ordered Trip objects.
 				{% empty %}
 					<h3>Sorry, there are no upcoming trips scheduled</h3>
 				{% endfor %}
-				<a href="#">Click to See Past Trips</a>
+				<a href="{% url 'all_trips' %}">Click to See Past Trips</a>
 			</div>
 		</div>
 	</div>

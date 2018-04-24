@@ -477,3 +477,10 @@ def trip_report(request, pk):
 			return render(request, 'trip_report.html', context={'trip': trip})
 	except Trip.DoesNotExist:
 		raise Http404('Sorry, that trip does not exist')
+		
+	
+def all_trips(request):
+	"""
+	Renders dashboard page, but with all trips that have ever happened from newest to oldest.
+	"""
+	return render(request, 'dashboard.html', {'trips': Trip.objects.all().order_by('-start_time')})
