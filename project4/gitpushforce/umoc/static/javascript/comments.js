@@ -57,17 +57,12 @@ $(document).ready(function(){
 			$('.comment-reply-btn').on('click', function() {
 				// extract comment id ("reply-btn-<id>")
 				var id = $(this).attr('id').substring(10);
-				console.log('clicked ' + id);
-				
 				
 				// remove reply button from parent comment
 				$(this).remove();
 				
 				// create reply and add it after comment's div
-				//$('#comment-' + id).after(createReply(id));
 				createReply(id, $('#comment-' + id));
-				
-				console.log($('#reply-' + id).html())
 			});
 		},
 		error: function(){
@@ -97,6 +92,16 @@ function createReply(id, root_elem) {
 				success: function(result) {
 					console.log('Successful post');
 					console.log(result);
+					
+					// remove input and button
+					$('#reply-input-' + id).remove();
+					$('#submit-btn-' + id).remove();
+				
+					// insert rendered comment html after reply button
+					$('#comment-' + id).after(result);
+					
+					// set padding to that of parent + 30px
+					$('#comment-' + id);
 					
 				},
 				error: function(result) {

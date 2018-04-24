@@ -28,15 +28,18 @@ Expects a 'trips': list/QuerySet parameter of ordered Trip objects.
 				{% endif %}
 				
 				{% for trip in trips %}
-					<div class = "row">
-						<div class = "col-md-10" id = "trip_widget">
+					<div class="row"">
+						<div class="col-md-10" class="trip_widget">
 							<h3><a href="{{ trip.get_absolute_url }}">{{ trip.name }} </a></h3> 
 							{% if trip.get_tag_name %}
-								<p style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</p>
+								<button class='btn btn-primary' style="background-color: {{ trip.get_tag_color }}">{{ trip.get_tag_name }}</button>
 							{% endif %}
-							<p>Led by {{ trip.leader.first_name }}</p>
+							{% if trip.cancelled %}
+								<button class='btn btn-danger'>Cancelled</button>
+							{% endif %}
+							<p>Led by <a href="{{ trip.leader.get_absolute_url }}">{{ trip.leader.first_name }} {{ trip.leader.last_name }}</a></p>
 							<p>{{ trip.start_time }} - {{ trip.end_time }}</p>
-							<p>{{ trip.description }}</p>
+							<p>{{ trip.description }} <a href="{{ trip.get_absolute_url }}">>> See Trip Page</a></p>
 							
 						</div>
 					</div>
