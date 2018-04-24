@@ -80,7 +80,7 @@ $(document).ready(function(){
 			});
 		},
 		error: function() {
-			alert('AJAX error');
+			console.log("AJAX error: couldn't load notifications");
 		}
 	});
 });

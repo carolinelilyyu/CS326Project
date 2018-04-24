@@ -21,7 +21,7 @@ urlpatterns = [
 	path('trip/<int:pk>/leave/', views.leave_trip, name='trip_leave'),
 	path('trip/<int:pk>/report/', views.trip_report, name='trip_report'),
     path('trip/<int:pk>/delete/', views.TripDelete.as_view(), name='trip_delete'),
-
+    path('trips', views.all_trips, name='all_trips'),
 ]
 
 urlpatterns += [
