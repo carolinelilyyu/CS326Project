@@ -20,6 +20,8 @@ urlpatterns = [
 	path('trip/<int:pk>/join/', views.join_trip, name='trip_join'),
 	path('trip/<int:pk>/leave/', views.leave_trip, name='trip_leave'),
 	path('trip/<int:pk>/report/', views.trip_report, name='trip_report'),
+    path('trip/<int:pk>/delete/', views.TripDelete.as_view(), name='trip_delete'),
+
 ]
 
 urlpatterns += [

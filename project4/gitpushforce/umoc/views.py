@@ -391,7 +391,10 @@ class TripUpdate(UpdateView):
 		args = {'form': form}
 		return render(request, self.template_name, args)
 
-		
+class TripDelete(DeleteView):
+    model = Trip
+    success_url = reverse_lazy('dashboard')
+
 @login_required
 def cancel_trip(request, pk):
 	""" 
