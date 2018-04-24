@@ -24,10 +24,16 @@ User information will be managed Javascript-side, and populated with JSON data f
 			<div class="row">
 				<div class="col-md-12">
 					<p>Use this page to manage users</p>
-					
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
 					<p>Filter by user last name</p>
 					<input id='user-filter'></input>
-					
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
 					<select id='user-listbox' size="{{ users|length }}">
 						{% for user in users %}
 							<option class='user-select' id="user-select-{{user.id}}">{{ user.first_name }} {{ user.last_name }}</option>
@@ -43,13 +49,17 @@ User information will be managed Javascript-side, and populated with JSON data f
 						<th>Admin Level</th>
 						</tr>
 						<tr>
-						<td id='user-firstname'></td>
-						<td id='user-lastname'></td>
-						<td id='user-profile'></td>
-						<td id='user-email'></td>
-						<td id='user-adminlevel'></td>
+						<td id='user-firstname'>-</td>
+						<td id='user-lastname'>-</td>
+						<td id='user-profile'>-<a id='user-profile-link'></a></td>
+						<td id='user-email'>-</td>
+						<td id='user-adminlevel'>-</td>
 						</tr>
 					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
 					<p>Set User's Admin Level</p>
 					<select id='admin-level-box' size="3">
 						<option id='u'>User</option>

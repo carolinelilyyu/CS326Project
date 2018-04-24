@@ -45,10 +45,10 @@ class AdminTripForm(ModelForm):
 	choices = Trip.participants
 	name = forms.CharField(max_length=20, help_text='Enter Trip Name', error_messages={'required': 'Please enter your name'})
 	description = forms.CharField(widget=forms.Textarea, help_text='Enter description and informatin for trip', error_messages={'required': 'Please enter your description'})
-	num_seats = forms.IntegerField(help_text='Enter number of seats available for the trip', error_messages={'required': 'Please enter the number of seats'})
+	#num_seats = forms.IntegerField(help_text='Enter number of seats available for the trip', error_messages={'required': 'Please enter the number of seats'})
 	capacity = forms.IntegerField(help_text='Enter number of seats available for the trip', error_messages={'required': 'Please enter the capacity'})
-	thumbnail = forms.ImageField(required=False,help_text='Upload an image to show alongside this trip', error_messages={'required': 'Please enter a thumbnail picture'})
-	start_time = forms.DateTimeField(input_formats=['%Y-%m-%d %I:%M %p'], help_text='Select Start Date/Time of the Trip. Format: year-month-day hour:minute am/pm. Example: 2016-02-16 2:30 pm', error_messages={'required': 'Please enter a date'})
+	#thumbnail = forms.ImageField(required=False,help_text='Upload an image to show alongside this trip', error_messages={'required': 'Please enter a thumbnail picture'})
+	start_time = forms.DateTimeField(widget=forms.TextInput(attrs={'class':'datepicker'}), input_formats=['%Y-%m-%d %I:%M %p'], help_text='Select Start Date/Time of the Trip. Format: year-month-day hour:minute am/pm. Example: 2016-02-16 2:30 pm', error_messages={'required': 'Please enter a date'})
 	end_time = forms.DateTimeField(input_formats=['%Y-%m-%d %I:%M %p'], help_text='Select End Date/Time of the Trip. Format: year-month-day hour:minute (use 24 hour clock). Example: 2016-02-16 3:30 pm', error_messages={'required': 'Please enter a date'})
 	cancelled = forms.BooleanField(required=False, help_text='Click to Cancel', error_messages={'required': 'Please enter whether is cancelled or not'})
 	tag = forms.ChoiceField(choices=OPTIONS, help_text='Select a tag to help classify this trip', error_messages={'required': 'Please enter the tags'})

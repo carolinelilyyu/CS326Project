@@ -38,6 +38,25 @@ var user_cache = new Map()
 // currently selected user object
 var selected_user = null;
 
+// mapping of admin level ids to words
+var admin_mapping = {'a': 'Admin', 'l': 'Leader', 'u': 'User'};
+
+
+// let user filter shown users by entering text in <user-filter>
+$('#user-filter').bind('input', function() {
+    // retrieve filter val, case-insensitive
+	var filter = $(this).val().toLowerCase();
+
+	// show items whose name contain a substring of filter text
+    $('.user-select').each(function() {
+		if ($(this).val().toLowerCase().includes(filter)) {
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
+});
+
 // handle user clicking an item in the <select> element, selecting a user
 $('.user-select').on('click', function() {
 	// id='user-select-<id>'
@@ -53,22 +72,20 @@ $('.user-select').on('click', function() {
 	else {
 		$.ajax({
 			type: 'GET',
-			dataType: 'application/json',
 			url: 'http://localhost:8000/administration_edit/',
 			data: {'user_id': user_id },
 			success: function(result) {
-				console.log('Received successful response ' + result)
-			},
-			error: function(result) { // TODO: WHY IS THIS ALWAYS AN ERROR?
-				console.log('Received error response ' + result)
-				console.log('Parsed ' + JSON.parse(result.responseText))
-				
 				// parse user data and add to cache
-				user_obj = JSON.parse(result.responseText);
-				user_cache.set(user_id, user_obj)
+				user_cache.set(user_id, result)
 				console.log('User cache now has ' + user_cache.get(user_id));
 				
-				populateUI(user_obj);
+				populateUI(result);
+			},
+			error: function(result) { 
+				console.log('Received error response:');
+				console.log(result);
+				console.log('Parsed ' + JSON.parse(result.responseText))
+				alert("Couldn't connect to the server. Are you sure you have internet access?");
 			}
 		});
 	}
@@ -76,28 +93,40 @@ $('.user-select').on('click', function() {
 
 // populates UI with data from given user
 function populateUI(user) {
-	// set selected_user and enable submit button
+	// set selected_user 
 	selected_user = user;
-	$('#submit-btn').prop('disabled', false);
+	
+	if (selected_user === null) 
+		return;
 	
 	console.log('Populating with obj ');
 	console.log(user);
 	
-	$('#user-firstname').text(user_obj.first_name);
-	$('#user-lastname').text(user_obj.last_name);
-	$('#user-profile').text(user_obj.href); // TODO: MAKE LINK
-	$('#user-email').text(user_obj.email);
-	$('#user-adminlevel').text(user_obj.admin_level);
+	$('#user-firstname').text(selected_user.first_name);
+	$('#user-lastname').text(selected_user.last_name);
+	$('#user-profile').html('<a href="' + selected_user.href + '">Click Here</a>');
+	$('#user-email').text(selected_user.email);
+	$('#user-adminlevel').text(admin_mapping[selected_user.admin_level]);
+	
+	/*$('#admin-level-box option[id="u"]').removeAttribute('selected');
+	$('#admin-level-box option[id="l"]').removeAttribute('selected');
+	$('#admin-level-box option[id="a"]').removeAttribute('selected');
 	
 	// set correct admin level selection
-	$('#admin-level-box').val(user_obj.admin_level);
-	//$("#admin-level-box option[id='" + user_obj.admin_level + "']").attr("selected", "selected");
+	//$('#admin-level-box').value = (selected_user.admin_level);
+	$("#admin-level-box option[id='" + selected_user.admin_level + "']").attr("selected", "selected");*/
 }
 
 // handle user clicking Save button--check set admin level, and make POST request
 $('#submit-btn').on('click', function() {
 	console.log('User wants to submit');
 	console.log(selected_user);
+	
+	if (selected_user === null) 
+		return;
+	
+	// enable submit button (since user and admin level have been selected)
+	$('#submit-btn').prop('disabled', false);
 	
 	// retrieve level selected in admin-level-box
 	var selected_level = $("#admin-level-box option:selected").attr("id");
