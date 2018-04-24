@@ -59,6 +59,7 @@ $(document).ready(function(){
 				var id = $(this).attr('id').substring(10);
 				console.log('clicked ' + id);
 				
+				
 				// remove reply button from parent comment
 				$(this).remove();
 				

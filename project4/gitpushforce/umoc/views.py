@@ -243,7 +243,7 @@ def trip_comments(request, pk):
 		
 		# create Notification for comment's parent if one exists and author is not equal to current signed-in user
 		if parent_comment and request.user.profile.id != parent_comment.author.id:
-			Notification(recipient=parent_comment.author, message='{} {} replied to your comment'.format(parent_comment.author.first_name, parent_comment.author.last_name), link=comment.get_absolute_url()).save()
+			Notification(recipient=parent_comment.author, message='{} {} replied to your comment'.format(author.first_name, author.last_name), link=comment.get_absolute_url()).save()
 		# no parent: create notification for trip leader 
 		elif not parent_comment and request.user.profile.id != trip.leader.id:
 			Notification(recipient=trip.leader, message='{} {} commented on one of your trips'.format(author.first_name, author.last_name), link=comment.get_absolute_url()).save()
@@ -314,6 +314,9 @@ def admin_edit(request):
 			user.admin_level = request.POST['admin_level'];
 			user.save();
 			print('Set {} to {}'.format(user, user.admin_level))
+			
+			# send user a notification
+			Notification(recipient=user, message='Your admin level was set to {}'.format({'a': 'Admin', 'l': 'Leader', 'u': 'User'}[user.admin_level])).save()
 			return JsonResponse({'success': True});
 		except UserProfile.DoesNotExist:
 			return JsonResponse({'success': False})  # todo: return error

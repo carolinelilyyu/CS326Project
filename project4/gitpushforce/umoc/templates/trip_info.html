@@ -58,7 +58,7 @@
 		{% if user.profile != trip.leader and user.profile in trip.participants.all %}
 			<a id="trip-leave" class="btn btn-danger" href="{% if trip.cancelled or trip.is_over %}#{% else %}{% url 'trip_leave' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Leave Trip</a>
 		{% elif user.profile != trip.leader %}
-			<a id="trip-sign-up" class="btn btn-info" href="{% if trip.cancelled or trip.is_over %}#{% else %}{% url 'trip_join' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip</a>
+			<a id="trip-sign-up" class="btn btn-info" href="{% if trip.cancelled or trip.is_over or not user.profile.can_join_trip %}#{% else %}{% url 'trip_join' trip.id %}{% endif %}" {% if trip.cancelled or trip.is_over %} disabled {% endif %}>Join Trip</a>
 		{% endif %}
         
 		<div class="row">
