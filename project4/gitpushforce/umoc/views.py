@@ -29,6 +29,11 @@ def index(request):
 
 
 def register(request):
+	if request.user.is_anonymous:
+		pass
+	else:
+		raise PermissionDenied("You cannot register while logged in!")
+
 	if request.method == 'POST':
 		form = RegisterForm(request.POST)
 		
@@ -70,6 +75,7 @@ def profile(request):
 			
 			profile.first_name = form.cleaned_data['first_name']
 			profile.last_name = form.cleaned_data['last_name']
+			profile.email = form.cleaned_data['email']
 			profile.dob = form.cleaned_data['date_of_birth']
 			profile.phone_num = form.cleaned_data['phone_number']
 			profile.profile_img = form.cleaned_data['profile_image']
@@ -82,7 +88,7 @@ def profile(request):
 	else:
 		form = UpdateProfileForm(initial={'first_name': profile.first_name,
 										  'last_name': profile.last_name,
-										  'email': user.email,
+										  'email': profile.email,
 										  'date_of_birth': profile.dob,
 										  'phone_number': profile.phone_num,
 										  'contact_name': profile.contact_name,
@@ -113,7 +119,7 @@ def waiver(request):
 	else:
 		form = WaiverForm(initial={'first_name': profile.first_name,
 									'last_name': profile.last_name,
-									'current_date': datetime.now(timezone.utc).date()})
+									'current_date': datetime.now().date()})
 	
 	return render(request, 'waiver.html', {'form': form})
 

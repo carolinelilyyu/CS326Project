@@ -133,12 +133,12 @@ class WaiverForm(forms.Form):
 		lname = self.cleaned_data.get('last_name')
 		cdate = self.cleaned_data.get('current_date')
 		
-		if self.profile.first_name != fname or self.profile.last_name != lname or datetime.now(timezone.utc).date() != cdate:
+		if self.profile.first_name != fname or self.profile.last_name != lname or datetime.now().date() != cdate:
 			if self.profile.first_name != fname:
 				self.add_error('first_name', 'Please re-enter your first name.')
 			if self.profile.last_name != lname:
 				self.add_error('last_name', 'Please re-enter your last name.')
-			if datetime.now(timezone.utc).date() != cdate:
+			if datetime.now().date() != cdate:
 				self.add_error('current_date', 'Please re-enter the current date.')
 			return False
 		
