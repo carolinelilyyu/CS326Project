@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MaxValueValidator
 from datetime import datetime, timezone
 
 
@@ -141,6 +141,8 @@ class Comment(models.Model):
 	text = models.CharField(max_length=280)
 	time_stamp = models.DateTimeField(auto_now_add=True)
 	trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
+	# nested level of this comment. Don't allow to be greater than 6
+	depth = models.PositiveIntegerField(validators=[MaxValueValidator(6)])
 	
 	# route to trip page comment is on
 	def get_absolute_url(self):

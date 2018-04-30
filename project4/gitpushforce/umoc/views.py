@@ -159,21 +159,21 @@ def public_profile(request, pk):
 
 class ProcessedComment:
 	# initialize with a Comment var
-	def __init__(self, comment, parent=None, depth=0):
+	def __init__(self, comment, parent=None):
 		self.id = comment.id
 		self.author = comment.author
 		self.text = comment.text
 		self.time_stamp = comment.time_stamp
+		self.depth = comment.depth
 		self.href = comment.author.get_absolute_url()
 		self.replies = []
 		self.parent = parent
-		self.depth = depth
 		
 	# Unravels child comments and threads, running recursively and returning a list of ordered comments. Sets depth for each. 
 	def unravel(self):
 		ordered = [self]
 		for comment in self.replies:
-			comment.depth = self.depth + 1
+			# comment.depth = self.depth + 1
 			ordered += comment.unravel()
 		return ordered
 		
@@ -237,8 +237,10 @@ def trip_comments(request, pk):
 		parent_comment = Comment.objects.get(pk=request.POST['parent']) if request.POST['parent'] != '0' else None
 		trip = Trip.objects.get(pk=pk)
 		
+		# enforce maximumum depth of 6?
+		
 		# create Comment object and save to database
-		comment = Comment(author=author, parent=parent_comment, text=request.POST['text'], trip=trip)
+		comment = Comment(author=author, parent=parent_comment, text=request.POST['text'], trip=trip, depth=parent_comment.depth + 1 if parent_comment else 0)
 		comment.save()
 		
 		# create Notification for comment's parent if one exists and author is not equal to current signed-in user

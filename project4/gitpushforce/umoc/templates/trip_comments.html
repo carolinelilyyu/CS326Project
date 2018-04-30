@@ -9,7 +9,10 @@ OUTPUT: rendered comments, with threads
 			<div class="trip-comment" id="comment-{{ comment.id }}" style="margin-left: {{ comment.get_padding }}px">
 				<h4><a href="{{ comment.href }}">{{ comment.author }}</a>{% if comment.parent %} replying to <a href="{{ comment.parent.href }}">{{ comment.parent.author }}</a>{% endif %} on {{ comment.time_stamp }} </h4>
 				<p>{{ comment.text }}</p>
+				<!-- allow reply if thread depth limit has not been reached -->
+				{% if comment.depth < 5 %}
 				<button class='comment-reply-btn' id="reply-btn-{{ comment.id }}">Reply</button>
+				{% endif %}
 			</div>
 		</div>
 	</div>
