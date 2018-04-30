@@ -334,64 +334,67 @@ def admin_edit(request):
 
 class TripCreate(CreateView):
 	model = Trip
-	fields = ['name', 'description', 'capacity', 'start_time', 'end_time', 'tag']
+	fields = ('name', 'description', 'capacity', 'start_time', 'end_time', 'tag', 'leader')
 	template_name = 'umoc/trip_form.html'
 
 	def get(self, request):
 		form = AdminTripForm()
-		args = {'form': form}
-		return render(request, self.template_name, args)
+		return render(request, self.template_name, {'form': form})
 
 	def post(self, request):
 		if request.method == 'POST':
-			print("this is a post")
-			print(request.POST)
 			form = AdminTripForm(request.POST)
-			print(form.errors)
 			if form.is_valid():
-				print("this is valid")
-				text = form.cleaned_data['name']
-				name = request.POST.get('name')
-				description = request.POST.get('description')
-				form.save()
-				print(text)
-				print(name)
-				print(description)
+				trip_instance = form.save(commit=False)
+				trip_instance.num_seats = form.cleaned_data['capacity']
+				trip_instance.save()
 				return HttpResponseRedirect(reverse('dashboard'))
+		
 		else:
-			print("failed. this is not a post")
 			form = AdminTripForm()
 
-		args = {'form': form}
-		return render(request, self.template_name, args)
+		return render(request, self.template_name, {'form': form})
 
 
 class TripUpdate(UpdateView):
 	model = Trip
-	fields = ('name', 'description', 'num_seats', 'capacity', 'thumbnail', 'start_time', 'end_time', 'cancelled', 'tag', 'leader', 'participants', 'drivers')
+	fields = ('name', 'description', 'capacity', 'start_time', 'end_time', 'tag', 'leader')
 	template_name = 'umoc/trip_form.html'
-	# def get(self, request, pk):
-	# 	obj = get_object_or_404(Location, pk=pk)
- #    	form = LocationForm(request.POST or None, request.FILES or None, instance=obj)
-	# 	form = AdminUpdateTripForm()
-	# 	args = {'form': form}
-	# 	return render(request, self.template_name, args)
-
-	def update(self, request, pk):
+		
+	def get(self, request, pk):
+		trip_instance = Trip.objects.get(pk=pk)
+		form = AdminUpdateTripForm(initial={'name': trip_instance.name,
+									  'description': trip_instance.description,
+									  'capacity': trip_instance.capacity,
+									  'start_time': trip_instance.start_time.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %I:%M %p'),
+									  'end_time': trip_instance.end_time.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %I:%M %p'),
+									  'tag': trip_instance.tag,
+									  'leader': trip_instance.leader})
+		
+		return render(request, self.template_name, {'form': form})
+		
+	def post(self, request, pk):
 		if request.method == 'POST':
-			print("this is a post")
-			print(request.POST)
-			form = AdminUpdateTripForm(request.POST)
-			print(form.errors)
+			trip = Trip.objects.get(pk=pk)
+			form = AdminUpdateTripForm(request.POST, trip=trip)
+			
 			if form.is_valid():
-				form.save()
+				trip.name = form.cleaned_data['name']
+				trip.description = form.cleaned_data['description']
+				trip.num_seats = trip.num_seats - trip.capacity + form.cleaned_data['capacity']
+				trip.capacity = form.cleaned_data['capacity']
+				trip.start_time = form.cleaned_data['start_time']
+				trip.end_time = form.cleaned_data['end_time']
+				trip.tag = form.cleaned_data['tag']
+				trip.leader = form.cleaned_data['leader']
+				trip.save()
 				return HttpResponseRedirect(reverse('dashboard'))
+		
 		else:
-			print("failed. this is not a post")
-			form = AdminTripForm()
-		# args.update(csrf(request))
-		args = {'form': form}
-		return render(request, self.template_name, args)
+			form = get(self, request, pk)
+
+		return render(request, self.template_name, {'form': form})
+
 
 class TripDelete(DeleteView):
     model = Trip
