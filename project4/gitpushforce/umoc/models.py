@@ -49,10 +49,6 @@ class UserProfile(models.Model):
 
 	def __equals__(self, other): # TODO: LOOK UP BEST PRACTICE
 		return other is not None and isinstance(other, self.__class__) and self.id == other.id
-	
-	# return whether user has fulfilled requirement to sign up for trips
-	def can_sign_up(self):
-		return True # TODO
 		
 	# returns url to user's profile. Todo: change. No user profile pages
 	def get_absolute_url(self):
